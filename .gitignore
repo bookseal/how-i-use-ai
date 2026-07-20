@@ -1,0 +1,6 @@
+.DS_Store
+
+# never commit anything derived from client / internal data
+*.xlsx
+*.xls
+/private/
