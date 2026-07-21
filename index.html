@@ -11,9 +11,11 @@
 </head>
 <body>
 <style>
+  /* 색: Upstage 브랜드 가이드 기준 — 보라 #7B5EF2, 네이비 #1E2536.
+     본문 대비를 위해 보라는 조금 진한 #5B3FD9를 쓴다. 로고·워드마크는 쓰지 않는다. */
   :root{
-    --ink:#16211f; --muted:#5c6b69; --line:#e3eae8; --bg:#fff; --panel:#f7faf9;
-    --teal:#0b6b63; --teal-bg:#e9f3f2; --teal-ln:#8fc9c2;
+    --ink:#1E2536; --muted:#5B6478; --line:#E5E6EE; --bg:#fff; --panel:#F7F7FB;
+    --brand:#5B3FD9; --brand-bg:#EFEBFE; --brand-ln:#B9A8F7;
     --amber:#a8560a; --amber-bg:#fdf4e8;
     --green:#0a7048; --green-bg:#eaf6f0;
     --slate:#33505f; --slate-bg:#eef3f6;
@@ -26,44 +28,57 @@
   .wrap{max-width:860px;margin:0 auto;padding:0 26px 90px;}
 
   /* cover */
-  .cover{padding:44px 0 26px;border-bottom:3px solid var(--teal);}
-  .cover .doctype{font-size:.78rem;font-weight:800;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;}
+  .cover{padding:44px 0 26px;border-bottom:3px solid var(--brand);}
+  .cover .doctype{font-size:.78rem;font-weight:800;letter-spacing:.1em;color:var(--brand);text-transform:uppercase;}
   .cover h1{font-size:2.5rem;font-weight:800;line-height:1.25;margin:12px 0 16px;letter-spacing:-.03em;}
   .meta{display:flex;flex-wrap:wrap;gap:8px 26px;color:var(--muted);font-size:.93rem;margin-top:4px;}
   .meta b{color:var(--ink);}
 
-  h2{font-size:1.9rem;font-weight:800;margin:58px 0 12px;padding-bottom:9px;border-bottom:2px solid var(--teal-ln);letter-spacing:-.02em;}
-  h2 .no{color:var(--teal);font-weight:800;margin-right:8px;}
-  h3{font-size:1.4rem;font-weight:700;margin:34px 0 10px;color:#0e2d2a;padding-left:12px;border-left:4px solid var(--teal-ln);}
-  h4{font-size:.98rem;font-weight:700;margin:18px 0 6px;color:var(--ink);}
-  p{margin:10px 0;} b{color:#08130f;}
+  h2{font-size:2.3rem;font-weight:800;margin:58px 0 12px;padding-bottom:9px;border-bottom:2px solid var(--brand-ln);letter-spacing:-.02em;}
+  h2 .no{color:var(--brand);font-weight:800;margin-right:8px;}
+  h3{font-size:1.72rem;font-weight:700;margin:40px 0 12px;color:#2E2159;padding-left:14px;border-left:5px solid var(--brand-ln);}
+  h3 .mk{margin-right:4px;font-size:.95em;}
+  h3 .cs{display:inline-block;background:#EFEBFE;border:1px solid #B9A8F7;color:#3B2A82;border-radius:5px;padding:0 7px;margin-right:5px;font-size:.72em;font-weight:700;vertical-align:middle;letter-spacing:.02em;}
+  h4{font-size:1.12rem;font-weight:700;margin:18px 0 6px;color:var(--ink);}
+  h4.dev{font-size:1.28rem;font-weight:800;margin:30px 0 10px;padding-left:11px;border-left:4px solid var(--brand-ln);color:#2E2159;}
+  /* .step 안의 h4는 이미 번호 뱃지가 있으므로 좌측 바를 겹치지 않는다 */
+  .step h4.dev{border-left:none;padding-left:0;margin-top:0;font-size:1.22rem;}
+  h4.branch{font-size:1.42rem;font-weight:800;margin:38px 0 4px;padding:9px 14px;
+    color:#3B2A82;background:var(--brand-bg);border:1px solid var(--brand-ln);border-radius:9px;}
+  h4.sub{font-size:1.34rem;margin:30px 0 9px;padding-bottom:5px;color:#2E2159;
+    border-bottom:1px dashed var(--brand-ln);}
+  p{margin:10px 0;} b{color:#1A1440;}
   ul,ol{margin:10px 0;padding-left:22px;} li{margin:5px 0;}
-  code{background:#eff3f2;padding:1px 6px;border-radius:5px;font-size:.89em;}
+  code{background:#F1EEFD;padding:1px 6px;border-radius:5px;font-size:.89em;}
   a{color:var(--slate);}
 
-  .lead{background:var(--teal-bg);border:1px solid var(--teal-ln);border-radius:12px;padding:16px 20px;margin:18px 0;font-size:1.03rem;}
+  .lead{background:var(--brand-bg);border:1px solid var(--brand-ln);border-radius:12px;padding:16px 20px;margin:18px 0;font-size:1.03rem;}
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 18px;margin:14px 0;}
-  .note{border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:.96rem;}
-  .note .lbl{font-weight:800;font-size:.79rem;letter-spacing:.03em;display:block;margin-bottom:4px;}
-  .note.teal{background:var(--teal-bg);border:1px solid var(--teal-ln);border-left:5px solid var(--teal);} .note.teal .lbl{color:var(--teal);}
-  .note.green{background:var(--green-bg);border:1px solid #bfe3d2;border-left:5px solid var(--green);} .note.green .lbl{color:var(--green);}
-  .note.amber{background:var(--amber-bg);border:1px solid #f0d9b4;border-left:5px solid var(--amber);} .note.amber .lbl{color:var(--amber);}
-  .note.red{background:var(--red-bg);border:1px solid #f0c8c4;border-left:5px solid var(--red);} .note.red .lbl{color:var(--red);}
+  /* 의도/결과 상자(.io)와 같은 형태 — 왼쪽 3px 테두리 + 색이 채워진 라벨 */
+  .note{border-radius:0 8px 8px 0;padding:9px 13px 10px;margin:12px 0;font-size:.96rem;line-height:1.72;}
+  .note .lbl{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.04em;
+       margin:0 0 4px;padding:1px 8px;border-radius:4px;color:#fff;}
+  .note ul,.note ol{margin:5px 0 0;padding-left:18px;}
+  .note li{margin:3px 0;}
+  .note.teal{background:var(--brand-bg);border-left:3px solid var(--brand);}   .note.teal .lbl{background:var(--brand);}
+  .note.green{background:var(--green-bg);border-left:3px solid var(--green);}  .note.green .lbl{background:var(--green);}
+  .note.amber{background:var(--amber-bg);border-left:3px solid var(--amber);}  .note.amber .lbl{background:var(--amber);}
+  .note.red{background:var(--red-bg);border-left:3px solid var(--red);}        .note.red .lbl{background:var(--red);}
 
   /* prompt log */
-  .log{background:#0f1b22;color:#d7e5e6;border-radius:11px;padding:6px 16px 12px;margin:14px 0;font-size:.9rem;line-height:1.68;}
+  .log{background:#1E2536;color:#DDE1EC;border-radius:11px;padding:6px 16px 12px;margin:14px 0;font-size:.9rem;line-height:1.68;}
   .log .turn{margin:11px 0;padding-left:64px;position:relative;}
   .log .who{position:absolute;left:0;top:1px;font-size:.68rem;font-weight:800;letter-spacing:.05em;
     border-radius:4px;padding:2px 6px;}
-  .log .turn.me .who{color:#0f1b22;background:#7fd4c6;}
-  .log .turn.ai .who{color:#d7e5e6;background:#33505f;}
+  .log .turn.me .who{color:#1E2536;background:#A78BFA;}
+  .log .turn.ai .who{color:#DDE1EC;background:#33505f;}
   .log .turn.me .who::after{content:"나";}
   .log .turn.ai .who::after{content:"AI";}
-  .log .cap{color:#8fa8ad;font-size:.79rem;padding:8px 0 2px;border-bottom:1px solid #22333c;}
+  .log .cap{color:#96A0B8;font-size:.79rem;padding:8px 0 2px;border-bottom:1px solid #333C52;}
   .log em{color:#f0c98a;font-style:normal;}
 
   .step{display:flex;gap:12px;margin:14px 0;}
-  .step .n{flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--teal);color:#fff;
+  .step .n{flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--brand);color:#fff;
     font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px;}
   .step .c{flex:1 1 auto;}
 
@@ -73,40 +88,116 @@
 
   pre.mermaid{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px;margin:16px 0;text-align:center;overflow-x:auto;}
 
-  .codecap{background:#1b2b33;color:#7fd4c6;font-size:.79rem;font-weight:700;letter-spacing:.02em;padding:7px 14px;border-radius:10px 10px 0 0;margin-top:16px;}
-  .codecap .fn{color:#6f8e97;font-weight:400;margin-left:7px;}
-  pre.code{background:#0f1b22;color:#dbe7ea;border-radius:0 0 10px 10px;padding:13px 16px;margin:0 0 6px;overflow-x:auto;font:.82rem/1.62 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;}
-  pre.code .cm{color:#6f8e97;}
+  .codecap{background:#2A3348;color:#A78BFA;font-size:.79rem;font-weight:700;letter-spacing:.02em;padding:7px 14px;border-radius:10px 10px 0 0;margin-top:16px;}
+  .codecap .fn{color:#7C88A4;font-weight:400;margin-left:7px;}
+  pre.code{background:#1E2536;color:#DFE3EE;border-radius:0 0 10px 10px;padding:13px 16px;margin:0 0 6px;overflow-x:auto;font:.82rem/1.62 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;}
+  pre.code .cm{color:#7C88A4;}
 
   .twopath{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:0;margin:14px 0;}
   .twopath .path{border:1px solid var(--line);border-radius:11px;padding:12px 15px;background:var(--panel);font-size:.93rem;line-height:1.6;}
-  .twopath .ph{font-weight:800;color:var(--teal);font-size:.8rem;letter-spacing:.02em;margin-bottom:6px;}
+  .twopath .ph{font-weight:800;color:var(--brand);font-size:.8rem;letter-spacing:.02em;margin-bottom:6px;}
   .twopath .vs{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--amber);font-size:1.15rem;padding:0 14px;}
   .twopath .mut{color:var(--muted);font-size:.85em;}
   @media(max-width:680px){.twopath{grid-template-columns:1fr;}.twopath .vs{padding:8px 0;}}
+  .tiers{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:0;margin:14px 0 6px;}
+  .tiers .tier{border:1px solid var(--line);border-radius:11px;padding:13px 15px;background:var(--panel);font-size:.92rem;line-height:1.62;}
+  .tiers .tno{font-weight:800;color:var(--brand);font-size:.78rem;letter-spacing:.03em;margin-bottom:3px;}
+  .tiers .tname{font-weight:800;font-size:1.02rem;margin-bottom:8px;}
+  .tiers dl{margin:0;}
+  .tiers dt{font-size:.76rem;font-weight:800;color:var(--muted);letter-spacing:.02em;margin-top:7px;}
+  .tiers dd{margin:1px 0 0;}
+  .tiers .arw{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--amber);font-size:1.2rem;padding:0 11px;}
+  @media(max-width:820px){.tiers{grid-template-columns:1fr;}.tiers .arw{padding:7px 0;transform:rotate(90deg);}}
 
   /* 스크린샷 = 브라우저 창 프레임(상단 크롬 바 + 신호등 3점)으로 "화면 캡처"임을 즉시 알림 */
-  figure.shot{position:relative;margin:22px 0;padding-top:34px;border:1px solid #cdd6d4;border-radius:12px;
-    overflow:hidden;background:#fff;box-shadow:0 4px 16px rgba(16,33,31,.10);}
-  figure.shot::before{content:"";position:absolute;top:0;left:0;right:0;height:34px;
-    background:#e7eceb;border-bottom:1px solid #cdd6d4;}
-  figure.shot::after{content:"";position:absolute;top:12.5px;left:15px;width:9px;height:9px;border-radius:50%;
-    background:#f0645d;box-shadow:16px 0 #f5be4f, 32px 0 #55c74a;}
-  figure.shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line);}
-  figure.shot figcaption{padding:9px 15px 11px;font-size:.85rem;color:var(--muted);line-height:1.55;background:var(--panel);}
+  figure.shot{margin:24px 0;padding:10px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);box-shadow:0 6px 22px rgba(16,33,31,.11);}
+  figure.shot img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff;}
+  figure.shot figcaption{padding:10px 4px 2px;font-size:.85rem;color:var(--muted);line-height:1.55;}
+  figure.shot figcaption::before{content:"스크린샷";display:inline-block;margin-right:8px;padding:1px 7px;
+    border:1px solid var(--line);border-radius:4px;background:var(--bg);
+    font-size:.7rem;font-weight:800;letter-spacing:.03em;color:var(--brand);vertical-align:1.5px;}
   figure.shot figcaption b{color:var(--ink);}
-  blockquote{margin:12px 0;padding:10px 16px;border-left:4px solid var(--teal-ln);background:var(--teal-bg);
-    border-radius:0 8px 8px 0;color:#0c4640;}
+  blockquote{margin:12px 0;padding:10px 16px;border-left:4px solid var(--brand-ln);background:var(--brand-bg);
+    border-radius:0 8px 8px 0;color:#3B2A82;}
   mark{background:#fde6b8;color:#5a3d00;padding:0 3px;border-radius:3px;}
-  blockquote.rawp{background:var(--panel);border-left:4px dashed var(--teal-ln);color:var(--ink);font-size:.95rem;line-height:1.8;}
+  /* 원문 프롬프트 = 부록 A의 대화 로그와 같은 옷을 입힌다.
+     같은 성격(내가 실제로 친 말)이면 같은 표기여야 독자가 두 번 배우지 않는다. */
+  /* 본문 안의 작은 구분 라벨. 위/아래를 가리키지 않고 "여기서부터 이 얘기"만 표시한다. */
+  .minihead{display:flex;align-items:center;gap:9px;margin:24px 0 6px;
+    color:var(--muted);font-size:.86rem;font-weight:800;letter-spacing:.02em;}
+  .minihead::before{content:"";flex:0 0 auto;width:18px;height:3px;border-radius:2px;background:var(--brand-ln);}
+  .minihead::after{content:"";flex:1 1 auto;height:1px;background:var(--line);}
+  .cap.intent{margin-top:9px;}
+  .cap.intent ul{margin:5px 0 0;padding-left:17px;}
+  .cap.intent li{margin:2px 0;line-height:1.55;}
+  .sit{margin:6px 0 9px;color:#4a4f63;font-size:.95rem;}
+  .sit b{color:#333C52;}
+  /* 생각의 사슬 — 세로로 흐르는 판단 과정 (다이어그램 대신) */
+  .chain{list-style:none;margin:12px 0 16px;padding:0 0 0 26px;position:relative;counter-reset:ch;}
+  .chain::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:#ddd5f8;}
+  .chain li{position:relative;margin:0 0 13px;padding:0 0 0 4px;counter-increment:ch;line-height:1.7;}
+  .chain li::before{content:counter(ch);position:absolute;left:-26px;top:2px;width:17px;height:17px;
+       border-radius:50%;background:#EFEBFE;border:2px solid #B9A8F7;color:#3B2A82;
+       font-size:.68rem;font-weight:800;text-align:center;line-height:15px;}
+  .chain li b{display:block;color:#2E2159;font-size:1.02rem;}
+  .chain li span{display:block;color:var(--muted);font-size:.93rem;margin-top:1px;}
+  .chain li.q::before{content:"?";background:#fdf4e8;border-color:#e0a76a;color:#7a3d06;}
+  .chain li.q b{color:#7a3d06;}
+  .chain li.key::before{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .chain li.key b{color:var(--brand);}
+  @media print{ .chain li{break-inside:avoid;page-break-inside:avoid;} }
+  .io{margin:10px 0 0;padding:9px 13px 10px;border-radius:0 8px 8px 0;}
+  .io.intent{background:#f6f4fe;border-left:3px solid #5B3FD9;}
+  .io.result{background:#f2f8f5;border-left:3px solid #0a7048;}
+  .io .ioh{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.06em;
+       margin:0 0 4px;padding:1px 8px;border-radius:4px;color:#fff;}
+  .io.intent .ioh{background:#5B3FD9;}
+  .io.result .ioh{background:#0a7048;}
+  .io ul,.io ol{margin:5px 0 0;padding-left:18px;}
+  .io li{margin:3px 0;line-height:1.68;}
+  .io p{margin:5px 0 0;}
+  .ans{margin:0 0 16px;padding:11px 14px;background:#fbfaff;border:1px solid #ddd5f8;
+       border-radius:8px;line-height:1.72;}
+  .ans .lbl{display:inline-block;background:#5B3FD9;color:#fff;border-radius:4px;
+       padding:1px 8px;font-size:.76rem;font-weight:700;margin-right:7px;letter-spacing:.03em;}
+  .ans ul{margin:7px 0 0;padding-left:18px;}
+  .ans li{margin:3px 0;}
+  .qref{margin:2px 0 7px;padding:7px 12px;background:#f6f4fe;border-left:3px solid #B9A8F7;
+        border-radius:0 6px 6px 0;color:#4a3f6b;font-size:.92rem;line-height:1.6;}
+  .qref b{color:#3B2A82;}
+  .q{background:#eef3f6;border:1px solid #c3cfd8;border-radius:5px;padding:1px 6px;color:#333C52;font-size:.94em;}
+  blockquote.rawp{background:#1E2536;color:#DDE1EC;border:0;border-radius:11px;
+    margin:14px 0;padding:14px 17px 15px 74px;font-size:.9rem;line-height:1.68;position:relative;}
+  blockquote.rawp::before{content:"나";position:absolute;left:17px;top:15px;
+    font-size:.68rem;font-weight:800;letter-spacing:.05em;border-radius:4px;padding:2px 6px;
+    color:#1E2536;background:#A78BFA;}
+  blockquote.rawp mark{background:transparent;color:#f0c98a;font-weight:600;padding:0;}
+  blockquote.rawp b{color:#ffffff;}
+  blockquote.rawp em{color:#f0c98a;font-style:normal;}
+  blockquote.rawp code{background:#333C52;color:#DDE1EC;}
   .garble{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;background:#2b1f1f;color:#f0b8b0;
     padding:9px 13px;border-radius:8px;display:block;margin:9px 0;overflow-x:auto;}
 
   footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.87rem;}
   @media print{
+    @page{margin:14mm 13mm;}
     body{font-size:10.5pt;} .wrap{max-width:none;padding:0;}
-    h2{page-break-after:avoid;} .panel,.note,.log,.step,pre.mermaid,table{page-break-inside:avoid;}
-    .log{background:#132028 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    /* 제목은 뒤따르는 본문과 떨어지지 않게 */
+    h2,h3,h4,.codecap{page-break-after:avoid;break-after:avoid;}
+    h2{page-break-before:auto;}
+    /* 한 덩어리로 읽혀야 하는 블록은 페이지 경계에서 쪼개지 않는다 */
+    .panel,.note,.log,.step,pre.mermaid,pre.code,table,figure.shot,
+    .twopath,.tiers,blockquote.rawp{page-break-inside:avoid;break-inside:avoid;}
+    /* 어두운 배경(코드·로그)은 기본적으로 인쇄에서 탈락 → 강제 출력
+       ※ Chrome '다른 이름으로 저장 → PDF'에서 [배경 그래픽] 체크 필요 */
+    .log,pre.code,blockquote.rawp{background:#1E2536 !important;}
+    .log,pre.code,blockquote.rawp,.note,figure.shot,.tiers .tier,.twopath .path,table th{
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    /* 세로로 긴 스크린샷이 페이지를 넘기지 않도록 */
+    figure.shot img{max-height:180mm;width:auto;max-width:100%;margin:0 auto;}
+    figure.shot{box-shadow:none;}
+    pre.mermaid svg{max-width:100% !important;height:auto !important;}
   }
   /* ── 사이드바 (현재 읽는 위치) ── */
   #sidenav{position:fixed;left:0;top:0;width:242px;height:100vh;overflow-y:auto;
@@ -119,13 +210,15 @@
   #sidenav-list{padding:8px 10px 0;}
   #sidenav-list a{display:block;font-size:.855rem;line-height:1.4;color:var(--muted);text-decoration:none;
     padding:7px 11px;margin:1px 0;border-left:2px solid transparent;border-radius:0 7px 7px 0;}
-  #sidenav-list a:hover{background:#eaf2f0;color:var(--ink);}
-  #sidenav-list a.active{background:var(--teal-bg);color:var(--teal);font-weight:700;border-left-color:var(--teal);}
-  #sidenav-list a.lv3{font-size:.8rem;padding:5px 10px 5px 24px;color:#8a9694;line-height:1.35;}
+  #sidenav-list a:hover{background:#EFEBFE;color:var(--ink);}
+  #sidenav-list a.active{background:var(--brand-bg);color:var(--brand);font-weight:700;border-left-color:var(--brand);}
+  #sidenav-list a.lv3{font-size:.8rem;padding:5px 10px 5px 24px;color:#8A90A2;line-height:1.35;}
+  #sidenav-list a.lv4{font-size:.78rem;padding:4px 10px 4px 34px;color:#7C8296;line-height:1.32;font-weight:600;}
+  #sidenav-list a.lv5{font-size:.74rem;padding:3px 10px 3px 48px;color:#A6ABBC;line-height:1.28;}
   #navshow{display:none;position:fixed;left:14px;top:14px;z-index:31;width:40px;height:40px;
     border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1.1rem;cursor:pointer;
     border-radius:9px;box-shadow:0 1px 5px rgba(0,0,0,.09);}
-  #navshow:hover{border-color:var(--teal-ln);color:var(--teal);}
+  #navshow:hover{border-color:var(--brand-ln);color:var(--brand);}
   @media(min-width:1180px){
     #sidenav{display:block;}
     body{padding-left:242px;}
@@ -133,7 +226,24 @@
     body.nav-hidden{padding-left:0;}
     body.nav-hidden #navshow{display:block;}
   }
-  @media print{ #sidenav,#navshow{display:none;} body{padding-left:0;} }
+  /* 본문 차례 — 인쇄에는 사이드바가 없으므로 여기가 유일한 목차가 된다 */
+  #toc{margin:22px 0 8px;padding:16px 20px 18px;background:#fbfaff;
+       border:1px solid #ddd5f8;border-radius:10px;}
+  #toc .toc-h{font-weight:800;font-size:.82rem;letter-spacing:.06em;color:#fff;
+       background:#5B3FD9;border-radius:4px;padding:2px 9px;display:inline-block;margin-bottom:10px;}
+  #toc ol{list-style:none;margin:0;padding:0;}
+  #toc li{break-inside:avoid;margin:0;}
+  #toc a{display:block;text-decoration:none;color:var(--ink);line-height:1.5;padding:2px 0;}
+  #toc a:hover{color:var(--brand);}
+  #toc a.t2{font-weight:800;font-size:1.02rem;margin-top:9px;color:#2E2159;}
+  #toc li:first-child a.t2{margin-top:0;}
+  #toc a.t3{font-size:.9rem;color:#5a6072;padding-left:15px;}
+  #toc a .tn{color:var(--brand);font-weight:800;margin-right:5px;}
+  @media print{
+    #sidenav,#navshow{display:none;} body{padding-left:0;}
+    #toc{page-break-inside:avoid;break-inside:avoid;background:#fbfaff !important;
+         -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
 </style>
 
 <nav id="sidenav" aria-label="목차">
@@ -150,15 +260,15 @@
   <h1>AI를 믿을 수 있게 쓰는 법</h1>
   <div style="font-size:1.03rem;color:var(--muted);margin:-4px 0 14px;">산출물을 반증 가능하게 만들고, 담당자가 바뀌어도 굴러가게 넘기기</div>
   <div class="meta">
-    <span><b>이기찬</b> · AI Product Engineer</span>
+    <span>이기찬 · AI Product Engineer</span>
     <span><a href="https://bit-habit.com">bit-habit.com</a></span>
     <span>실제 프로젝트 사례 · 2026</span>
   </div>
 </div>
 
 <!-- ================= 세 질문 ================= -->
-<div style="font-weight:800;color:var(--teal);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 2px;">이 글이 답하는 세 질문</div>
-<p style="color:var(--muted);margin:2px 0 4px;">AI를 쓴다는 건 결국 세 가지를 증명하는 일입니다 — <b>결과를 믿고 실무에 넣을 수 있는가</b>, 성과가 조직에 남아 계속 굴러가는가, 도구를 비판적으로 골라 쓰는가. 각 주제가 무엇을 왜 묻는지는 해당 절 첫머리에서 다시 짚습니다.</p>
+<div style="font-weight:800;color:var(--brand);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 2px;">이 글이 답하는 세 질문</div>
+<p style="color:var(--muted);margin:2px 0 4px;">AI를 쓴다는 건 결국 세 가지를 증명하는 일입니다 — 결과를 믿고 실무에 넣을 수 있는가, 성과가 조직에 남아 계속 굴러가는가, 도구를 비판적으로 골라 쓰는가. 각 주제가 무엇을 왜 묻는지는 해당 절 첫머리에서 다시 짚습니다.</p>
 
 <pre class="mermaid">
 flowchart TB
@@ -170,322 +280,1070 @@ flowchart TB
   H2["② 업무 생산성 &nbsp;(§2)<br/><b>성과가 조직에 남아 계속 굴러가는가</b><br/><i>개인기 → 조직 역량</i>"]:::h2
   H3["③ 도구 · 모델 &nbsp;(§3)<br/><b>한계를 알고 골라 쓰는가</b><br/><i>기술 의사결정</i>"]:::h3
 
-  classDef root fill:#0b2e2a,color:#ffffff,stroke:#0b6b63,stroke-width:2px;
-  classDef h1 fill:#0b6b63,color:#ffffff,stroke:#083f3a,stroke-width:1.5px;
-  classDef h2 fill:#a8560a,color:#ffffff,stroke:#6e3907,stroke-width:1.5px;
-  classDef h3 fill:#33505f,color:#ffffff,stroke:#22333c,stroke-width:1.5px;
+  classDef root fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:2.4px;
+  classDef h1 fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.5px;
+  classDef h2 fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.5px;
+  classDef h3 fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.5px;
 </pre>
 
-<p style="color:var(--muted);font-size:.92rem;margin:4px 0 2px;">바로 가기 → <a href="#s1">§1 문제 해결</a> · <a href="#s2">§2 조직 생산성</a> · <a href="#s3">§3 도구·모델</a></p>
+<nav id="toc" aria-label="차례">
+  <div class="toc-h">차례</div>
+  <ol id="toc-list"></ol>
+</nav>
 
 <!-- ================= §0 ================= -->
 <h2><span class="no">0.</span>요약</h2>
 
 <div class="lead">
-AI를 <b>더 빨리 쓰는 게 아니라, 결과를 믿게 만드는 일</b>을 합니다.
-모델은 자신 있게 틀립니다. 검증도 대상이 어긋나면 소용없습니다.
-그래서 <b>산출물을 반증 가능하게 만들고, 남이 이어받게 넘깁니다.</b>
+AI를 더 빨리 쓰는 게 아니라, 결과를 <b>믿을 수 있게</b> 만드는 일을 합니다.<br>
+모델은 <b>자신 있게 틀립니다.</b> 그래서 확신도는 신호로 쓸 수 없습니다.<br>
+남는 방법은 하나 — 산출물을 <b>반증 가능하게</b> 만들고, 남이 이어받게 넘기는 것.
 </div>
 
 <table>
-  <tr><th style="width:16%">항목</th><th>한 줄 요약</th></tr>
-  <tr><td>1. 문제 해결</td><td>한국경영분석연구원에서 수행한 <b>정부 원가 검증 프로젝트</b>입니다. AI가 만든 근거를 원본 대조·이미지 근거·교차 파일 불변식·독립 2차 추정이라는 네 겹 장치로 반증 가능하게 만들었습니다. 정답이 있는 문제에선 45개 설정 자동 채점(벤치마킹)으로 검증을 체계화합니다.</td></tr>
-  <tr><td>2. 조직 생산성</td><td>개발자 3명뿐인 조직에서 회의록 → AI 제안 → 사람 항목별 승인 → 개발자 검증 루프를 만들고 정책을 문서화했습니다. 문서 검토 10시간 → 2시간, 그리고 담당자가 바뀌어도 워크플로우가 재현되도록 절차를 조직에 남겼습니다.</td></tr>
-  <tr><td>3. 도구·모델</td><td>Claude Code를 주력으로 쓰는 이유와, 직접 관찰한 네 가지 한계(모르는 것도 안다고 말함 · 검증 대상 착오 · 확신도와 정확도의 비례하지 않음 · 비용의 비선형 증가)를 정리했습니다.</td></tr>
+  <tr><th style="width:16%">주제 (과제 지문)</th><th style="width:27%">한 줄</th><th>사례 · 근거</th></tr>
+  <tr>
+    <td><b>1.</b><br>문제 해결이나<br>아키텍처 개선 사례</td>
+    <td><b>정답을 채점할 수 없는 문제에서, AI가 낸 값을 되짚을 수 있게 만들었다.</b><br>
+        <span style="color:var(--muted);font-size:.9em;">정확도 → 추적 가능성으로 대체</span></td>
+    <td><b>💧 사례 1 · 수문조사 원가 검증</b> — 한국경영분석연구원, 정부 예산 검증<br>
+        검증 네 겹 — 원본 대조 · 이미지 근거 · 교차 파일 불변식 · 독립 2차 추정<br>
+        <span style="color:var(--muted);font-size:.92em;">목표는 <b>수문조사를 모르는 사람도 1시간이면 검증</b>할 수 있게</span><br><br>
+        <b>✈️ 사례 2 · 항공법 RAG</b> — 같은 문제, 조건이 다를 때<br>
+        정답셋을 만들 수 있으니 <b>45개 설정 자동 채점</b>. 검색 축은 API 0회로 무료화<br>
+        <span style="color:var(--muted);font-size:.92em;">동점이면 싼 쪽 — 토큰 38% 절감안 채택, 에이전틱은 27배라 기각</span></td>
+  </tr>
+  <tr>
+    <td><b>2.</b><br>AI를 활용한<br>업무 생산성 향상 사례</td>
+    <td><b>성과를 나 없이 재현되게 남겼다.</b><br>
+        <span style="color:var(--muted);font-size:.9em;">지표 = 단축된 시간이 아니라 담당자가 바뀌어도 재현되는 범위</span></td>
+    <td><b>같은 조직의 일하는 방식 자체</b> — 회의록 → AI 제안 → <b>사람 항목별 승인</b> → 보드<br>
+        장치 셋 — 승인 게이트 · 작업 모델 · 유출 게이트(사람 검토 + 기계 패턴 2단)<br>
+        <b>[진술]</b> 문서 검토 <b>10h → 2h</b> · 비개발자가 직접 실행<br>
+        <b>[로그]</b> 회의록 <b>34건</b> 단일화(폴더 4→1) · 결정 기록 <b>3건</b> · 인수인계 레슨 6개</td>
+  </tr>
+  <tr>
+    <td><b>3.</b><br>도구 및 모델 분석</td>
+    <td><b>한계를 직접 관찰해 기록하고, 알고 골라 썼다.</b></td>
+    <td>주력 <b>Claude Code</b> — 선정 이유와 대안 비교<br>
+        관찰한 한계 — 모르는 것도 안다고 함 · 확신도 ≠ 정확도 · 비용의 비선형 증가<br>
+        <span style="color:var(--muted);font-size:.92em;">데이터를 밖으로 못 내는 환경에서 온프레미스가 왜 별도 엔지니어링인지</span></td>
+  </tr>
 </table>
 
-<div class="note teal"><span class="lbl">세 사례를 관통하는 구조</span>
-<b>§3이 문제를 제기하고(모델은 자신 있게 틀린다), §1이 해법을 제시하며(반증 가능하게 만드는 장치), §2가 그것을 조직에 남깁니다(성과를 조직 역량으로 만들기).</b></div>
+<div class="note teal"><span class="lbl">세 주제가 이어지는 방식</span>
+<b>§3이 문제를 제기하고</b>(모델은 자신 있게 틀린다), <b>§1이 장치를 만들며</b>(반증 가능하게), <b>§2가 그것을 조직에 남깁니다</b>(개인기 → 조직 역량).<br>
+그래서 세 절에서 같은 동작이 반복됩니다 — <b>결과만 남기지 않고, 결과가 나온 경로를 남기는 것.</b> §1은 숫자마다 원본을, §2는 결정마다 근거를 붙였습니다.</div>
+
+<div class="note amber"><span class="lbl">읽는 분께 — 근거의 등급을 표시했습니다</span>
+공개할 수 있는 것과 없는 것이 섞여 있어, <b>§2에 <span class="q">[로그]</span>와 <span class="q">[진술]</span>을 구분해 붙였습니다.</b> 저장소·로그로 확인되는 것과 제 말로만 남는 것을 나눠 둔 것입니다.<br>
+§1의 원가 검증 앱은 <b>클라이언트 데이터라 저장소가 비공개</b>이고 화면의 금액은 전부 가렸습니다. 대신 <b>검증 설계는 전부 공개</b>합니다 — 값은 가려도 값들 사이의 관계는 확인되니까요. 마스킹 기준은 <a href="#ap-b">부록 B</a>에 있습니다.</div>
 
 <!-- ================= §1 ================= -->
-<h2 id="s1"><span class="no">1.</span>문제 해결 · 아키텍처 개선 사례</h2>
+<div class="note teal"><span class="lbl">이 직무가 요구하는 것이 문서 어디에 있는가</span>
+채점표를 들고 대조하실 수 있게, <b>JD의 요구 역량과 절 번호</b>를 먼저 놓습니다.</div>
+<table>
+  <tr><th style="width:34%">JD가 요구하는 역량</th><th style="width:20%">문서 위치</th><th>무엇으로 보이는가</th></tr>
+  <tr><td><b>유효성 검증(Validation) 체계 설계·운영</b></td><td><b>1-3 · 1-6</b></td><td>정답셋이 없을 때의 네 겹 검증, 있을 때의 자동 채점</td></tr>
+  <tr><td><b>제품 벤치마킹 · 안정성 검증(BMT)</b></td><td><b>1-6</b></td><td>45개 설정 그리드, 커버리지·MRR·토큰 3축 비교, 동점이면 싼 쪽</td></tr>
+  <tr><td><b>온프레미스 · 폐쇄망 제약</b></td><td><b>1-1 · 2-2-3 · 3-3-3</b></td><td>데이터를 밖으로 못 내는 환경의 설계, 유출 게이트 2단, 로컬 모델 운용</td></tr>
+  <tr><td><b>기술 문서 자산화 · 파트너 교육</b></td><td><b>2-2-4 · 부록 A</b></td><td>결정 기록(ADR) 3건 · 운영 매뉴얼 · 인수인계 레슨 6개 · 반증 가능한 문서 세 표식</td></tr>
+  <tr><td><b>트러블슈팅 · 근본 원인 해결</b></td><td><b>부록 A-4</b></td><td><code>200 OK</code>인데 다른 사이트가 서빙된 장애 — 층별 이분법 진단과 회고</td></tr>
+  <tr><td><b>Kubernetes · Docker · GitOps · CI/CD</b></td><td><b>부록 A</b></td><td>단일 노드 k3s에 약 20개 서비스 운영, GitHub Actions 배포, ArgoCD를 안 한 결정과 그 순서</td></tr>
+  <tr><td><b>AI Agent 기반 업무 자동화</b></td><td><b>2-2</b></td><td>회의록 → 에이전트 제안 → 사람 항목별 승인 → 보드. 권한을 문서화된 규칙으로 고정</td></tr>
+</table>
+
+<h2 id="s1"><span class="no">1.</span>문제 해결이나 아키텍처 개선 사례</h2>
 <p class="sec-note" style="color:var(--muted);font-size:.93rem;margin:2px 0 0;">이 주제가 던지는 세 질문 — 결과를 믿고 실무에 넣을 수 있는가.</p>
-<p style="margin:10px 0 0;">먼저 밝혀둡니다 — 아래 <b>Ⓐ 사례는 제가 한국경영분석연구원에서 실제로 수행한 정부 프로젝트</b>(댐 <b>수문(水門 · floodgate)</b> 유량조사 원가 검증)입니다. "AI 얘기하다 왜 수문이?" 싶겠지만, 검증 이야기는 전부 그 <b>실무에서 겪은 것</b>이라 이렇게 씁니다.</p>
+<p style="margin:10px 0 0;">프로젝트 둘을 같은 순서로 놓습니다 — 배경 → 핵심 프롬프트 → 검증. 하나를 읽으면 나머지는 같은 자리에서 같은 것을 찾을 수 있습니다.</p>
+<ul style="margin:8px 0 0;">
+  <li><b>사례 1 · 💧 수문조사 원가 검증</b> — 한국경영분석연구원에서 수행한 정부 프로젝트. 채점할 정답셋이 없습니다. (1-1 · 1-2 · 1-3)</li>
+  <li><b>사례 2 · ✈️ 항공법 RAG</b> — 공개 저장소로 만든 학습 프로젝트. 채점할 정답셋을 만들 수 있습니다. (1-4 · 1-5 · 1-6)</li>
+</ul>
+<p style="margin:8px 0 0;">둘을 고른 이유는 정답셋의 유무가 검증 설계를 통째로 가르기 때문입니다. 도메인(하천 예산 / 항공법)은 서로 아무 관계가 없고, 그래야 설계 덕분인지 도메인 덕분인지가 구분됩니다.</p>
 <pre class="mermaid">
 flowchart TB
-  A1["배경 · 제약<br/><i>무엇이 걸려 있었나 — 리스크·비용</i>"]:::s1 --> A2["핵심 프롬프트 · 대화<br/><i>무엇을 먼저 요구했나 — 검증 우선</i>"]:::s1 --> A3["적용 전 검증<br/><i>실무 투입 전 어떻게 확인했나</i>"]:::s1
-  classDef s1 fill:#e9f3f2,stroke:#0b6b63,color:#0b3f3a,stroke-width:1.3px;
+  subgraph GA["💧 사례 1 · 수문조사 · 정답셋 없음"]
+    direction LR
+    A1["1-1 배경"]:::s1 --> A2["1-2 핵심 프롬프트"]:::s1 --> A3["1-3 검증<br/><i>원본까지 되짚게 만든다</i>"]:::s1
+  end
+  subgraph GB["✈️ 사례 2 · 항공법 RAG · 정답셋 있음"]
+    direction LR
+    B1["1-4 배경"]:::s1 --> B2["1-5 핵심 프롬프트"]:::s1 --> B3["1-6 검증<br/><i>수백 번 자동으로 채점한다</i>"]:::s1
+  end
+  GA --> GB
+  classDef s1 fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
 </pre>
 
-<h3>1-1. 배경 — 검증은 "정답셋이 있느냐"에서 갈린다</h3>
-<p>검증 방식은 하나로 갈립니다 — <b>정답셋이 있는가.</b> supervised와 unsupervised를 가르는 선입니다. 제약도 여기서 갈립니다. 그래서 §1은 양쪽을 다른 프로젝트로 다룹니다.</p>
+<h3><span class="mk">💧</span> 1-1. <span class="cs">사례 1</span> 배경 — 무슨 일이었고, 왜 검증이 어려웠나</h3>
+<p class="qref"><b>과제 질문</b> — 어떤 문제였으며, 당시의 <b>기술적 제약 사항</b>은 무엇이었습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span><b>정부 수문조사 예산이 표준품셈 기준에 맞는지 검증</b>하는 일입니다. 기존에는 엑셀 수작업으로 한 건에 <b>10시간 이상</b>이 들었고, 산정과 검산이 같은 손·같은 시트에서 일어나 오류가 드러날 자리가 없었습니다.
+<ul>
+  <li><b>틀린 숫자가 곧 위험</b> — 결과가 예산 심의 근거라, 오차는 버그가 아니라 법적·금전적 리스크입니다.</li>
+  <li><b>원본이 이질적</b> — 기준은 PDF 표(표준품셈), 데이터는 여러 엑셀에 흩어져 있습니다.</li>
+  <li><b>채점할 정답셋이 없음</b> — "이 조사의 진짜 원가"라는 확정값이 존재하지 않습니다.</li>
+  <li><b>검증자가 비개발자</b> — 코드를 못 읽는 사람이 결과를 믿을 수 있어야 합니다.</li>
+  <li><b>데이터를 외부로 낼 수 없음</b> — 클라이언트 자료라 저장소도 비공개입니다.</li>
+</ul></div>
 
-<div class="panel">
-<b>Ⓐ 정답이 없는 문제 — 수문 원가 검증</b> <span style="color:var(--muted);font-size:.86em;">(정답셋 없음 · unsupervised에 가까움)</span>
-<p style="margin:8px 0;">정부 <b>표준품셈</b>과 발주처 예산을 대조해 편성 예산이 기준에 맞는지 검증하는 Streamlit 앱. 채점할 정답이 없어 정확도를 추적 가능성으로 대체해야 합니다.</p>
-<b style="font-size:.92rem;">그래서 걸린 제약</b>
-<ol style="margin-top:6px;">
-  <li>환각이 곧 리스크 — 예산 근거라 틀린 숫자는 버그가 아니라 법적·금전적 위험.</li>
-  <li>원본이 이질적 — PDF 표(품셈)와 여러 엑셀에 흩어짐.</li>
-  <li>정답셋 없음 — 정확도 대신 원본까지 되짚는 추적성으로 검증(§1-2~1-4).</li>
-  <li>검증자가 비개발자 — 코드를 못 읽는 사람이 믿을 수 있어야.</li>
-</ol>
-<p style="margin:8px 0 0;color:var(--muted);font-size:.9rem;">저장소: <b>비공개</b> (클라이언트 데이터) — 대신 검증 설계 노하우는 이 문서에 전부 공개합니다. 핵심은 코드가 아니라 사고 과정이니까요.</p>
-</div>
+<h4 class="dev" data-nav="1-1-1 · 수문조사란">1-1-1 · 수문조사란</h4>
 
-<div class="panel">
-<b>Ⓑ 정답이 있는 문제 — llm-app-lab RAG</b> <span style="color:var(--muted);font-size:.86em;">(홀드아웃 정답셋 · supervised에 가까움)</span>
-<p style="margin:8px 0;"><b>1,297쪽 항공법(14 CFR)</b>에서 정확한 조항을 찾는 RAG. 홀드아웃 정답셋을 만들 수 있어 검증을 자동 채점·벤치마킹으로 끌어올립니다(§1-6).</p>
-<b style="font-size:.92rem;">그래서 걸린 제약</b>
-<ol style="margin-top:6px;">
-  <li>설정 공간이 큼 — 청킹 × 임베딩 × 검색 × top-k, 손으로 못 훑어 자동 그리드서치가 필요.</li>
-  <li>토큰이 곧 비용 — 반복 채점·agentic 루프가 돈. 품질이 동률이면 싼 쪽.</li>
-  <li>채점 기준 자작 편향 — 내가 만든 정답셋은 내 편향을 물려받음.</li>
-</ol>
-<p style="margin:8px 0 0;color:var(--muted);font-size:.9rem;">저장소: <a href="https://github.com/bookseal/llm-app-lab">github.com/bookseal/llm-app-lab</a> · 라이브 <a href="https://llm-app-lab.bit-habit.com">llm-app-lab.bit-habit.com</a></p>
-</div>
+<div class="note teal"><span class="lbl">먼저 한 글자</span>
+수문(水文)은 댐의 <i>물문(水門)</i>이 아닙니다. "물의 기록", 영어로 hydrology입니다.</div>
 
-<figure class="shot">
-  <img src="./screenshots/s1-overview.jpg" alt="원가 검증 앱 개요 — 모든 숫자에 원본 셀 citation, 내부 예산 수치는 마스킹, 공개 표준품셈은 그대로">
-  <figcaption>Ⓐ 수문 앱. 모든 숫자에 원본 파일·시트·셀 citation이 붙어 앱 어디서든 원본과 눈으로 대조됩니다. — 공개 페이지라 내부 예산 수치는 마스킹했고, 공개 표준품셈만 그대로 둡니다.</figcaption>
-</figure>
+<ul>
+  <li><b>수문조사</b> — 하천 지점마다 유량을 반복 측정하는 국가 사업.</li>
+  <li><b>유량</b> — 그 지점에 물이 초당 몇 m³ 흐르는가.</li>
+  <li><b>쓰이는 곳</b> — 홍수 예보 · 댐 방류량 결정 · 용수 배분 · 하천 계획.</li>
+  <li><b>규모</b> — 전국 수백 개 지점. 매년 반복. 매년 국가 예산.</li>
+</ul>
 
-<h3>1-2. 핵심 프롬프트 — 코드보다 검증을 먼저 요구</h3>
-<p>다듬은 요약 대신 <b>첫 프롬프트를 날것 그대로</b> 남깁니다. 오디오 받아쓰기라 문장이 거칠고 오타도 있지만(<i>"파악을 할 수 있느", "validtion"</i>), 그래서 결론이 아니라 사고의 흐름이 보입니다. 핵심만 하이라이트했습니다. (내부 데이터 폴더명 한 곳만 마스킹.)</p>
+<h4 class="dev" data-nav="1-1-2 · 원가 검증이란">1-1-2 · 원가 검증이란</h4>
+<ul>
+  <li>예산은 지점·년 단가로 편성됩니다 — "한 지점을 1년 조사하는 데 얼마".</li>
+  <li>용역을 제안한 회사가 자기 산정 원가를 제출합니다.</li>
+  <li>제3의 기관이 같은 원가를 독립적으로 다시 산정합니다. 제가 일한 사단법인 한국경영분석연구원이 그 역할입니다.</li>
+  <li>두 값을 비교해 과다 산정으로 보이는 항목을 찾고, 근거를 붙여 정부에 제시합니다.</li>
+  <li>핵심은 감이나 관행이 아니라 국가가 정해 둔 기준서로 되짚는다는 것입니다.</li>
+</ul>
+
+<div class="note green"><span class="lbl">표준품셈 — 그 기준서</span>
+· 어떤 작업에 몇 명이 몇 시간 드는지를 정해 놓은 국가 기준서입니다.<br>
+· 거기에 노임을 곱하고 경비를 더합니다. 이 방식을 실비정액가산방식이라 합니다.<br>
+· 즉 "얼마 썼나"가 아니라 "기준대로면 얼마여야 하나"를 역산합니다.</div>
+
+<pre class="mermaid">
+flowchart LR
+  A["편성 예산<br/><i>지점·년 단가</i><br/><b>실제로 잡힌 돈</b>"]:::a
+  B["표준품셈 역산<br/><i>실비정액가산방식</i><br/><b>기준대로면 나올 돈</b>"]:::b
+  A --- Q{{"둘이 다르다<br/><b>어느 가정에서 벌어지나?</b>"}}:::q --- B
+  Q --> T["가정을 하나씩 원본까지 되짚는다<br/><i>측정 횟수 · 투입 인원 · 보정계수 …</i>"]:::t
+  classDef a fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef b fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+  classDef q fill:#EFEBFE,color:#3B2A82,stroke:#5B3FD9,stroke-width:2.4px;
+  classDef t fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.3px;
+</pre>
+
+<h4 class="dev" data-nav="1-1-3 · 앱이 한 일 · 안 한 일">1-1-3 · 앱이 한 일 · 안 한 일</h4>
+<table>
+  <tr><th style="width:50%">하지 않은 것</th><th>한 것</th></tr>
+  <tr>
+    <td>어느 쪽이 옳다고 <b>판정</b>하기</td>
+    <td>두 값을 나란히 놓고 <b>차이의 출처를 추적</b>하게 하기</td>
+  </tr>
+  <tr>
+    <td>"AI가 계산했습니다"로 근거 대신하기</td>
+    <td>가정마다 <b>원본 문서·셀까지</b> 붙이기</td>
+  </tr>
+</table>
+<p>추적 대상은 셋입니다 — 측정 횟수를 몇 회로 봤는가, 1회당 몇 명·몇 시간인가, 어떤 보정계수를 적용했는가. 가정을 바꾸면 숫자가 어떻게 움직이는지 화면에서 보입니다.</p>
+
+<div class="note amber"><span class="lbl">걸려 있던 것</span>
+· 결과물이 예산 심의의 근거가 됩니다.<br>
+· 그래서 틀린 숫자는 버그가 아니라 법적·금전적 위험입니다.<br>
+· 읽는 사람은 코드를 못 읽는 비개발자입니다.</div>
+
+<h4 class="dev" data-nav="1-1-4 · 기존 방식 (10시간 → 1분)">1-1-4 · 기존 방식 (10시간 → 1분)</h4>
+<ul>
+  <li>현재 절차는 엑셀 수작업입니다. 코드도, AI도 쓰지 않습니다.</li>
+  <li>한 건에 10시간 이상이 듭니다.</li>
+  <li>산정과 검산이 같은 손에서 같은 시트 안에 일어납니다. 그래서 오류가 섞여도 드러날 자리가 없습니다.</li>
+  <li>무엇보다 그 결과를 산정한 본인 말고는 확인하기 어렵습니다.</li>
+</ul>
+
+<div class="note teal"><span class="lbl">그래서 노린 것 — 산정과 검증을 떼어놓기</span>
+계산을 빠르게 만드는 게 목적이 아닙니다. 계산에 쓰던 시간을 검증으로 옮기는 것이 목적입니다.<br>
+로직을 한 번 세워 두면 산정은 1분이고, 남는 시간은 전부 "이 숫자가 어디서 왔나"를 보는 데 씁니다.</div>
+
+<table>
+  <tr><th style="width:34%"></th><th>기존 (엑셀 수작업)</th><th>앱</th></tr>
+  <tr><td><b>산정</b></td><td>10시간 이상</td><td><b>1분</b></td></tr>
+  <tr><td><b>검증</b> — 수문조사 숙련자</td><td colspan="1">산정과 분리되지 않음</td><td><b>약 10분</b></td></tr>
+  <tr><td><b>검증</b> — 도메인 비숙련자</td><td>사실상 불가</td><td><b>약 1시간</b> <span style="color:var(--muted);font-size:.9em;">← 이게 진짜 목표</span></td></tr>
+</table>
+
+<p>마지막 줄이 이 프로젝트의 실제 목표입니다. 수문조사를 모르는 사람도, 앱이 제시하는 근거만 따라가면 한 시간 안에 검증할 수 있게 만드는 것. 검증할 수 있는 사람의 수를 늘리는 일입니다.</p>
+
+<h4 class="dev" data-nav="1-1-5 · 정답셋이 없다">1-1-5 · 정답셋이 없다</h4>
+<ul>
+  <li><b>판정하는 사람은 있습니다</b> — 숙련된 검증자가 근거를 보고 판단합니다.</li>
+  <li>하지만 미리 채점할 수 있는 라벨은 없습니다. "이 조사의 진짜 원가"라는 확정값이 존재하지 않습니다.</li>
+  <li>있는 것은 법이 정한 계산 절차뿐이고, 그 절차를 적용하는 데도 해석의 여지가 남습니다.</li>
+  <li>즉 정확도를 자동으로 잴 방법이 없습니다. 사람이 봐야 합니다.</li>
+  <li>그래서 정확도를 추적 가능성으로 대체했습니다.</li>
+  <li>맞았는지 채점하는 대신, 모든 숫자가 원본까지 되짚어지는지를 기준으로 삼았습니다.</li>
+  <li>사람이 눈으로 대조할 수 있으면 — 정답을 몰라도 틀렸을 때 틀렸다고 말할 수 있습니다.</li>
+</ul>
+
+<div class="note green"><span class="lbl">그리고 끝나지 않는 작업</span>
+실무자의 노하우를 계속 듣고 반영합니다. 어떤 가정을 왜 그렇게 잡는지는 기준서에 다 적혀 있지 않고, 현장에서 축적된 판단으로 채워집니다. 그 판단을 하나씩 앱의 근거로 옮기는 일이 계속됩니다 (→ §1-3의 원장 피드백).</div>
+
+
+
+
+<h3><span class="mk">💧</span> 1-2. <span class="cs">사례 1</span> 핵심 프롬프트 — 코드보다 검증을 먼저 요구</h3>
+<p class="qref"><b>과제 질문</b> — AI에게 던진 <b>핵심 프롬프트(질문)</b>와 그에 대한 AI의 답변은 어땠는지? <b>이후 어떤 방식으로 대화가 진행</b>되었는지 기술해 주세요.</p>
+<div class="ans"><span class="lbl">짧은 답</span>첫 프롬프트에서 <b>코드를 요구하지 않았습니다.</b> 대신 <b>"validation이 가장 중요하니 각 문장의 근거를 매번 citation해줘"</b>를 요구했습니다.
+<ul>
+  <li><b>AI의 답</b> — 요구대로 Streamlit 앱과 3단 화면(1분·10분·최종)이 나왔지만, <b>목적을 "총예산 이해 도구"로 잘못 잡았습니다.</b></li>
+  <li><b>이후 다섯 번 되돌렸습니다</b> — 목적 정정 → 범위를 수문 1개로 → 좌표 인용 거부 → PDF는 이미지로 → 모든 계산을 수식으로.</li>
+  <li>다섯 건 모두 <b>AI가 먼저 틀렸고 제가 앱을 써보다 발견</b>한 것입니다.</li>
+</ul></div>
+<h4 class="dev" data-nav="1-2-1 · 첫 프롬프트 원문">1-2-1 · 첫 프롬프트 원문</h4>
+<p>다듬은 요약 대신 첫 프롬프트를 날것 그대로 남깁니다. 오디오 받아쓰기라 문장이 거칠고 오타도 있지만(<i>"파악을 할 수 있느", "validtion"</i>), 그래서 결론이 아니라 사고의 흐름이 보입니다. 핵심만 하이라이트했습니다. (내부 데이터 폴더명 한 곳만 마스킹.)</p>
 
 <blockquote class="rawp">강 별로 수문조사들을 한 것들이 다 저장되어 있는 데 너무 내용이 많고 그 예산이라고 할만한 부분도 카테고리가 너무 많다. 그래서 이 전체적으로 파악이 안되는데. 파악을 할 수 있느. 어떻게 보면 <mark>1분만에 이해할 수 있는</mark> 적절한 spread sheet와 인사이트를 보여주는 html을 만들어주고, 그 후 <mark>10분 정도</mark> 시간 들여서 이해할 수 있는 html도 만들어주고. 그 다음에 결국에는 궁극적으로 내가 원하는것은 <mark>1개 강의 수문을 조사시 몇명이 몇시간 얼마의 비용이 들어가는지</mark> 분석하는 것이다. 하지만 이게 바로 하게 되면 <mark>환각이 일어날수도있고</mark>, 이게 나름의 방정식일텐데 이해하기가 어려울 수도 있다. 마치 선형회귀로 서울 아파트 가격을 예측할때 다양한 feature들을 고려해서 더 정확하게 예측할 수 있겠다만, 그러면 이해가 안되니 <mark>heuristic하게 일단 size만 가지고 예측하는 것처럼</mark>. 처음에는 아주 간단한 마치 하나의 feature 고려하는 것처럼 <mark>정확도는 떨어지더라도 validtion이 될 수 있는 방향</mark>으로 해야겟다. html을 만들때 아무래도 streamlit으로 해야될 거 같으니. <mark>아까 말한것과 다르게 html이 아니라 streamlit으로</mark> 만들어줘. 다시한번 말하는데 <mark>validation이 가장 중요</mark>하니, 가 문장의 근거는 실제 <b>[내부 데이터]</b>를 한번 가공해서 그 데이터를 <mark>매번 citation</mark>해줘.</blockquote>
 
-<p style="color:var(--muted);font-size:.92rem;font-weight:700;margin:16px 0 2px;">↑ 이 한 문단이 담은 사고 흐름</p>
-<pre class="mermaid">
-flowchart TB
-  P["전체가 안 잡힌다<br/><i>데이터·예산 카테고리 과다</i>"]:::prob
-  P --> G["목표를 3단으로 쪼갬<br/>1분 → 10분 → <b>1개 강 = 몇 명·몇 시간·얼마</b>"]:::goal
-  G --> W["바로 복잡하게 가면?<br/><i>환각 위험 + 이해 불가 — 아파트값 다중회귀처럼</i>"]:::warn
-  W --> S["그래서 heuristic부터<br/><i>size 하나로 어림 · 정확도↓ 검증↑</i>"]:::solu
-  S --> V["<b>validation이 가장 중요</b>"]:::key
-  V --> C["모든 값에 원본 citation"]:::key2
-  V --> T["도구 정정: html → streamlit"]:::tool
-  classDef prob fill:#fdeeec,stroke:#a3241d,color:#7a1a15;
-  classDef goal fill:#e9f3f2,stroke:#0b6b63,color:#0b3f3a;
-  classDef warn fill:#fdf4e8,stroke:#a8560a,color:#7a3d06;
-  classDef solu fill:#eaf6f0,stroke:#0a7048,color:#08512f;
-  classDef key fill:#0b6b63,stroke:#083f3a,color:#ffffff;
-  classDef key2 fill:#e9f3f2,stroke:#0b6b63,color:#0b3f3a;
-  classDef tool fill:#eef3f6,stroke:#33505f,color:#22333c;
-</pre>
+<p class="minihead">이 한 문단이 담은 사고 흐름</p>
+<ol class="chain">
+  <li><b>데이터가 너무 많아 전체가 안 잡힌다</b>
+      <span>파일도 여러 개고, 예산 항목 분류도 지나치게 잘게 쪼개져 있다.</span></li>
+  <li><b>그래서 숲과 나무를 한 번에 요청했다</b>
+      <span>어차피 오래 걸리니 한 번의 대기로 둘 다 받는다. 전체 구조는 AI가 잘하고, 세부는 내가 조정한다.</span></li>
+  <li class="q"><b>세부만 곧장 요청하면 안 되나?</b>
+      <span>좁고 깊은 결과일수록 내가 원한 것과 어긋나기 쉽다. 게다가 AI가 그럴듯한 숫자를 지어내도 알아챌 수가 없다.</span></li>
+  <li><b>그래서 확인할 수 있는 형태부터 요청했다</b>
+      <span>정확도가 조금 떨어져도 값이 어디서 왔는지 따라갈 수 있어야 한다. 실패해도 전체 맥락은 남아 다음 대화의 자료가 된다.</span></li>
+  <li class="key"><b>결국 가장 중요한 것은 검증이다</b>
+      <span>빨리 만드는 것보다, 나온 결과를 믿을 수 있느냐가 먼저.</span></li>
+  <li><b>그래서 모든 숫자에 원본 출처를 붙이게 했다</b>
+      <span>어느 파일 어느 셀에서 온 값인지 화면에 같이 표시한다.</span></li>
+  <li><b>도구도 도중에 바꿨다</b>
+      <span>정적 HTML → Streamlit. 값을 바꿔 가며 확인할 수 있어야 해서.</span></li>
+</ol>
 
-<p><b>코드 얘기는 한 줄도 없습니다.</b> 대신 이미 다 들어 있습니다 — 단계적 이해(1분 → 10분 → 궁극), 환각 위험을 스스로 예상, 정확도보다 검증 우선, heuristic-first, 그리고 도구를 바꾸는 중간 정정(html → streamlit). 전부 "무엇을 만드나"가 아니라 "어떻게 믿을 것인가"입니다.</p>
+<p><b>코드 얘기는 한 줄도 없습니다.</b> 전부 "무엇을 만드나"가 아니라 "어떻게 믿을 것인가"에 대한 요구입니다.</p>
 
-<p>이어진 대화 — 목적을 헷갈린 AI를 <b>"이건 원가 검증이다"</b>로 되돌리고, 좌표 인용을 거부하고, 추출 채널 자체를 불신한 과정 — 은 <a href="#ap-a">부록 A</a>에 원문(마스킹)으로, 그 결과는 바로 아래 1-3에 정리했습니다.</p>
+<h4 class="dev" data-nav="1-2-2 · 왜 숲과 나무를 한 번에">1-2-2 · 왜 숲과 나무를 한 번에 요청했나</h4>
+<p>가장 오해받는 대목입니다. 화면을 세 개 만들어 달라는 말도, 세 결과를 서로 대조하겠다는 말도 아닙니다.</p>
+<ul>
+  <li><b>대기가 한 번으로 끝난다</b> — 큰 요청은 어차피 오래 걸립니다. 그 한 번의 대기로 최종 목표(나무)와 전체 맥락(숲)을 같이 받습니다. 운이 좋으면 나무가 곧바로 나오기도 합니다.</li>
+  <li><b>지엽적일수록 빗나간다</b> — 세부 계산은 제가 뭘 원하는지 AI가 모르는 상태에서 만들어집니다. 좁고 깊을수록 어긋나기 쉽습니다.</li>
+  <li><b>전체 구조는 웬만하면 맞힌다</b> — 흩어진 자료에서 뼈대를 뽑는 일은 잘합니다. 그래서 숲은 맡기고 나무는 제가 조정합니다.</li>
+  <li><b>실패해도 손해가 아니다</b> — 나무가 빗나가도 숲은 남습니다. 그 숲은 다음 대화에서 AI가 참고할 자료가 되어, 같은 배경을 다시 설명하지 않아도 됩니다.</li>
+</ul>
 
-<h3>1-3. 이후 대화의 전개 — 네 번의 수정</h3>
-<p>모두 <b>AI가 먼저 틀렸고, 제가 발견해 방향을 바꾼</b> 사건입니다.</p>
+<div class="tiers">
+  <div class="tier">
+    <div class="tno">숲</div>
+    <div class="tname">1분판 — 전체 규모</div>
+    <dl>
+      <dt>만드는 것</dt><dd>강·연도별 총량과 단가를 한 화면에 요약</dd>
+      <dt>보는 사람</dt><dd>의사결정자(원장). 설명 없이 1분 안에 본다</dd>
+      <dt>왜 맡기나</dt><dd>흩어진 자료에서 전체 구조를 뽑는 일은 AI가 잘한다</dd>
+    </dl>
+  </div>
+  <div class="arw">→</div>
+  <div class="tier">
+    <div class="tno">사이</div>
+    <div class="tname">10분판 — 분해</div>
+    <dl>
+      <dt>만드는 것</dt><dd>그 총량이 어떤 항목의 합인지 분해, 각 값에 원본 인용</dd>
+      <dt>보는 사람</dt><dd>실무자. 숫자를 따라 원본까지 내려간다</dd>
+      <dt>역할</dt><dd>숲에서 나무로 내려가는 계단. 어느 항목을 파고들지 여기서 정한다</dd>
+    </dl>
+  </div>
+  <div class="arw">→</div>
+  <div class="tier">
+    <div class="tno">나무</div>
+    <div class="tname">최종 — 수문 1건 원가</div>
+    <dl>
+      <dt>만드는 것</dt><dd>몇 명 · 몇 시간 · 얼마 — 법령 품셈에서 쌓아 올린 단가</dd>
+      <dt>보는 사람</dt><dd>발주처와의 원가 협의 자리</dd>
+      <dt>왜 내가 조정하나</dt><dd>무엇이 맞는 답인지 아는 건 결국 저뿐이다</dd>
+    </dl>
+  </div>
+</div>
+
+<h4 class="dev" data-nav="1-2-3 · 세 화면이 만들어진 모습">1-2-3 · 세 화면이 실제로 만들어진 모습</h4>
+<figure class="shot">
+  <img src="./screenshots/s1-tier1-30sec.png" alt="숲 화면 — 번호 붙은 인사이트 네 개와 각각의 원본 근거 인용 footer">
+  <figcaption>숲 · 전체 규모. 결론 네 줄과 그 아래 근거 줄이 한 화면에 같이 있습니다 — 어느 파일 어느 시트 어느 셀에서 나온 값인지(<code>D24×E24=F24</code>)까지. 여기서는 수치를 전부 가렸습니다. 남은 문장만 읽어도 이 화면이 무엇을 하는지는 보입니다 — 결론마다 그 결론이 어디서 나왔는지가 붙어 있다는 것. 그리고 이 화면은 구경거리로 끝나지 않았습니다 — 네 번째 항목이 "표준품셈에 1회당 인·일이 이미 규정돼 있다"를 찾아냈고, 끝에 <code>→ 비용모델 v0 페이지에서 사용</code>이라고 적혀 있습니다. 최종 계산의 열쇠를 숲에서 주운 것입니다.</figcaption>
+</figure>
+<figure class="shot">
+  <img src="./screenshots/s1-tier2-sites.png" alt="중간 화면 — 시도별 조사지점 수 막대그래프와 거점별 교통비 분포, 두 파일의 지점 수가 일치한다는 확인 문구">
+  <figcaption>사이 · 분해. 총량을 시도별·거점별로 쪼개 봅니다. 오른쪽 아래 한 줄이 이 화면의 핵심입니다 — "교통비 파일의 연번 범위 합 = 355지점, 조사지점 파일과 정확히 일치". 서로 다른 두 파일이 같은 수를 말하는지 확인한 것으로, §1-3 장치 3(교차 파일 불변식)이 여기서 처음 등장합니다. 교통비 금액과 내부 파일명은 가렸고, 이 대조의 근거인 지점 수는 남겼습니다.</figcaption>
+</figure>
+<figure class="shot">
+  <img src="./screenshots/s1-tier3-costmodel.png" alt="나무 화면 — 비용모델 v2 상단. 질문, 법정 산식, 근거 발췌 접이식, 관측소 선택">
+  <figcaption>나무 · 최종. 질문을 화면 맨 위에 그대로 적어 둡니다 — <i>"1회 하면 법령상 몇 명이·몇 시간·얼마가 나와야 하는가"</i>. 바로 아래가 그 답의 근거인 법정 산식이고, 접이식으로 표준품셈 원문 p.1이 붙어 있습니다. 값이 아니라 값이 나온 법적 경로를 먼저 보여주는 순서입니다.</figcaption>
+</figure>
+
+<p>이어진 대화 — 목적을 헷갈린 AI를 "이건 원가 검증이다"로 되돌리고, 좌표 인용을 거부하고, 추출 채널 자체를 불신한 과정 — 은 아래 1-2-4~1-2-8에 원문(마스킹)으로, 그 결과는 1-3에 정리했습니다.</p>
+
+<p class="minihead">이후 대화의 전개 — 다섯 번의 수정</p>
+<p>모두 AI가 먼저 틀렸고, 제가 발견해 방향을 바꾼 사건입니다.</p>
 <figure class="shot" style="max-width:340px;">
   <img src="./screenshots/s1-app-pages.png" alt="앱 사이드바 — 10분 심화, 비용모델 v0/v1/v2, 원본 엑셀 뷰어, 질문 히스토리 페이지 목록">
-  <figcaption>한 번에 만들지 않고 <b>v0 → v1 → v2</b>로 점점 지엽적인 모델을 쌓았습니다. 원본 뷰어·질문 히스토리까지 페이지로 남겼습니다.</figcaption>
+  <figcaption>한 번에 만들지 않고 v0 → v1 → v2로 점점 지엽적인 모델을 쌓았습니다. 원본 뷰어·질문 히스토리까지 페이지로 남겼습니다.</figcaption>
 </figure>
 
-<div class="step"><div class="n">1</div><div class="c">
-<h4>목적 자체의 오해</h4>
-<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">이때 던진 원문 — "아이고 니가 <mark>목적을 완전히 헷갈렸는데</mark> … 우리가 <mark>원가 검증</mark>을 하는 프로젝트를 하고 있거든. 이 예산이 실제 그 <mark>법령하고 맞는지</mark>를 항상 보는 …"</blockquote>
-<p>약 50분 만에 완성도 높은 앱이 나왔지만, 프레이밍이 <b>"총예산을 이해하는 도구"</b>였습니다. 실제 목적은 "이 예산이 기준에 부합하는지 검증"이었습니다. 결과물은 그럴듯했지만 목적 함수가 틀려 있었습니다.</p>
-<p><b>발견:</b> 코드가 아니라 앱을 써보다 알았습니다. 제 도메인 감각과 앱이 강조하는 게 어긋났거든요. 사전 기대치가 있으니 불일치가 보였습니다.</p>
-<p><b>조치:</b> 목적을 정정하고 프로젝트 메모리에 기록했습니다. "이 데이터가 실제로 그런지 궁금하다"는 요구에서 원본 엑셀 뷰어가 나왔습니다 — 행·열 좌표를 그대로 보존해 어디서든 원본과 대조됩니다. 페이지는 덮어쓰지 않고 버전을 붙여 이전 결론을 남깁니다.</p>
-</div></div>
+<h4 class="dev" data-nav="1-2-4 · 목적 자체의 오해">1-2-4 · 목적 자체의 오해</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">아이고 니가 <mark>목적을 완전히 헷갈렸는데</mark> … 우리가 <mark>원가 검증</mark>을 하는 프로젝트를 하고 있거든. 이 예산이 실제 그 <mark>법령하고 맞는지</mark>를 항상 보는 …</blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>만들어진 것을 고치라는 게 아니라 <b>목적 함수 자체를 바꾸라</b>고 말했습니다.</li>
+  <li>"총예산을 이해하는 도구"가 아니라 <b>"이 예산이 법령 기준에 맞는지 검증"</b>이 목적임을 못 박았습니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li>약 50분 만에 <b>완성도 높은 앱</b>이 나와 있었습니다. 그런데 프레이밍이 틀려 있었습니다 — <b>결과물은 그럴듯한데 목적 함수가 어긋난</b> 경우입니다.</li>
+  <li><b>어떻게 발견했나</b> — 코드가 아니라 <b>앱을 써보다</b> 알았습니다. 제 도메인 감각과 앱이 강조하는 것이 어긋났고, 사전 기대치가 있으니 불일치가 보였습니다.</li>
+  <li>정정한 목적을 <b>프로젝트 메모리에 기록</b>해 이후 대화에도 남게 했습니다.</li>
+  <li>"이 데이터가 실제로 그런지 궁금하다"는 요구에서 <b>원본 엑셀 뷰어</b>가 나왔습니다.</li>
+  <li>페이지는 덮어쓰지 않고 <b>버전을 붙여</b> 이전 결론을 남겼습니다.</li>
+</ul></div>
 
-<div class="step"><div class="n">2</div><div class="c">
-<h4>"근거처럼 보이지만 반증할 수 없는 근거"</h4>
-<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">이때 던진 원문 — "그 근거라는 부분을 <mark>spreadsheet의 일부를 복사붙여넣기 해서 누구나 spreadsheet에서 온 것처럼</mark> 해줘. … <mark>새로운 수식이 나오면 그걸 근거를 보여줘</mark>"</blockquote>
-<p>인용이 <b>좌표 문자열</b>이었습니다(<code>📎 근거: 단가표 D4</code>). 엄밀해 보이지만 그 자리에서 검증할 수 없고, 무엇보다 지어낸 좌표와 진짜 좌표가 겉으로 구분되지 않습니다.</p>
-<p><b>조치:</b> 인용을 원본 시트의 실제 조각으로 바꿨습니다. 엑셀 행 번호·열 문자를 유지한 발췌를 접이식으로 붙이고, 인용 행은 연노랑·인용 셀은 진노랑으로 강조했습니다. "왜 측정 종류가 두 가지인가" 같은 파생 질문은, 표준품셈 해당 페이지에 두 행만 존재한다는 사실을 보여주는 것으로 답했습니다.</p>
-</div></div>
+<h4 class="dev" data-nav="1-2-5 · 범위를 원자 단위로 좁힘">1-2-5 · 범위를 원자 단위로 좁힘</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">누가 그냥 todo를 해줘. 비용모델은 <mark>1개 강의 수문 조사시 몇명이 몇시간 얼마의 비용인지</mark> 부터 아는거로 하자.<br><br>
+새로운 비용모델을 만들자. 즉 <mark>매우 지엽적인 수문 1개 조사시에 몇명이 몇시간 얼마</mark>의 비용이 들어가는 지. 즉 특정 수문을 현재 조건을 보고 <mark>법령에 맞게 실제로 나오는지</mark>. 다른 예산은 일단 필요없다.</blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li><b>출력을 먼저 못 박기</b> — <b>몇 명 · 몇 시간 · 얼마</b>. 무엇을 만들지가 아니라 무엇이 나와야 하는지를 정합니다.</li>
+  <li><b>판정 기준 고정</b> — "법령대로 나오는가".</li>
+  <li><b>나머지를 명시적으로 제외</b> — "다른 예산은 일단 필요없다".</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li>판정 기준이 생기니 <b>뒤의 검증이 대조가 됐습니다.</b> 기준이 없으면 검증은 감상이 됩니다.</li>
+  <li><b>범위를 말로 닫아 두지 않으면 AI가 알아서 넓힙니다.</b> 닫아 두자 v0 → v1 → v2로 <b>점점 좁은 모델이 쌓였습니다.</b></li>
+  <li>원본 뷰어·질문 히스토리까지 별도 페이지로 남아, 이전 단계가 지워지지 않았습니다.</li>
+</ul></div>
 
-<div class="step"><div class="n">3</div><div class="c">
-<h4>PDF 텍스트 추출이 표를 조용히 파괴</h4>
-<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">이때 던진 원문 — "pdf는 확실히 표로 되어 있으니 읽기가 어렵네. <mark>pdf는 스크린샷도 그냥 찍어서 근거로 보여주라</mark>"</blockquote>
-<p>PDF를 일반 텍스트 추출로 읽자 인력 투입 표가 <b>구분자 없는 숫자 나열</b>로 나왔습니다.</p>
+<h4 class="dev" data-nav="1-2-6 · 반증할 수 없는 근거">1-2-6 · 반증할 수 없는 근거</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">그 근거라는 부분을 <mark>spreadsheet의 일부를 복사붙여넣기 해서 누구나 spreadsheet에서 온 것처럼</mark> 해줘. … <mark>새로운 수식이 나오면 그걸 근거를 보여줘</mark></blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>좌표 문자열이 아니라 <b>원본 조각 자체</b>를 붙이게 했습니다.</li>
+  <li>새 수식이 나올 때마다 <b>근거를 함께</b> 내게 했습니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li><b>무엇이 문제였나</b> — 인용이 <code>📎 근거: 단가표 D4</code> 같은 좌표였습니다. 엄밀해 보이지만 그 자리에서 검증할 수 없고, 무엇보다 <b>지어낸 좌표와 진짜 좌표가 겉으로 구분되지 않습니다.</b></li>
+  <li><b>바꾼 것</b> — 엑셀 행 번호·열 문자를 유지한 발췌를 접이식으로 붙이고, 인용 행은 연노랑·인용 셀은 진노랑으로 표시했습니다.</li>
+  <li><b>표시 방식을 기존 작업자 화면에 맞췄습니다</b> — 원본이 엑셀이면 엑셀 뷰어처럼. 담당자가 <b>새 UI를 배우지 않아야</b> 검증이 실제로 일어납니다.</li>
+  <li>파생 질문("왜 측정 종류가 두 가지인가")도 <b>원문에 두 행만 존재한다는 사실</b>을 보여주는 것으로 답했습니다.</li>
+</ul></div>
+<figure class="shot">
+  <img src="./screenshots/s1-evidence-xlsx.png" alt="근거 발췌를 엑셀 뷰어 형태로 표시한 화면 — 행 번호와 열 문자를 유지하고 인용 행을 노랑으로 강조">
+  <figcaption>값마다 근거 발췌가 접혀 있습니다. 열면 원본 시트 좌표(<code>B101:D103</code>)와 함께 인용 행의 앞뒤 행까지 나옵니다 — 앞뒤가 있어야 값이 잘린 것인지 원래 그런 것인지 판단됩니다. 금액·주소·내부 파일명은 마스킹했고, 격자 구조는 원본 그대로입니다.</figcaption>
+</figure>
+
+<h4 class="dev" data-nav="1-2-7 · 텍스트 추출은 믿지 않는다">1-2-7 · 텍스트 추출은 믿지 않는다 — 원본을 그대로 보여준다</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">pdf는 확실히 표로 되어 있으니 읽기가 어렵네. <mark>pdf는 스크린샷도 그냥 찍어서 근거로 보여주라</mark></blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>PDF에서 텍스트를 뽑는 <b>추출 채널 자체를 근거에서 배제</b>하게 했습니다.</li>
+  <li>이유는 하나입니다 — <b>안 될 때 에러가 나지 않습니다.</b> 그럴듯한 문자열이 나오고 계산은 그대로 돕니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<p><b>실제로 인력 투입 표를 텍스트로 뽑으면 이렇게 나옵니다.</b></p>
 <span class="garble">(1) 평ㆍ저수 유량측정회0.050.650.850.90②●</span>
-<p>등급 칸은 <b>여섯 개</b>인데 값은 네 개뿐이고, 어느 값이 어느 등급인지 알 수 없는 상태였습니다. 하나만 밀려도 하위 인건비 계산 전체가 조용히 오염됩니다 — 에러가 발생하지 않기 때문에 더 위험합니다.</p>
-<p><b>발견:</b> 특정 숫자가 아니라 추출 경로 자체를 불신했습니다. 근거 발췌가 표로 읽히지 않으니 채널을 믿을 수 없었습니다.</p>
-<p><b>조치(3단):</b> ① 레이아웃 보존 모드로 재추출해 값–등급 대응 확정(합계 2.45 인·일). ② PDF를 이미지로 렌더해 표 원형을 근거로 제시 — 스크립트 생성이라 원본이 바뀌면 재생성. ③ 전사값이 원본과 일치하는지 재대조하고 기록.</p>
+<ul>
+  <li>등급 칸은 여섯 개인데 값은 네 개뿐이고, <b>어느 값이 어느 등급인지 알 수 없습니다.</b> 하나만 밀려도 인건비 계산 전체가 조용히 오염됩니다.</li>
+  <li><b>규칙을 바꿨습니다</b> — PDF 근거는 무조건 원본 페이지를 그대로 보여줍니다. 표가 표로 보이고, 줄 간격도 원본 그대로이고, <b>추출기가 무엇을 흘렸는지 걱정할 필요가 없습니다.</b></li>
+  <li>값 자체는 레이아웃 보존 모드로 다시 뽑아 원본과 대조해 확정했습니다(합계 <b>2.45 인·일</b>). 다만 <b>화면에 붙는 근거는 언제나 원본 이미지</b>입니다.</li>
+  <li>원본만 두면 어디를 보라는 건지 알 수 없으니 <b>인용한 문구에만 형광펜</b>을 칠했습니다. 이미지는 스크립트가 생성하므로 원본이 바뀌면 다시 만들어집니다.</li>
+</ul></div>
+<div class="note amber"><span class="lbl">이 우회책의 한계 — 그리고 왜 전용 파서가 필요한가</span>
+· 표 추출은 <b>실패해도 예외를 던지지 않습니다.</b> 그럴듯한 문자열이 나오고 계산은 그대로 돕니다. 값이 조용히 오염되는 이 성질이 <b>범용 텍스트 추출로 문서를 다루면 안 되는 이유</b>이고, <b>레이아웃과 표 구조를 이해하는 전용 파서</b>가 별도 제품으로 존재하는 이유이기도 합니다.<br>
+· <b>제 우회책은 확장되지 않습니다.</b> 원본 이미지를 붙이는 방식은 <b>사람이 검증하는 화면</b>에서는 통하지만, 표 안의 값을 <b>기계가 다시 쓰는 자동 파이프라인</b>에서는 쓸 수 없습니다. 사람이 읽을 그림이지 구조화된 데이터가 아니니까요.<br>
+· 그래서 지금 구조는 <b>"값은 사람이 확정하고, 근거는 이미지로 남긴다"</b>에 머뭅니다. 규모가 커지면 <b>구조를 보존해 추출하는 단계</b>가 앞에 들어와야 하고, 그때 필요한 것이 이 부분을 제품으로 푼 파서입니다.</div>
 <figure class="shot">
   <img src="./screenshots/s1-pumsem-manpower.png" alt="표준품셈 투입인원수 산정기준 표를 이미지로 렌더한 근거 — 정부 공개문서">
-  <figcaption>② 채널 검증. 텍스트 추출이 표를 깨뜨리므로 PDF 페이지를 이미지로 렌더해 표 원형 그대로를 근거로 제시합니다. (표준품셈 — 정부 공개문서)</figcaption>
+  <figcaption>PDF 근거는 이렇게 붙습니다 — 페이지를 이미지로 렌더해 표를 표인 채로 보여주고, 인용한 부분만 형광펜으로 표시합니다. 추출기를 거치지 않으므로 무엇이 흘렀는지 의심할 일이 없고, 사람은 색칠된 곳만 보면 됩니다. (표준품셈 — 정부 공개문서)</figcaption>
 </figure>
+
+<h4 class="dev" data-nav="1-2-8 · 결과 말고 수식을 요구">1-2-8 · 결과 말고 수식을 요구 — 결과가 아니라 근거를 대조할 수 있게</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">현장 출동인원이 몇명이 필요한지는 <mark>원래 알 수 없나?</mark> … 적용보정계수 같이 수식으로 계산한것들은 <mark>그 수식까지 표현해야지. 모든 수식은 다 표현해줘.</mark></blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>결과 숫자가 아니라 <b>수식 → 숫자 대입 → 결과</b> 세 열을 요구했습니다.</li>
+  <li>근거 없이 놓인 <b>기본값의 출처</b>를 캐물었습니다.</li>
+  <li>결과만 있으면 확인하는 방법이 <b>전부 다시 계산하는 것뿐</b>이고, 검토자에게 그건 사실상 확인하지 말라는 말입니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li><b>검토가 재계산이 아니라 대조가 됐습니다.</b> 각 항의 숫자가 어느 원본에서 왔는지 그 줄에서 확인되고, 어긋나도 <b>그 항만 짚으면</b> 됩니다.</li>
+  <li><b>부수 효과 — 근거 없는 상수가 드러났습니다.</b></li>
+</ul>
+<ol>
+  <li><b>발견</b> — "현장 출동 인원"이 기본값 <code>3</code>으로 고정돼 있었습니다. 수식 자리에 적을 근거가 없었습니다.</li>
+  <li><b>확인</b> — 표준품셈은 연인원(인·일)만 규정합니다. 동시 투입 인원은 정하지 않습니다.</li>
+  <li><b>유도</b> — 데이터에서 범위를 뽑았습니다. 1일 내 완료 가정 + 사람은 쪼갤 수 없으므로 <code>⌈2.45⌉ = 3명</code>, 등급 구성상 상한 <code>4명</code>.</li>
+</ol>
+<p><b>상수를 유도로 대체한 것입니다.</b> 수식을 요구하지 않았으면 보이지 않았을 자리였습니다.</p></div>
 <figure class="shot">
   <img src="./screenshots/s1-calib.png" alt="수면폭 보정계수 유도 — 표준품셈 p.7을 이미지로 렌더">
-  <figcaption>보정계수도 같은 방식입니다 — <b>수면폭 B로 구간을 정하는 규칙</b>을 공개 품셈 p.7 이미지로 근거 제시(100 ≤ B=150 &lt; 200 → 계수 1.0).</figcaption>
+  <figcaption>보정계수가 그 예입니다. <code>1.0</code>이라고만 적으면 왜 1.0인지 확인할 수 없지만, 판정 규칙을 함께 펼치면 100 ≤ B=150 &lt; 200 → 계수 1.0이라는 근거가 그 자리에서 대조됩니다. 규칙의 출처인 공개 품셈 p.7은 원본 이미지로 함께 붙였습니다.</figcaption>
 </figure>
-</div></div>
 
-<div class="step"><div class="n">4</div><div class="c">
-<h4>입력값처럼 위장한 매직 넘버</h4>
-<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">이때 던진 원문 — "현장 출동인원이 몇명이 필요한지는 <mark>원래 알 수 없나?</mark> … 적용보정계수 같이 수식으로 계산한것들은 <mark>그 수식까지 표현해야지. 모든 수식은 다 표현해줘.</mark>"</blockquote>
-<p>"현장 출동 인원"이 <b>기본값 3</b>으로 하드코딩된 채 입력처럼 보였습니다. 파라미터처럼 생겼지만, 근거 없는 상수가 법적 원가표 안에 있던 겁니다.</p>
-<p><b>조치:</b> 표준품셈은 연인원(인·일)만 규정하고 동시 투입 인원은 안 정합니다. 그래서 데이터에서 하한을 유도했습니다(1일 내 완료 + 사람은 못 나누므로 ⌈2.45⌉ = 3명, 등급 구성상 상한 4명). 상수를 유도로 대체한 겁니다. 모든 계산은 수식 → 대입 → 결과 3열로 펼쳤습니다. 결과만 있으면 전부 재계산해야 하지만, 수식이 남으면 어느 항이 틀렸는지 좁혀집니다.</p>
-<figure class="shot">
-  <img src="./screenshots/s1-cost-formula.jpg" alt="원가 계산을 수식 → 숫자 대입 → 결과 3열로 전개한 화면 — 공개 노임단가 기반">
-  <figcaption>수식 → 숫자 대입 → 결과 3열. 어느 항이 틀렸는지 좁힐 수 있게 모든 계산을 펼쳤습니다. 공개 노임단가로 유도한 원가입니다.</figcaption>
-</figure>
-</div></div>
-
-<h3>1-4. 검증 — 실제 적용 전에 확인한 것</h3>
+<h3><span class="mk">💧</span> 1-3. <span class="cs">사례 1</span> 검증 및 적용 — 실무에 넣기 전, 네 겹으로 확인</h3>
+<p class="qref"><b>과제 질문</b> — AI가 작성한 코드나 가이드를 <b>실제 환경에 적용하기 전</b>, 어떤 <b>검증(Test/Review)</b> 과정을 거쳤습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span>정답셋이 없으므로 <b>정확도를 "추적 가능성"으로 대체</b>했습니다. 맞았는지 채점하는 대신, <b>모든 숫자가 원본까지 되짚어지는지</b>를 기준으로 삼았습니다.
+<ul>
+  <li><b>원본 대조</b> — 인용한 셀을 엑셀 행·열 좌표 그대로 발췌해 화면에 붙입니다.</li>
+  <li><b>채널 검증</b> — PDF는 텍스트로 뽑지 않고 원본 페이지를 이미지로 보여줍니다.</li>
+  <li><b>교차 파일 불변식</b> — 서로 다른 파일이 같은 사실을 말하는지 기계로 검사합니다(42건 중 38건 오차 0).</li>
+  <li><b>독립 2차 추정</b> — 예산을 한 번도 보지 않는 두 번째 경로로 같은 값을 구해 견줍니다.</li>
+  <li><b>적용 이후</b> — 원장(비개발자) 보고로 피드백을 받아 다음 사이클의 입력으로 씁니다.</li>
+</ul></div>
+<h4 class="dev" data-nav="1-3-1 · 이 절을 읽는 법">1-3-1 · 이 절을 읽는 법</h4>
 <p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">여기서부터가 이 일의 핵심입니다 — AI가 낸 것을 실무에 넣기 전에 거치는 유효성 검증(validation). 데이터를 밖으로 낼 수 없고 틀린 값이 곧 법적·금전적 리스크인 환경에서, reliability는 기능이 아니라 요건이었습니다.</p>
-<div class="note teal"><span class="lbl">여긴 프롬프트가 없습니다</span>§1-2·1-3과 달리 이 검증 장치들엔 <b>개별 지시가 없습니다.</b> P1에서 세운 "검증이 최우선"이라는 원칙 아래 AI가 스스로 만들었고, 저는 검토해 채택했습니다. 무엇을 검증할지 정하는 건 사람, 실행은 AI — 판단을 쓰는 자리가 여기입니다.</div>
+<div class="note amber"><span class="lbl">읽는 분께 — 가려진 것과 남은 것</span>
+이 사례는 고객사 데이터를 다루므로 금액·주소·내부 파일명을 모두 가렸습니다. 그래서 화면에 회색 칸이 자주 보입니다. 다만 가린 것은 값이고, 이 글의 주장은 전부 값들 사이의 관계에 관한 것이라 값 없이도 확인됩니다 — 예컨대 바로 아래 불변식 검사는 금액을 다 가려도 <code>오차 = 0</code>이라는 결론이 그대로 보입니다.<br>
+값까지 직접 확인하고 싶으시면 사례 2(✈️ 1-4~1-6)를 보시면 됩니다. 저장소·정답셋·점수·코드가 전부 공개돼 있어 재현 가능합니다. 마스킹 기준은 <a href="#ap-b">부록 B</a>에 정리했습니다.</div>
+<div class="note teal"><span class="lbl">여긴 개별 프롬프트가 없습니다</span>1-2와 달리 이 검증 장치들엔 개별 지시가 없습니다. P1에서 세운 "검증이 최우선"이라는 원칙 아래 AI가 스스로 만들었고, 저는 검토해 채택했습니다. 무엇을 검증할지 정하는 건 사람, 실행은 AI — 판단을 쓰는 자리가 여기입니다.</div>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">맞는 답이 하나로 정해져 있지 않으니 점수를 매길 수 없습니다. 대신 모든 값이 원본으로 되짚어지게 만들어, 틀렸다면 어디서 틀렸는지 사람이 찾을 수 있게 했습니다.</p>
 <pre class="mermaid">
 flowchart TB
-  A["AI 산출물"] --> B["① 원본 대조<br/>행·열 보존 발췌 + 하이라이트"]
-  A --> C["② 채널 검증<br/>PDF는 이미지 렌더로 표 원형 확인"]
-  A --> D["③ 교차 파일 불변식<br/>자동 점검 스크립트"]
-  A --> E["④ 독립 2차 추정<br/>예산 데이터를 읽지 않는 경로"]
-  B --> F["적용"]
+  A["AI가 낸 산출물"]:::src
+  A --> B["원본 대조<br/>행·열 좌표를 보존한 발췌"]:::dev
+  A --> C["채널 검증<br/>PDF는 이미지로 표 원형 확인"]:::dev
+  A --> D["교차 파일 불변식<br/>다른 파일이 같은 값을 말하나"]:::dev
+  A --> E["독립 2차 추정<br/>예산을 안 보는 두 번째 경로"]:::dev
+  B --> F["실무 적용"]:::ok
   C --> F
   D --> F
   E --> F
-  D -.->|"불일치는 숨기지 않고"| G["알려진 데이터 이슈로 공개"]
+  D -.->|"불일치는 숨기지 않고"| G["알려진 데이터 이슈로 공개"]:::warn
+  classDef src fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.3px;
+  classDef dev fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+  classDef ok fill:#5B3FD9,stroke:#3A2A7A,color:#ffffff,stroke-width:1.4px;
+  classDef warn fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
 </pre>
 
-<p><b>가장 강력했던 것은 교차 파일 불변식 검사</b>였습니다. 서로 다른 파일이 같은 사실을 말하는지 프로그램으로 확인하므로, 자기일관적인 환각으로는 통과할 수 없습니다.</p>
-<ul>
-  <li>수량 × 단가 = 총계 — 42건 중 38건 정확 일치, 4건 불일치(오차 ±1.7% 이내). 실제값과 모델값을 함께 출력.</li>
-  <li>파일 간 대조 — 조사지점 수를 지점 현황 파일과 별도의 교통비 파일에서 각각 집계 → 양쪽 355로 일치.</li>
-  <li>변경 전/후 대조 — 7개 행의 불일치를 행 단위로 출력.</li>
-  <li>결측 탐지 — 주소에 광역시도가 없는 항목 1건 발견.</li>
-</ul>
+<p>아래는 실제 코드입니다 — 말이 아니라 이렇게 돌아갑니다. (파일명·금액은 파라미터라 노출 없음, 로직은 원본)</p>
 
-<p>아래는 <b>실제 코드</b>입니다 — 말이 아니라 이렇게 돌아갑니다. (파일명·금액은 파라미터라 노출 없음, 로직은 원본)</p>
+<h4 class="dev" data-nav="1-3-2 · 원본 대조">1-3-2 · 원본 대조 — 인용한 셀을 원본 격자 그대로 보여준다</h4>
+<pre class="mermaid">
+flowchart LR
+  Q["인용할 셀 좌표<br/>예: E9"]:::inp --> R["raw_slice<br/>엑셀 행번호·열문자를 그대로 보존"]:::act
+  R --> S["_row_style<br/>표의 행마다 호출"]:::act
+  S --> T{"이 셀이<br/>인용 목록에 있나"}:::dec
+  T -->|"셀까지 일치"| U["진노랑 + 굵게"]:::ok
+  T -->|"행만 인용"| V["연노랑"]:::ok
+  T -->|"아니다"| W["색 없음"]:::inp
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">인용 행·셀 하이라이트 <span class="fn">applib.py</span></div>
+<pre class="code">def evidence(rel_file, sheet_name, row_from, row_to, col_from="A", col_to=None,
+             note="", expanded=False, hl_rows=None, hl_cells=None):
+    <span class="cm">"""근거를 '원본 스프레드시트 발췌'로 붙이고, 인용된 행(연노랑)·셀(진노랑)을 하이라이트."""</span>
+    if hl_rows is None:
+        hl_rows = []
+    if hl_cells is None:
+        hl_cells = []
+    rows = set(hl_rows)    <span class="cm"># 하이라이트할 엑셀 행 번호 목록</span>
+    cells = set(hl_cells)  <span class="cm"># 하이라이트할 셀 좌표 목록 (예: "E9")</span>
+    df = raw_slice(rel_file, sheet_name, row_from, row_to, col_from, col_to)
 
-<div class="codecap">③ 교차 파일 불변식 <span class="fn">app.py</span></div>
-<pre class="code">chk = items.dropna(subset=["수량", "단가_백만원", "총계_백만원"]).copy()
-chk["모델값"]     = chk["수량"] * chk["단가_백만원"]
-chk["오차_백만원"] = chk["총계_백만원"] - chk["모델값"]
-n_exact = (chk["오차_백만원"].abs() &lt; 0.5).sum()
-max_err_pct = (chk["오차_백만원"].abs() / chk["총계_백만원"]).max() * 100
-<span class="cm"># 총계를 안 보고 수량×단가를 다시 곱한다. 서로 다른 셀이 말하는 사실이라</span>
-<span class="cm"># 자기일관적 환각으로는 이 등식을 통과할 수 없다.</span></pre>
-
-<div class="codecap">① 원본 대조 — 인용 셀만 하이라이트 <span class="fn">applib.py</span></div>
-<pre class="code">def evidence(rel_file, sheet, row_from, row_to, col_from="A", col_to=None,
-             hl_rows=None, hl_cells=None):
-    <span class="cm">"""근거를 '원본 스프레드시트 발췌'로 붙이고, 인용된 행·셀을 하이라이트."""</span>
-    df = raw_slice(rel_file, sheet, row_from, row_to, col_from, col_to)  <span class="cm"># 엑셀 좌표 그대로</span>
-    rows, cells = set(hl_rows or []), set(hl_cells or [])
-
+    <span class="cm"># pandas Styler가 행마다 호출하는 콜백 (C의 함수 포인터 인자와 같은 역할)</span>
     def _row_style(row):
         out = []
         for col in df.columns:
-            if f"{col}{row.name}" in cells:
-                out.append("background-color:#ffd54a; font-weight:600")  <span class="cm"># 인용 셀 = 진노랑</span>
+            cell_name = col + str(row.name)  <span class="cm"># 열 문자 + 행 번호 = 셀 좌표 (예: "E9")</span>
+            if cell_name in cells:
+                out.append("background-color:#ffd54a; font-weight:600")  <span class="cm"># 인용 셀</span>
             elif row.name in rows:
-                out.append("background-color:#fff3c4")                   <span class="cm"># 인용 행 = 연노랑</span>
+                out.append("background-color:#fff3c4")                   <span class="cm"># 인용 행</span>
             else:
                 out.append("")
         return out
 <span class="cm"># → '지어낸 좌표'와 '진짜 좌표'가 화면에서 색으로 갈린다.</span></pre>
+<figure class="shot">
+  <img src="./screenshots/s1-highlight-cell.png" alt="근거 발췌 화면 — 엑셀 행 번호 50·51·52와 열 문자 A~E를 그대로 두고, 인용 행은 연노랑, 인용 셀은 진노랑으로 강조">
+  <figcaption>위 코드가 만들어내는 화면입니다. 행 번호 50·51·52와 열 문자 A~E가 원본 엑셀 좌표 그대로라, 담당자가 원본 파일을 열어 같은 자리를 확인할 수 있습니다. 연노랑은 인용한 행, 진노랑은 실제로 값을 가져온 셀 — <code>_row_style</code>의 두 분기가 그대로 색으로 나타납니다. 앞뒤 행(50·52)을 함께 남긴 것도 의도입니다. 내부 파일명은 마스킹했습니다.</figcaption>
+</figure>
 
-<div class="codecap">② 채널 검증 — PDF는 이미지로, 없으면 텍스트 폴백 <span class="fn">applib.py</span></div>
-<pre class="code">def evidence_pdf(label, txt_name):
-    <span class="cm">"""PDF 근거: 페이지 스크린샷(형광펜)을 보여준다. 없으면 텍스트로 폴백."""</span>
-    png = DATA / f"{txt_name}.png"
-    if png.exists():
-        st.image(str(png))                    <span class="cm"># 표를 깨뜨리지 않는 이미지 그대로</span>
-        st.caption("↑ PDF 스크린샷 (🟡 형광펜 = 인용 문구)")
-    else:
-        st.code(_read_txt(txt_name))          <span class="cm"># 폴백: 기계 추출 원문</span></pre>
+<h4 class="dev" data-nav="1-3-3 · 채널 검증">1-3-3 · 채널 검증 — 추출 경로 자체를 믿지 않는다</h4>
+<pre class="mermaid">
+flowchart LR
+  A["PDF 근거 요청"]:::inp --> B{"그 페이지의<br/>렌더 이미지가 있나"}:::dec
+  B -->|"있다"| C["이미지 그대로 표시<br/>표 레이아웃이 살아 있다"]:::ok
+  B -->|"없다"| D["기계 추출 텍스트로 폴백<br/>표가 깨질 수 있음을 감수"]:::bad
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">PDF는 이미지로, 없으면 텍스트 폴백 <span class="fn">applib.py</span></div>
+<pre class="code">def evidence_pdf(label, txt_name, note="", expanded=False, hl=None):
+    <span class="cm">"""PDF 근거: 페이지 스크린샷(인용 부분 형광펜)을 보여준다. 없으면 텍스트로 폴백."""</span>
+    title = "📎 근거 발췌 — `표준품셈(2023).pdf` " + label
+    with st.expander(title, expanded=expanded):
+        png = DATA / (txt_name + ".png")
+        if png.exists():
+            st.image(str(png), width='stretch')      <span class="cm"># 표를 깨뜨리지 않는 이미지 그대로</span>
+            st.caption("↑ PDF 페이지 스크린샷 (etl.py가 렌더링, 🟡 = 인용 문구). " + note)
+        else:
+            st.code(_read_txt(txt_name), language=None)  <span class="cm"># 폴백: 기계 추출 원문</span>
+            st.caption("↑ PDF에서 기계 추출한 원문. " + note)
+
+<span class="cm"># raw_slice — 엑셀 좌표(행 번호·열 문자)를 그대로 살려 2차원 배열로 잘라온다</span>
+data = []           <span class="cm"># data[행][열]</span>
+row_names = []      <span class="cm"># 엑셀 행 번호를 인덱스로</span>
+for r in range(row_from, row_to + 1):
+    line = []
+    for c in range(c0, c1 + 1):
+        line.append(ws.cell(r, c).value)
+    data.append(line)
+    row_names.append(r)</pre>
+
+<h4 class="dev" data-nav="1-3-4 · 교차 파일 불변식">1-3-4 · 교차 파일 불변식 — 서로 다른 파일이 같은 사실을 말하는가</h4>
+<p><b>마지막 장치가 쓸 기준선이 멀쩡한지</b>를 먼저 검사합니다. 예산표의 지점당 단가는 <i>적혀 있으니 맞다</i>고 넘어갈 값이 아니고, 기준선이 틀려 있으면 격차(%)를 아무리 정밀하게 계산해도 의미가 없습니다.</p>
+<p>앞의 세 장치가 <b>"사람이 확인할 수 있게"</b> 만드는 것이라면, 이것은 <b>사람이 보지 않아도 걸립니다.</b> 자기일관적인 환각으로는 통과할 수 없습니다.</p>
+<table>
+  <tr><th style="width:26%">검사한 불변식</th><th style="width:38%">어떻게</th><th>결과</th></tr>
+  <tr><td><code>수량 × 단가 = 총계</code></td><td>총계 셀을 <b>보지 않고</b> 다시 곱해 대조</td><td><b>42건 중 38건 정확 일치</b> · 4건 오차 ±1.7% 이내</td></tr>
+  <tr><td>조사지점 수</td><td>지점 현황 파일과 <b>별도의 교통비 파일</b>에서 각각 집계</td><td>양쪽 <b>355</b>로 일치</td></tr>
+  <tr><td>변경 전 / 후</td><td>행 단위 대조</td><td>7개 행 불일치를 행별로 출력</td></tr>
+  <tr><td>결측</td><td>주소에 광역시도가 있는지 확인</td><td>1건 발견</td></tr>
+</table>
+<pre class="mermaid">
+flowchart TB
+  A["행 목록 records"]:::inp --> B{"수량·단가·총계 중<br/>빈 칸이 있나"}:::dec
+  B -->|"있다"| S["검사 대상 아님 — 건너뜀"]:::inp
+  B -->|"없다"| C["model = 수량 × 단가<br/><b>총계 셀은 보지 않는다</b>"]:::act
+  C --> D["err = 총계 − model"]:::act
+  D --> E{"오차가 0.5 미만인가"}:::dec
+  E -->|"예"| F["정확 일치 건수 +1"]:::ok
+  E -->|"아니오"| G["최대 오차율 갱신 후 공개"]:::bad
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">불변식 검사 루프 <span class="fn">app.py</span></div>
+<pre class="code"><span class="cm"># 교차 파일 불변식 검사: 수량 × 단가 = 총계. 총계 셀을 안 보고 다시 곱해서 대조한다.</span>
+records = items.to_dict("records")  <span class="cm"># DataFrame → dict 배열 (C의 struct 배열처럼 순회)</span>
+n_exact = 0         <span class="cm"># 오차 0으로 정확히 일치한 건수</span>
+max_err_pct = 0.0   <span class="cm"># 최대 오차율(%)</span>
+for i in range(len(records)):
+    row = records[i]
+    qty, price, total_val = row["수량"], row["단가_백만원"], row["총계_백만원"]
+    if pd.isna(qty) or pd.isna(price) or pd.isna(total_val):
+        continue  <span class="cm"># 셋 중 하나라도 빈 칸이면 검사 대상이 아니다</span>
+    model = qty * price          <span class="cm"># 서로 다른 셀이 말하는 사실이라</span>
+    err = total_val - model      <span class="cm"># 자기일관적 환각으로는 이 등식을 통과할 수 없다</span>
+    if abs(err) &lt; 0.5:
+        n_exact = n_exact + 1
+    if total_val != 0:  <span class="cm"># 총계 0인 행은 오차율 계산에서 제외</span>
+        err_pct = abs(err) / total_val * 100.0
+        if err_pct &gt; max_err_pct:
+            max_err_pct = err_pct</pre>
+<figure class="shot">
+  <img src="./screenshots/s1-invariant.png" alt="불변식 검사 화면 — 항목·연도·수량과 오차_백만원 열이 보이고, 모든 행의 오차가 0">
+  <figcaption>실제 화면입니다. 마지막 열 오차_백만원이 전부 0 — 총계 셀을 보지 않고 <code>수량 × 단가</code>로 다시 곱한 값이 원본 총계와 일치한다는 뜻입니다. 위 문장이 그 요약이고요(42건 중 38건 오차 0, 나머지 4건도 ±1.7% 이내). 단가·총계·모델값 열은 내부 예산 금액이라 가렸는데, 이 장치가 증명하는 것은 그 값들이 아니라 셋 사이의 등식이라 가려도 논지는 그대로 남습니다.</figcaption>
+</figure>
+
+<p class="minihead">불일치 4건을 어떻게 다뤘나</p>
+<table>
+  <tr><th style="width:14%">어디에</th><td>무작위가 아니라 <b>한 항목군에 몰려</b> 있었습니다 — 자동화 계측으로 전환 중인 신규 사업 계열.</td></tr>
+  <tr><th>왜</th><td>총계가 엑셀 수식이 아니라 <b>별도 산출값</b>이고 단가는 그것을 정수로 반올림한 표기값이라, 총계를 수량으로 나누면 소수점 아래에서 어긋납니다.</td></tr>
+  <tr><th>성과</th><td>눈으로는 못 찾을 <b>0.13%짜리 차이</b>를 등식 하나가 잡아냈습니다. 그것도 어느 항목군인지까지 좁혀서.</td></tr>
+  <tr><th>그래서</th><td>기준선으로 쓸 항목은 <b>전 연도 오차 0</b>으로 성립했습니다. 어긋난 곳은 기준선이 아니었고, 마지막 대조를 그대로 진행할 수 있었습니다. <b>이 검사가 없었다면 "기준선이 멀쩡한지"를 물어볼 수조차 없었습니다.</b></td></tr>
+</table>
 
 <div class="note green"><span class="lbl">발견된 이상치를 감추지 않았습니다</span>
-4건·7건·1건 모두 앱과 저장소 문서의 "검증 상태"에 <b>알려진 원본 데이터 이슈</b>로 공개했습니다. 원본의 문제를 조용히 보정하면 검증 도구 자체가 신뢰를 잃기 때문입니다.</div>
+4건·7건·1건 모두 앱과 저장소 문서의 "검증 상태"에 알려진 원본 데이터 이슈로 공개했습니다. 원본의 문제를 조용히 보정하면 검증 도구 자체가 신뢰를 잃기 때문입니다.</div>
 
-<p><b>[데이터] / [가정] 라벨 규약</b>도 이때 정착했습니다. 출처가 확인된 값과 제가 채운 가정을 화면에서 구분했는데, 이유는 하나입니다 — 검증이 실패했을 때 "데이터가 틀렸는지, 가정이 틀렸는지"를 즉시 구분할 수 있어야 하고, 섞어두면 그것이 불가능합니다. 실제로 AI가 특정 단가를 출처 없이 그럴듯하게 채웠을 때, 그 값은 [가정]으로 표시되고 사용자가 수정 가능하게 남았습니다.</p>
+<p class="minihead">[데이터] / [가정] 라벨 규약이 이때 정착했습니다</p>
+<table>
+  <tr><th style="width:14%">무엇을</th><td>출처가 확인된 값과 <b>제가 채운 가정</b>을 화면에서 구분합니다.</td></tr>
+  <tr><th>왜</th><td>검증이 실패했을 때 <b>"데이터가 틀렸는지, 가정이 틀렸는지"</b>를 즉시 갈라야 합니다. 섞어 두면 불가능합니다.</td></tr>
+  <tr><th>실제로</th><td>AI가 특정 단가를 출처 없이 그럴듯하게 채웠을 때, 그 값은 <b>[가정]</b>으로 표시되고 사용자가 수정 가능하게 남았습니다.</td></tr>
+</table>
 
-<h4>④ 독립 2차 추정 — 두 경로로 같은 답을 구한다</h4>
-<p>같은 원가를 <b>서로 모르는 두 경로</b>로 계산합니다. 복식부기의 차변=대변, 또는 독립된 두 목격자처럼요.</p>
+<h4 class="dev" data-nav="1-3-5 · 독립 2차 추정">1-3-5 · 독립 2차 추정 — 두 경로로 같은 답을 구한다</h4>
+<p>같은 원가를 서로 모르는 두 경로로 계산합니다. 복식부기의 차변=대변, 또는 독립된 두 목격자처럼요.</p>
 <div class="twopath">
   <div class="path"><div class="ph">경로 A · 예산에서</div>편성된 예산 → 지점당 단가<br><span class="mut">top-down · 발주 자료 기반</span></div>
   <div class="vs">≠ ?</div>
-  <div class="path"><div class="ph">경로 B · 법령에서</div>표준품셈 × 노임단가 → 원가<br><span class="mut">bottom-up · <b>예산은 안 봄</b></span></div>
+  <div class="path"><div class="ph">경로 B · 법령에서</div>표준품셈 × 노임단가 → 원가<br><span class="mut">bottom-up · 예산은 안 봄</span></div>
 </div>
-<p><b>경로 B가 예산을 안 보는 게 핵심입니다.</b> 두 값이 같으면 서로를 검증한 것, 다르면 어디가 틀렸는지 신호입니다. 실제로 약 40% 차이가 났습니다 — 모델을 억지로 맞추지 않고, <b>격차의 원인(노임단가·측정 횟수·수면폭)을 조절 변수로 노출</b>해 귀속했습니다. 독립 경로의 가치는 일치할 때가 아니라 어긋날 때 나옵니다.</p>
-<div class="codecap">④ 독립 2차 추정 <span class="fn">비용모델 v2</span></div>
-<pre class="code">def once_cost(task, fct):
-    <span class="cm"># 측정 1회 대가 = 품셈 인원 × 공표 노임단가 × 대가승수. 예산은 안 본다.</span>
-    r = labor[labor["업무"] == task].iloc[0]
-    dl = sum(float(r[g]) * fct * wages[g] for g in GRADES)   <span class="cm"># 직접인건비</span>
-    return dl * (1 + ovh_rate) * (1 + fee_rate) + team * fare * 2
+<table>
+  <tr><th style="width:16%"></th><th style="width:42%">경로 A · 예산에서</th><th>경로 B · 법령에서</th></tr>
+  <tr><td><b>방향</b></td><td>top-down — 편성 예산 → 지점당 단가</td><td>bottom-up — 표준품셈 × 노임단가 → 원가</td></tr>
+  <tr><td><b>입력</b></td><td>발주 자료</td><td>공개 법령·공표 단가 — <b>예산을 한 번도 안 봄</b></td></tr>
+  <tr><td><b>전제 조건</b></td><td colspan="2">A의 단가는 <b>1-3-4가 검사한 뒤에야</b> 기준선으로 씁니다. 기준선이 틀리면 격차가 무의미하니까요.</td></tr>
+  <tr><td><b>두 값이 같으면</b></td><td colspan="2">서로를 검증한 것입니다.</td></tr>
+  <tr><td><b>다르면</b></td><td colspan="2">어디가 틀렸는지 <b>신호</b>입니다. 실제로 <b>약 40% 차이</b>가 났고, 모델을 억지로 맞추지 않고 격차의 원인(노임단가·측정 횟수·수면폭)을 <b>조절 변수로 노출</b>해 귀속했습니다.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">왜 굳이 예산과 견주나</span>
+원가 검증의 산출물은 <b>숫자가 아니라 판정</b>이기 때문입니다. "법령대로면 지점당 얼마"만 내놓으면 협의 자리에서 할 수 있는 말이 없습니다.<br>
+필요한 문장은 <i>"법령대로 계산한 값이 현재 편성 단가와 ±20% 이내이므로 정합적이다"</i> 또는 <i>"벗어나므로 근거가 필요하다"</i>입니다. <b>비교 대상이 없으면 검증이 아니라 계산입니다.</b><br>
+그래서 <b>독립 경로의 가치는 일치할 때가 아니라 어긋날 때 나옵니다.</b></div>
+<pre class="mermaid">
+flowchart TB
+  L["표준품셈 인·일<br/>등급별"]:::inp --> M["× 보정계수<br/>수면폭 구간에서 유도"]:::act
+  M --> N["× 공표 노임단가<br/>등급별로 누적 = 직접인건비"]:::act
+  N --> O["× 간접비·이윤 + 여비"]:::act
+  O --> P["연 원가 annual<br/><b>여기까지 예산을 한 번도 안 봄</b>"]:::ok
+  P --> R{"gap = annual 대 UNIT<br/>얼마나 벌어졌나"}:::dec
+  U["편성 예산 단가 UNIT<br/>완전히 다른 출처"]:::inp -.-> R
+  R --> Z["차이의 원인을 조절 변수로 노출"]:::act
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">법령만으로 원가를 쌓는 경로 <span class="fn">비용모델 v2</span></div>
+<pre class="code">def once_cost(task_name, fct):
+    <span class="cm">"""측정 1회 대가(여비 포함, 부가세 제외) — 예산은 안 본다."""</span>
+    r = labor[labor["업무"] == task_name].iloc[0]  <span class="cm"># 품셈에서 해당 업무 행 1개</span>
+    dl = 0.0                                       <span class="cm"># 직접인건비 누적합</span>
+    for g in GRADES:
+        man_days = float(r[g]) * fct               <span class="cm"># 등급별 인·일 × 보정계수</span>
+        dl = dl + man_days * wages[g]              <span class="cm"># × 공표 노임단가 → 누적</span>
+    cost = dl * (1 + ovh_rate) * (1 + fee_rate) + team * fare * 2
+    return cost
+
+<span class="cm"># 지점당 고정 업무의 직접인건비: 업무 행 × 등급 이중 루프</span>
+fixed_records = fixed_tasks.to_dict("records")
+fixed_dl = 0.0
+for i in range(len(fixed_records)):
+    r = fixed_records[i]
+    for g in GRADES:
+        fixed_dl = fixed_dl + float(r[g]) * wages[g]
 
 annual = (n_py*cost_py + n_hs*cost_hs + fixed_cost) * vat_mult  <span class="cm"># 법령만으로 나온 연 원가</span>
 gap = (annual - UNIT) / UNIT * 100      <span class="cm"># UNIT = 편성 예산 단가(값은 다른 곳). 두 경로의 차이(%)</span>
 <span class="cm"># → annual은 예산을 한 번도 안 봤다. 그래서 gap이 '진짜 신호'다.</span></pre>
+<figure class="shot">
+  <img src="./screenshots/s1-second-estimate.png" alt="독립 2차 추정 검증 화면 — 연간 원가를 수식·숫자 대입·결과 3열로 전개하고, 법령 기반 원가와 예산 단가를 나란히 대조">
+  <figcaption>경로 B가 실제로 도는 화면입니다. 왼쪽 값은 표준품셈 인·일과 공표 노임단가만으로 쌓아 올린 것 — 예산 파일을 한 번도 읽지 않습니다. <b>금액은 전부 가렸습니다.</b> 하나만 가리면 나머지로 복원되기 때문입니다 — 합계를 지워도 항목을 더하면 되고, 원가를 남기면 <code>원가 ÷ (1+차이)</code>로 예산이 나옵니다. 그래서 절대금액·비율·구성 항목을 함께 가려야 합니다. 대신 <b>항목과 수식 열은 남겼습니다.</b> 이 절의 주장은 값이 아니라 <b>구조</b>에 관한 것이라서입니다 — 연간 원가가 어떤 항의 합이고 각 항이 어떤 식에서 나오는지가 보이면, 값 없이도 이 화면이 무엇을 하는지 확인됩니다.</figcaption>
+</figure>
 
-<h3>1-5. 보조 사례 — 검증 자체가 실패하는 방식</h3>
-<div class="panel">
-<p>공개 저장소로 운영하는 학습용 사이트에서, 사이드바가 보이지 않는 문제가 있었습니다. AI는 <b>네 겹으로 검증</b>했습니다 — CI 통과, 자원 응답 200, 배포본에 스크립트 태그 존재 확인, 그리고 실제 브라우저로 페이지를 열어 스크린샷까지 찍어 사이드바를 확인했습니다. 결론은 "정상 배포됐고 브라우저 캐시 문제"였습니다.</p>
-<p><b>네 검증이 모두 사실이었지만, 모두 엉뚱한 URL을 검증했습니다.</b> 제가 보고 있던 것은 랜딩 페이지였고, 그 페이지는 의도적으로 사이드바를 제외한 유일한 페이지였습니다.</p>
-<p>제가 한 것은 더 나은 가설이 아니라 세 가지 행동이었습니다. ① <b>통과한 CI를 관찰의 반증으로 인정하지 않음</b> — 검사가 깨끗한데 증상이 남으면, 그것은 코드가 아니라 검사 자체를 의심할 근거입니다. ② 이론과 논쟁하지 않고 원래의 관찰을 재진술. ③ 결정적으로 렌더된 화면이라는 산출물을 요구했습니다.</p>
-<p><b>교훈:</b> 무엇을 검증했느냐보다 어디를 검증했느냐가 중요합니다. AI에게 검증을 위임할 때 검증 대상은 사람이 지정해야 합니다. 참고로 틀린 가설(반응형 임계값)도 실제 개선을 낳아, 숨김 기준을 1000px → 720px로 낮춰 기본값이 "보이는" 쪽이 되게 했습니다.</p>
-</div>
+<h4 class="dev" data-nav="1-3-6 · 네 겹을 통과한 화면">1-3-6 · 네 겹을 통과한 화면</h4>
+<figure class="shot">
+  <img src="./screenshots/s1-cost-formula.jpg" alt="원가 계산을 수식 → 숫자 대입 → 결과 3열로 전개한 화면 — 공개 노임단가 기반">
+  <figcaption>최종 산출물에는 결과 숫자만 남지 않습니다. 수식 → 숫자 대입 → 결과 3열이 나란히 놓여, 값이 이상하면 어느 항에서 어긋났는지 그 자리에서 좁혀집니다. 앞의 네 단계가 노린 상태가 결국 이 화면입니다 — 믿어달라고 하지 않고, 직접 확인하게 하는 것.</figcaption>
+</figure>
 
-<h3>1-6. 체계적 검증 — 정답이 있을 땐 자동으로 채점한다</h3>
-<p>수문 앱의 검증은 <b>사례별 추적성</b>(모든 값이 원본으로 되짚어짐)이었습니다. 반대로 정답셋을 만들 수 있는 문제에서는 검증을 자동화된 유효성 검증·벤치마킹으로 끌어올립니다.</p>
-<p>공개 학습 프로젝트 <a href="https://github.com/bookseal/llm-app-lab">llm-app-lab</a>에서 <b>1,297쪽 항공법(14 CFR)</b> 위에 RAG를 만들며, 감이 아니라 측정으로 튜닝했습니다.</p>
+<h4 class="dev" data-nav="1-3-7 · 적용 이후 — 원장 피드백">1-3-7 · 적용 이후 — 원장 피드백</h4>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">앞의 넷은 내보내기 전의 검증이고, 이건 내보낸 뒤입니다. 여기서 나온 말이 다음 사이클의 입력이 됩니다.</p>
+<p>이 분석은 제 조직 대표(원장)에게 성과 보고를 하며 마무리됐습니다. 비개발자입니다. 요지는 셋이었습니다. <span style="color:var(--muted);font-size:.9em;">(실명·금액은 마스킹, 축어가 아닌 요약)</span></p>
+<div class="note green"><span class="lbl">✅ 잘한 점</span>"방향이 맞다"를 반복해 확인했습니다. 특히 입력하면 결과가 나오는 구조가 원하던 것이라고 했습니다.</div>
+<div class="note amber"><span class="lbl">⚠ 개선점</span>세부 항목·인건비는 현업이 직접 조절할 수 있어야 하고, 장비 항목이 빠졌으며, 원가 쪽은 더 완성된 실제 산출물을 원했습니다.</div>
+<div class="note teal"><span class="lbl">→ 앞으로</span>결론은 하나였습니다 — "옆에서 계속 소통하며 결과를 내놓을 사람이 상시로 필요하다." 이 말이 지금 제가 그 조직에서 AI 협업 시스템을 지속 운영하는 역할의 출발점이 됐습니다. 단발 산출물이 아니라 계속 굴러가는 관계로.</div>
+
+<h3><span class="mk">✈️</span> 1-4. <span class="cs">사례 2</span> 배경 — 1,297쪽 법령에서 맞는 조항 찾기</h3>
+<p class="qref"><b>과제 질문</b> — 어떤 문제였으며, 당시의 <b>기술적 제약 사항</b>은 무엇이었습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span><b>1,297쪽 미국 연방항공규정(14 CFR)에서 근거 조항을 찾는 RAG</b>입니다. 공개 저장소로 만든 학습 프로젝트라 <b>데이터·코드·점수가 전부 공개</b>돼 재현됩니다.
 <ul>
-  <li>45개 검색 설정(청킹 × 임베딩 × 검색 × top-k)을 밤새 자동 채점 — 그리드서치.</li>
-  <li>§조항 경계로 청킹하자 coverage 0.41 → 0.86, 블라인드 홀드아웃 recall 0.909.</li>
-  <li>품질이 동률이면 토큰 38% 싼 쪽을 채택 — 온프레미스에선 추론 비용이 곧 제품 제약이라.</li>
-  <li>agentic 검색 루프는 토큰이 ~제곱으로 늘어(81k) 이득 대비 비쌌습니다. 측정 후 single-shot(~2.3k)을 배포하고, 루프는 문서화된 실험으로 남겼습니다.</li>
-</ul>
-<div class="note amber"><span class="lbl">이 검증의 한계</span>채점 기준(정답셋)을 <b>제가 직접 만들었습니다.</b> 자기 채점은 자기 편향을 벗어나기 어렵습니다 — 다음엔 정답셋을 남이 만들게 하거나, 최소한 사람 평가와 한 번 대조하려 합니다.</div>
-<div class="note teal"><span class="lbl">두 검증을 나란히</span>수문(단발 실무 · 추적성)과 llm-app-lab(정답셋 · 자동 벤치마킹)은 <b>reliability의 두 얼굴</b>입니다 — 정답이 없으면 모든 값을 원본까지 되짚게 만들고, 정답이 있으면 수백 번 자동으로 채점합니다. 공통점은 하나: "믿어달라" 대신 "직접 확인하라".</div>
+  <li><b>사례 1과 갈리는 점</b> — 여기는 <b>정답셋을 만들 수 있습니다.</b> 조항이 확정된 문서에 있으니 해석이 아니라 대조입니다.</li>
+  <li><b>설정 공간이 큼</b> — 청킹 × 임베딩 × 검색방식 × top-K. 손으로 훑을 수 없습니다.</li>
+  <li><b>채점이 돈</b> — 답변 품질을 재려면 LLM 심판이 필요해 반복하면 과금이 쌓입니다.</li>
+  <li><b>자작 편향</b> — 정답셋을 제가 만들었으므로 제 편향을 그대로 물려받습니다.</li>
+</ul></div>
 
-<h3>1-7. 이해관계자 피드백 — 원장이 실제로 한 말</h3>
-<p>이 분석은 <b>제 조직 대표(원장)에게 성과 보고</b>를 하며 마무리됐습니다. 비개발자입니다. 요지는 셋이었습니다. <span style="color:var(--muted);font-size:.9em;">(실명·금액은 마스킹, 축어가 아닌 요약)</span></p>
-<div class="note green"><span class="lbl">✅ 잘한 점</span>"방향이 맞다"를 반복해 확인했습니다. 특히 <b>입력하면 결과가 나오는 구조</b>가 원하던 것이라고 했습니다.</div>
-<div class="note amber"><span class="lbl">⚠ 개선점</span>세부 항목·인건비는 <b>현업이 직접 조절</b>할 수 있어야 하고, 장비 항목이 빠졌으며, 원가 쪽은 더 완성된 실제 산출물을 원했습니다.</div>
-<div class="note teal"><span class="lbl">→ 앞으로</span>결론은 하나였습니다 — <b>"옆에서 계속 소통하며 결과를 내놓을 사람이 상시로 필요하다."</b> 이 말이 지금 제가 그 조직에서 AI 협업 시스템을 지속 운영하는 역할의 출발점이 됐습니다. 단발 산출물이 아니라 계속 굴러가는 관계로.</div>
+<h4 class="dev" data-nav="1-4-1 · 이 프로젝트가 무엇인가">1-4-1 · 이 프로젝트가 무엇인가</h4>
+<ul>
+  <li><b>대상</b> — 미국 연방항공규정 14 CFR. 원문 1,297쪽입니다.</li>
+  <li><b>과제</b> — 질문을 던지면 근거가 되는 조항(§)을 찾아 답하는 RAG.</li>
+  <li><b>맥락</b> — 공개 저장소로 만든 학습 프로젝트이자 강의 콘테스트 제출작.</li>
+  <li><b>💧와 다른 점</b> — 데이터도 코드도 전부 공개라, 이 문서의 주장을 누구나 재현할 수 있습니다.</li>
+</ul>
+
+<h4 class="dev" data-nav="1-4-2 · 무엇이 걸려 있었나">1-4-2 · 무엇이 걸려 있었나</h4>
+<ul>
+  <li><b>법령은 틀리면 안 됩니다.</b> 조항을 잘못 짚으면 그럴듯한 문장으로 규정을 어기게 만듭니다.</li>
+  <li>그런데 그럴듯함과 정확함이 겉으로 구분되지 않습니다. 잘못된 조항을 인용한 답변도 문장은 매끄럽습니다.</li>
+  <li>그래서 사람이 눈으로 보고 판단하는 방식으로는 규모가 나오지 않습니다.</li>
+</ul>
+
+<h4 class="dev" data-nav="1-4-3 · 정답셋을 만들 수 있다">1-4-3 · 정답셋을 만들 수 있다</h4>
+<ul>
+  <li>"이 질문의 근거 조항은 §91.151"처럼 정답을 미리 적어 둘 수 있습니다.</li>
+  <li>원가와 달리 법령 조항은 확정된 문서에 존재하기 때문입니다. 해석이 아니라 대조입니다.</li>
+  <li>정답셋이 있으면 검증은 사람이 들여다보는 일이 아니라 밤새 돌리는 실험이 됩니다.</li>
+  <li>그래서 이 프로젝트의 병목은 "믿을 수 있는가"가 아니라 "설정이 너무 많다"였습니다.</li>
+</ul>
+
+<div class="note amber"><span class="lbl">그래서 걸린 제약</span>
+· <b>설정 공간이 큽니다</b> — 청킹 × 임베딩 × 검색방식 × top-K. 손으로 훑을 수 없습니다.<br>
+· <b>채점이 돈입니다</b> — 답변 품질을 재려면 LLM 심판이 필요하고, 반복하면 과금이 쌓입니다.<br>
+· <b>정답셋을 제가 만들었습니다</b> — 자작 채점표는 제 편향을 그대로 물려받습니다.</div>
+
+<h3><span class="mk">✈️</span> 1-5. <span class="cs">사례 2</span> 핵심 프롬프트 — AI가 낸 답이 아니라, 그 답의 출처를 묻는다</h3>
+<p class="qref"><b>과제 질문</b> — AI에게 던진 <b>핵심 프롬프트(질문)</b>와 그에 대한 AI의 답변은 어땠는지? <b>이후 어떤 방식으로 대화가 진행</b>되었는지 기술해 주세요.</p>
+<div class="ans"><span class="lbl">짧은 답</span>AI가 낸 <b>답을 반박하지 않고, 그 답의 출처를 물었습니다.</b> 네 번 모두 AI가 자신 있게 틀린 뒤였습니다.
+<ul>
+  <li><b>"내가 언제 보여줬더라?"</b> — "정확한 측정"이라 붙은 표가 실은 추정이었고, 실측하니 <b>1,406 → 2,656</b>(약 1.9배)이었습니다.</li>
+  <li><b>"어느 비율로 쓰나?"</b> — 구체값을 요구하자 AI가 코드를 열었고, RRF라던 설명이 실제로는 <code>alpha=0.5</code> 가중합이었습니다. 공개 문서 5곳을 정정했습니다.</li>
+  <li><b>AI가 미룬 판단을 되가져옴</b> — 에이전틱이 품질은 좋았지만 <b>토큰 27배</b>라 기각했습니다.</li>
+  <li><b>규칙을 대화가 아니라 설정에 박음</b> — 한 번 통한 지시를 설정 파일로 옮겨 다음 세션에도 살아 있게 했습니다.</li>
+</ul></div>
+<p>1-2에서 세운 원칙이 도메인이 바뀌어도 같은 자리에서 작동하는지 보이는 절입니다. 여기서도 프롬프트는 날것 그대로 남깁니다. 오타와 음성 받아쓰기 흔적을 그대로 뒀습니다.</p>
+
+<div class="note teal"><span class="lbl">이 절이 1-2와 다른 점</span>
+1-2는 일이 시작될 때의 프롬프트였습니다. 여기 넷은 전부 AI가 이미 결과를 낸 뒤의 프롬프트입니다 — 되돌리고, 캐묻고, 기각하는 자리입니다.</div>
+
+<h4 class="dev" data-nav="1-5-1 · '정확한 측정'의 출처를 되짚다">1-5-1 · '정확한 측정'의 출처를 되짚다</h4>
+<p class="sit"><b>상황</b> — AI가 top-K별 토큰 소모를 표로 냈습니다. 머리에 <span class="q">📏 정확한 측정</span>, 밑에 <span class="q">실제 토크나이저 + 실제 답변·실제 문단·실제 시스템 프롬프트</span>라고 붙어 있었습니다. 숫자는 그럴듯했습니다.</p>
+<blockquote class="rawp">네가 아까 붙여준 <mark>실제 답변 + 실제 §91.151 문단 + 실제 시스템 프롬프트를 내가 언제 보여줬더라?</mark> 지금 <mark>너가 직접 한번만 돌려볼래?</mark> 그 후에도 k를 낮추는걸 추천하는지 궁금해</blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>숫자가 틀렸다고 <b>반박하지 않았습니다.</b> 그 "실제"가 <b>어디서 왔는지</b>를 물었습니다.</li>
+  <li>추정으로 답하지 못하도록 <b>직접 한 번 돌려 보라</b>고 요구했습니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li><b>"실제 답변"은 제가 화면에서 복사해 붙여넣은 것</b>이었고, 토큰 수는 근사 토크나이저 추정이었습니다.</li>
+  <li>실측하니 K=5 기준 <b>1,406 → 2,656</b>. 약 1.9배 차이입니다.</li>
+  <li>"K를 줄이자"는 <b>방향은 살아남았고, 근거로 쓰던 숫자만 전부 갈렸습니다.</b></li>
+</ul></div>
+<div class="note green"><span class="lbl">1-2와 같은 동작</span>
+수문에서 "수식 → 숫자 대입 → 결과" 세 열을 요구한 것과 같습니다. 결과를 검산하는 대신 <b>결과가 만들어진 경로를 열게</b> 만드는 것. 경로가 열리면 틀린 자리가 스스로 드러납니다.</div>
+
+<h4 class="dev" data-nav="1-5-2 · 설명이 코드와 다른 것을 잡다">1-5-2 · 설명이 코드와 다른 것을 잡다</h4>
+<p class="sit"><b>상황</b> — 하이브리드 검색을 AI가 <b>RRF(순위 융합)</b>라고 설명했고, 저는 그 설명을 그대로 <b>공개 문서 다섯 군데</b>에 실었습니다. 다이어그램·용어사전·본문까지 전부. 그런데 읽어도 계속 감이 안 잡혔습니다.</p>
+<blockquote class="rawp">아니, 내가 궁금한건 앙상블을 어떻게 한지 아직 이해안돼. <mark>어느 비율로 어떤 것을 쓰고, 언제 어떤 임베딩을 썼나?</mark></blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>"설명해 줘"로는 <b>같은 설명이 한 번 더</b> 나옵니다. <b>비율이라는 구체값</b>을 요구했습니다.</li>
+  <li>구체값은 코드를 열지 않으면 답할 수 없습니다 — <b>말이 아니라 소스를 근거로 삼게</b> 만드는 질문입니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li><b>거기서 무너졌습니다</b> — 실제 구현은 RRF가 아니라 <code>alpha = 0.5</code> 가중합이었습니다. 점수를 0~1로 정규화한 뒤 반씩 더하는 방식입니다.</li>
+  <li><b>AI의 자기 진단</b> — 코드를 안 보고 "보통 RRF 쓰지"라고 넘겨짚었다는 것이었습니다.</li>
+  <li>이미 배포된 <b>다섯 군데를 전부 정정</b>했습니다.</li>
+</ul></div>
+<div class="note amber"><span class="lbl">정정을 지우지 않고 남겼습니다</span>
+틀렸던 기록을 삭제하지 않고 <b>정정 박스</b>로 남겼습니다. "이렇게 알았다가 코드를 보고 바로잡았다"가 함께 있어야, 나머지 서술도 검증을 거쳤다는 신호가 됩니다.<br>
+같은 이유로 <b>이해가 안 되는 상태를 그냥 두지 않는 것</b>이 검증 장치입니다. 제가 못 알아듣는 설명은 대체로 설명하는 쪽도 확인하지 않은 설명이었습니다.</div>
+
+<h4 class="dev" data-nav="1-5-3 · AI가 미룬 판단을 되가져오다">1-5-3 · AI가 미룬 판단을 되가져오다 — 에이전틱 기각</h4>
+<p class="sit"><b>상황</b> — AI가 에이전틱 RAG를 직접 구현해 품질 우위를 보인 뒤, <span class="q">당신 콜이에요. 어느 쪽으로 확정할까요?</span>라며 결정을 넘겼습니다.</p>
+<blockquote class="rawp">지금 에이전틱으로 하면 그래도 <mark>10배 정도의 토큰 소모</mark>가 있는거 아니가? 우리는 단일 래그로 했을 때 <mark>복잡한 문제도 이미 잘 풀었다는것을 확인</mark>했어. 이정도 데이터에서는 에이전틱 루프 보다는 단일 래그도 잘 된다면 <mark>굳이 토큰 많이 써가면서 에이전트를 붙일 필요성ㅇ ㅣ있을까?</mark></blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>AI가 넘긴 판단을 <b>되가져왔습니다.</b> 품질만 보지 말고 <b>품질과 비용을 같은 저울에</b> 올리자는 것입니다.</li>
+  <li>기준은 취향이 아니라 <b>실측</b>이어야 하므로, 이미 재 둔 토큰 수를 근거로 들었습니다.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li>광범위 질문에서 <b>81,320토큰</b>이 나왔습니다. 단발 대비 <b>27배</b>입니다.</li>
+  <li><b>이 실측은 채택하려고 만든 게 아닙니다</b> — 시간이 없는 상태에서 "일단 간단하게라도 만들어 보자"고 붙인 것이 <b>기각의 근거</b>가 됐습니다.</li>
+  <li><b>버리되 남겼습니다</b> — 코드는 <code>harness/agent_rag.py</code>로 커밋해 두고 배포에서만 뺐습니다. 코퍼스가 커지면 다시 필요해질 물건이라서입니다.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">여기서 사람이 한 일</span>
+AI는 "품질이 좋다"까지 정확히 보여줬습니다. 하지만 <b>품질과 비용을 같은 저울에 올리는 일</b>은 넘겨줬습니다. 무엇을 최적화할지는 <b>제품의 제약을 아는 쪽</b>이 정해야 합니다.</div>
+
+<h4 class="dev" data-nav="1-5-4 · 규칙을 대화가 아니라 설정에 박다">1-5-4 · 규칙을 대화가 아니라 설정에 박다</h4>
+<p class="sit"><b>상황</b> — 세션 두 개를 동시에 돌렸습니다. 한쪽이 실험 코드를, 한쪽이 문서를 맡았고 <b>같은 저장소</b>를 씁니다. 그러면 한쪽이 다른 쪽의 미완성 작업을 같이 커밋해 버리는 사고가 납니다.</p>
+<blockquote class="rawp">그리고 너가 커밋할때는 <mark>너가 작업한것만 올려줘</mark>. 너가 작업하지 않은건 그대로 둬<br><br>
+claude-memory-backup 에서 <mark>커밋 관련된 모든 엠디 파일에 '한 세션에서는 그 세션이 작업한 것만 커밋한다'는 것을 추가해줘.</mark></blockquote>
+<div class="io intent"><span class="ioh">의도</span>
+<ul>
+  <li>먼저 <b>커밋 범위를 못 박고</b>, 거기서 멈추지 않았습니다.</li>
+  <li>한 번 통한 지시를 <b>설정 파일로 승격</b>시켰습니다 — 다음 세션에도 살아 있도록.</li>
+</ul></div>
+<div class="io result"><span class="ioh">결과</span>
+<ul>
+  <li>같은 방식으로 <b>문서 갱신 절차</b>도 규칙이 됐습니다. 원고에 마커를 심어 두면 AI가 배포 전에 그 마커를 훑습니다.</li>
+  <li><b>왜 이렇게 하나</b> — 대화로 준 지시는 그 대화가 끝나면 사라집니다. <b>재현되지 않는 것은 제 습관이지 시스템이 아닙니다.</b></li>
+</ul></div>
+<div class="note green"><span class="lbl">§2와 이어지는 지점</span>
+"담당자가 바뀌어도 재현되는가"가 §2의 기준인데, 그 기준이 여기서 이미 한 번 나옵니다. <b>세션이 바뀌어도 규칙이 남는가</b> — 규모만 다르고 같은 질문입니다.</div>
+
+<div class="note amber"><span class="lbl">이 절에서 빼놓지 않을 것</span>
+넷 다 <b>AI가 자신 있게 틀린 뒤</b>에 벌어진 일입니다. 표에는 "정확한 측정"이라 적혀 있었고, 설명은 매끄러웠고, 구현은 실제로 품질이 좋았습니다. 겉으로는 어느 것도 이상해 보이지 않았습니다.<br>
+그래서 제가 쓴 방법은 더 나은 직관이 아니라 <b>같은 질문 하나</b>였습니다 — <b>"그 숫자, 어디서 나왔나."</b></div>
+
+<h3><span class="mk">✈️</span> 1-6. <span class="cs">사례 2</span> 검증 및 적용 — 정답셋이 있으니, 수백 번 자동으로 채점한다</h3>
+<p class="qref"><b>과제 질문</b> — AI가 작성한 코드나 가이드를 <b>실제 환경에 적용하기 전</b>, 어떤 <b>검증(Test/Review)</b> 과정을 거쳤습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span>정답셋이 있으므로 검증을 <b>사람이 보는 일에서 기계가 채점하는 실험으로</b> 올렸습니다. <b>45개 설정</b>을 밤새 돌렸습니다.
+<ul>
+  <li><b>비밀 시험지</b> — 홀드아웃 14문항 중 4문항은 튜닝에 한 번도 쓰지 않았고, 3문항은 <b>거부가 정답</b>입니다.</li>
+  <li><b>싼 채점과 비싼 채점 분리</b> — 검색 축은 로컬이라 <b>API 호출 0회</b>. 생성 축은 검색이 확정된 뒤에만 건드렸습니다.</li>
+  <li><b>채점기와 라벨을 먼저 검증</b> — 비교 대상이 아니라 <b>비교하는 자</b>를 먼저 검사한 뒤에 실험을 시작했습니다.</li>
+  <li><b>적용</b> — 동점이면 싼 쪽. 토큰 38% 싼 설정을 채택하고, 결과는 강사 채점(9/10)으로 회수했습니다.</li>
+</ul></div>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">사례 1의 검증이 <b>사람이 되짚을 수 있게</b> 만드는 일이었다면, 여기서는 <b>기계가 채점하게</b> 만드는 일입니다. 장치 넷을 세우고, 그 위에서 45개 설정을 돌렸습니다.</p>
+
+<h4 class="dev" data-nav="1-6-1 · 비밀 시험지">1-6-1 · 비밀 시험지 — 튜닝에 안 쓰는 문제를 떼어 둔다</h4>
+<p>홀드아웃 <b>14문항</b>을 사람이 직접 만들고, <b>용도를 갈랐습니다.</b></p>
+<table>
+  <tr><th style="width:16%">문항</th><th style="width:30%">용도</th><th>왜 갈랐나</th></tr>
+  <tr><td><b>4문항</b></td><td>최종 시험지 — 튜닝에 <b>한 번도 쓰지 않음</b> (<code>split:"final"</code>)</td><td>남은 문항에 설정을 맞추다 보면 <b>그 문항에만 강해집니다.</b> 시험지를 보고 공부하면 점수는 오르지만 실력은 안 오릅니다.</td></tr>
+  <tr><td><b>3문항</b></td><td><b>거부가 정답</b> — 범위 밖 질문</td><td>답을 잘하는지만 재면 <b>모르는 걸 아는 척하는 모델이 1등</b>을 합니다.</td></tr>
+  <tr><td><b>7문항</b></td><td>튜닝용</td><td>설정을 맞추는 데 쓰는 문항입니다.</td></tr>
+</table>
+
+<h4 class="dev" data-nav="1-6-2 · 싼 채점/비싼 채점 분리">1-6-2 · 싼 채점/비싼 채점 분리</h4>
+<table>
+  <tr><th style="width:14%"></th><th style="width:34%">검색 축</th><th>생성 축</th></tr>
+  <tr><td><b>무엇을 재나</b></td><td>정답 §조항이 검색 결과 안에 있는가</td><td>답변 품질</td></tr>
+  <tr><td><b>채점 방법</b></td><td>코드로 대조 — 로컬 임베딩</td><td>LLM 심판</td></tr>
+  <tr><td><b>비용</b></td><td><b>API 호출 0회 · $0</b></td><td>호출마다 과금</td></tr>
+  <tr><td><b>실행</b></td><td><b>45개 설정을 밤새 전부</b></td><td>검색이 <b>확정된 뒤에만</b></td></tr>
+</table>
+<p>순서를 가른 것만으로 <b>같은 실험량을 비용의 약 1/10</b>로 돌렸습니다.</p>
+
+<h4 class="dev" data-nav="1-6-3 · 채점기를 의심">1-6-3 · 채점기를 의심</h4>
+<p><b>비교 대상이 아니라 비교하는 자를 먼저 검사했습니다.</b> 두 군데가 틀려 있었습니다.</p>
+<table>
+  <tr><th style="width:22%">무엇이 틀렸나</th><th style="width:36%">왜 거짓 신호인가</th><th>어떻게 고쳤나</th></tr>
+  <tr><td>"정답 조항이 <b>하나라도</b> 들어오면 1점"</td><td>정답이 여러 개인 <b>교차 질문에서 절반만 맞아도 만점</b>이 나옵니다.</td><td><b>커버리지</b>(찾은 정답 ÷ 전체 정답)와 <b>MRR</b>(정답이 몇 위인가)로 교체</td></tr>
+  <tr><td>청킹 방식에 따라 <b>자가 달랐음</b></td><td>char 청크는 <code>section</code> 메타가 없다는 이유로 <b>조용히 0점</b>을 받아 멀쩡한 설정이 모함당합니다.</td><td>청킹과 무관한 매칭 규칙(<code>R1</code>)을 넣고, <code>§</code> 기호를 요구해 오인을 막음</td></tr>
+</table>
+<div class="codecap">서로 다른 청킹을 같은 자로 잰다 <span class="fn">harness/score.py</span></div>
+<pre class="code">A retrieved chunk "matches" an expected § when (R1 — chunking-independent):
+  - its `section` meta equals the expected §, OR
+  - (no section meta, i.e. a char chunk) the expected § number appears in its text.
+<span class="cm"># 이게 없으면 char 청크는 section 메타가 없다는 이유로 조용히 0점을 받아
+# 멀쩡한 설정을 모함하게 된다.</span>
+
+def _text_has_section(text, number):
+    <span class="cm"># § 기호를 요구한다 — 없으면 '191.151'이나 '91.1511'이 §91.151로 오인된다</span>
+    return re.search(rf"§\s*{re.escape(number)}(?!\d)", text) is not None</pre>
+<p><b>자가 한쪽에 유리하면 그 뒤 45번의 실험은 전부 무의미해집니다.</b></p>
+
+<h4 class="dev" data-nav="1-6-4 · 라벨 검증">1-6-4 · 라벨 검증</h4>
+<table>
+  <tr><th style="width:14%">의존</th><td>이 무료 채점 <b>전체</b>가 "이 질문의 정답은 §91.151"이라는 <b>제가 붙인 라벨</b>에 걸려 있습니다.</td></tr>
+  <tr><th>위험</th><td>라벨이 틀리면 <b>점수판은 계속 올라가는데 실제 품질은 내려갑니다.</b> 틀린 방향으로 빨리 달리게 됩니다.</td></tr>
+  <tr><th>조치</th><td>라벨 검증을 선택 작업이 아니라 <b>차단 작업</b>으로 뒀습니다. 원문에서 해당 조항 본문에 질문의 핵심 단어가 실제로 있는지 대조한 <b>뒤에야</b> 실험을 시작했습니다.</td></tr>
+</table>
+
+<h4 class="dev" data-nav="1-6-5 · 결과 — 동점이면 싼 쪽">1-6-5 · 결과 — 동점이면 싼 쪽</h4>
+<table>
+  <tr><th>설정</th><th>커버리지</th><th>MRR</th><th>토큰</th></tr>
+  <tr><td>§경계 · bge · 하이브리드 · K8</td><td>0.864</td><td>0.636</td><td>17,284</td></tr>
+  <tr><td><b>§경계 · bge · 벡터 · K5</b> — 채택</td><td>0.818</td><td><b>0.718</b></td><td><b>10,802</b></td></tr>
+  <tr><td>문자수 · minilm · 하이브리드 · K3 (최하위)</td><td>0.136</td><td>0.182</td><td>2,939</td></tr>
+</table>
+<table>
+  <tr><th style="width:18%">판단</th><th>근거</th></tr>
+  <tr><td><b>차이는 노이즈</b></td><td>1위와의 커버리지 차이 <b>0.045</b> — 11문항에서 사실상 <b>한 문항 차이</b>입니다.</td></tr>
+  <tr><td><b>채택안이 더 쌈</b></td><td>토큰 <b>38% 절감</b>, 게다가 정답을 더 앞 순위에 올립니다(MRR <b>0.718</b> vs 0.636).</td></tr>
+  <tr><td><b>동점이면 싼 쪽</b></td><td>온프레미스 배포에서는 <b>추론 비용이 곧 제품 제약</b>입니다.</td></tr>
+  <tr><td><b>같은 이유로 기각</b></td><td>agentic 검색 루프는 토큰이 ~제곱으로 늘어(<b>81k vs 2.3k</b>) 이득 대비 비쌌습니다. 배포는 single-shot, 루프는 <b>문서화된 실험</b>으로 남겼습니다.</td></tr>
+  <tr><td><b>가장 큰 변수</b></td><td>청킹입니다. 문자 수 → <b>§조항 경계</b>로 바꾸자 커버리지가 <b>0.136 → 0.864</b>. 법령은 조항이 의미 단위인데 1,000자로 자르면 그 단위를 가로지릅니다.</td></tr>
+</table>
+<h4 class="dev" data-nav="1-6-6 · 적용 이후 — 강사 채점">1-6-6 · 적용 이후 — 강사 채점</h4>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">여기서도 마찬가지입니다. 자동 채점이 끝난 뒤, 사람이 무엇을 지적했는지가 다음 개선의 출발점이 됩니다.</p>
+<div class="note green"><span class="lbl">강사 채점 — 콘테스트 1등, 완성도 9/10</span>
+콘테스트 결과는 수강생 중 1등, 완성도 채점 9/10이었습니다. 함께 받은 지적은 하나 — "UI를 더 다듬어라." 검색된 청크·토큰 수·점수를 화면에 그대로 노출해 뒀기 때문입니다. 의도한 노출이었지만(보이지 않으면 검증이 안 되니까) 완성도를 보는 자리에서는 틀린 기본값이었습니다. 걷어내는 일은 어렵지 않고, 남길지 정하는 쪽이 어렵습니다 — 다음엔 검증 화면을 기본이 아니라 토글로 둡니다. 만드는 사람에게 필요한 정보와 쓰는 사람에게 필요한 정보는 다릅니다.</div>
+
+<div class="note amber"><span class="lbl">이 검증의 한계</span>채점 기준(정답셋)을 제가 직접 만들었습니다. 자기 채점은 자기 편향을 벗어나기 어렵습니다 — 다음엔 정답셋을 남이 만들게 하거나, 최소한 사람 평가와 한 번 대조하려 합니다.</div>
+<h3>1-7. 두 사례가 남긴 것</h3>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">조건이 다르면 검증 방식도 갈립니다. 갈라지는 지점을 한 장으로 놓습니다.</p>
+
+<table>
+  <tr><th style="width:24%"></th><th>사례 1 · 💧 수문 원가 검증</th><th>사례 2 · ✈️ llm-app-lab RAG</th></tr>
+  <tr><td><b>도메인</b></td><td>하천 예산 · 정부 기준서</td><td>항공법 (14 CFR)</td></tr>
+  <tr><td><b>정답셋</b></td><td>없음</td><td>만들 수 있음 (홀드아웃)</td></tr>
+  <tr><td><b>검증 방식</b></td><td>사람이 원본까지 되짚기</td><td>코드가 자동 채점</td></tr>
+  <tr><td><b>병목</b></td><td>믿을 수 있는가</td><td>설정이 너무 많다 · 채점이 돈이다</td></tr>
+  <tr><td><b>같은 것</b></td><td colspan="2">AI 산출물을 <b>그대로 믿지 않고 반증 가능하게</b> 만든다</td></tr>
+</table>
+
+
+
+<div class="note teal"><span class="lbl">두 검증을 나란히</span>수문(단발 실무 · 추적성)과 llm-app-lab(정답셋 · 자동 벤치마킹)은 reliability의 두 얼굴입니다 — 정답이 없으면 모든 값을 원본까지 되짚게 만들고, 정답이 있으면 수백 번 자동으로 채점합니다. 공통점은 하나: "믿어달라" 대신 "직접 확인하라".</div>
 
 <!-- ================= §2 ================= -->
-<h2 id="s2"><span class="no">2.</span>AI를 활용한 조직 생산성 향상</h2>
+<h2 id="s2"><span class="no">2.</span>AI를 활용한 업무 생산성 향상 사례</h2>
 <p class="sec-note" style="color:var(--muted);font-size:.93rem;margin:2px 0 0;">이 주제가 던지는 세 질문 — 성과가 개인기가 아니라 조직 역량으로 남는가.</p>
-<pre class="mermaid">
-flowchart TB
-  B1["배경<br/><i>어디서 조직이 느려지고, 무엇이 한 사람에 묶여 있었나</i>"]:::s2 --> B2["접근 · 구현<br/><i>AI엔 실무를, 사람에겐 판단을 — 책임 있는 자동화</i>"]:::s2 --> B3["효과<br/><i>처리 시간 단축 + 담당자가 바뀌어도 굴러가는 프로세스</i>"]:::s2
-  classDef s2 fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
-</pre>
 
-<h3>2-1. 조직이 겪던 문제</h3>
-<p>직원 약 40명, 개발자는 저를 포함해 3명인 조직이었습니다. 병목은 <b>개발 속도가 아니라 번역</b>이었습니다.</p>
-<ul>
-  <li>모호한 요구가 기술 과제로 번역되지 않았습니다. 비개발 경영진의 의도는 회의에서 말로 나오고, 개발자는 각자 해석했습니다.</li>
-  <li>회의에서 결정된 것이 사라졌습니다. 보드에 반영되지 않으면 다음 회의에서 같은 논의를 반복했습니다.</li>
-  <li>장문 문서 검토가 사람 시간을 대량으로 소모했습니다. 정부 지침서 한 건 분석에 약 10시간이 들었습니다.</li>
-  <li>그리고 더 근본적으로 — 자동화가 한 사람에게 묶이면, 그건 조직의 자산이 아니라 그 사람에 대한 의존입니다. 담당자가 바뀌는 순간 멈추기 때문입니다.</li>
-</ul>
+<div class="note teal"><span class="lbl">이 절의 전제 — 생산성을 무엇으로 재는가</span>
+저는 단축된 시간이 아니라 <b>"담당자가 바뀌어도 재현되는 범위"</b>로 잽니다. 도구가 특정 개인에게만 의존하면 그건 조직의 자산이 아니라 한 사람에 대한 리스크이고, 그 사람이 빠지는 순간 멈추기 때문입니다.<br>
+아래 사례는 §1에서 수문조사 원가 검증을 한 <b>바로 그 조직</b>입니다. 이번엔 프로젝트 하나가 아니라 그 조직이 <b>일하는 방식 자체</b>가 대상입니다. 1-3 마지막에 나온 원장의 말 — "옆에서 계속 소통하며 결과를 내놓을 사람이 상시로 필요하다" — 이 절이 그 말에 대한 답입니다.</div>
 
-<h3>2-2. 접근과 구현</h3>
+<div class="note amber"><span class="lbl">근거의 출처를 구분해 둡니다</span>
+· <b>[로그]</b> 표시 — 공개 저장소의 산출물과 세션 로그로 확인되는 것입니다.<br>
+· <b>[진술]</b> 표시 — 제가 현업에서 직접 겪은 것으로, 사내 자료라 공개할 수 없어 <b>제 진술로만 남습니다.</b><br>
+· 두 가지를 섞지 않고 표시하는 이유는 이 문서의 주제와 같습니다 — 확인할 수 있는 것과 믿어달라는 것을 구별해 두는 것.</div>
+
 <pre class="mermaid">
 flowchart LR
-  C["비개발 이해관계자<br/>의도를 말한다"] --> A["AI 에이전트<br/>회의록을 읽고<br/>보드 변경을 제안"]
-  A --> V["사람<br/>항목별 승인"]
-  V -->|"승인된 것만"| B["보드 · 산출물"]
-  V -.->|"반려 · 보완 요청"| A
-  B --> C
+  M{{"생산성 = 담당자가 바뀌어도<br/>재현되는 범위"}}:::root
+  M --> P["회의록<br/><i>결정이 나오는 곳</i>"]:::s2
+  P --> A["AI 에이전트<br/><i>보드 변경을 제안</i>"]:::s2
+  A --> V["사람<br/><i>항목별 승인</i>"]:::gate
+  V -->|"승인된 것만"| B["GitHub Projects 보드<br/><i>기록이 남는 곳</i>"]:::s2
+  V -.->|"모호하면 되묻기"| P
+  classDef root fill:#EFEBFE,color:#3B2A82,stroke:#5B3FD9,stroke-width:2.4px;
+  classDef s2 fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef gate fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.8px;
 </pre>
-<p>AI 에이전트를 실무자로 넣되, <b>신뢰를 감이 아니라 정책으로 인코딩</b>했습니다 — 읽기는 자동, 쓰기는 항목별 승인, 삭제·권한·코드는 금지. 규칙이 문서로 있으니 에이전트의 권한을 비개발자도 판단할 수 있었습니다.</p>
-<p>동시에 <b>제가 없어도 돌아가게</b> 만드는 데 시간을 썼습니다. 워크플로우를 문서화하고 온보딩을 붙여, 비개발 담당자가 직접 실행할 수 있게 했습니다.</p>
+
+<h3>2-1. 배경 — 조직이 겪던 문제</h3>
+<p class="qref"><b>과제 질문</b> — <b>조직이</b> 어떤 문제를 겪고 있었습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span>병목은 개발 속도가 아니라 <b>번역</b>이었습니다. 회의에서 정해진 것이 보드에 남지 않았습니다.
+<ul>
+  <li><b>승인이 한 사람에 묶임</b> — "팀장 컨펌 없이는 원장에게 보고하지 않는다"가 합의였고, 그 사람이 자리를 비우자 병목이 드러났습니다.</li>
+  <li><b>결정이 이월됨</b> — 미해결이 다음 회의로 넘어가고, 승인 사실 자체가 오해로 남기도 했습니다.</li>
+  <li><b>회의록 자체를 믿을 수 없음</b> — 제목과 내용이 어긋나고, 받아쓰기가 중복되고, 시차로 날짜가 틀렸습니다.</li>
+  <li><b>흩어져 있고 계속 들어옴</b> — 폴더 4개에 산재, 유입은 주 2회.</li>
+  <li><b>밖으로 낼 수 없음</b> — "회사 자료를 외부에 맡기면 안 된다"가 조직 보안 기준이라, "AI에게 주자"가 곧바로 답이 되지 않았습니다.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="2-1-1 · 조직의 병목">2-1-1 · 조직의 병목 — 번역이 안 된다</h4>
+<p><b>[진술]</b> 직원 약 40명, 개발자는 저를 포함해 3명인 조직이었습니다. 병목은 개발 속도가 아니라 <b>번역</b>이었습니다.</p>
+<ul>
+  <li>비개발 경영진의 의도는 <b>회의에서 말로만</b> 나왔고, 개발자는 각자 해석했습니다.</li>
+  <li>장문 문서 검토가 사람 시간을 대량으로 먹었습니다. 정부 지침서 한 건 분석에 <b>약 10시간</b>.</li>
+</ul>
+
+<h4 class="dev" data-nav="2-1-2 · 회의록에서 드러난 것">2-1-2 · 회의록에서 드러난 것</h4>
+<p><b>[로그]</b> 회의록을 실제로 처리하자 문제가 더 구체적으로 드러났습니다.</p>
+<table>
+  <tr><th style="width:24%">드러난 문제</th><th style="width:40%">구체적으로</th><th>왜 까다로운가</th></tr>
+  <tr><td><b>승인 체인이 1인에 묶임</b></td><td>"팀장 컨펌을 받지 않은 산출물은 원장에게 보고하지 않는다"가 합의</td><td>그 한 사람이 해외 체류 중일 때 <b>병목이 물리적으로</b> 드러났습니다.</td></tr>
+  <tr><td><b>결정이 이월됨</b></td><td>이전 회의의 미해결이 그대로 넘어옴</td><td><b>승인 사실 자체가 오해로 남아</b> 다음 회의에서 정정되기도 했습니다.</td></tr>
+  <tr><td><b>회의록을 믿을 수 없음</b></td><td>제목과 내용이 무관 · 받아쓰기 중복 삽입 · 시차로 파일명 날짜 어긋남</td><td>입력이 오염돼 있으니 <b>"AI에게 주면 된다"가 성립하지 않습니다.</b></td></tr>
+  <tr><td><b>흩어져 있고 계속 들어옴</b></td><td>폴더 <b>4개</b>에 산재 · 유입 <b>주 2회</b></td><td>한 번 정리로 끝나지 않는 <b>계속 도는 일</b>입니다.</td></tr>
+  <tr><td><b>유출 위험이 상시</b></td><td>"회사 자료 자체를 외부에 맡기면 안 된다"가 조직 보안 기준</td><td>회의록은 그 기준에 <b>정면으로 걸리는 자료</b>입니다.</td></tr>
+</table>
+
+<div class="note amber"><span class="lbl">그래서 문제는 두 겹이었습니다</span>
+· <b>겉</b> — 회의에서 정해진 것이 보드에 안 남는다.<br>
+· <b>속</b> — 그 회의록 자체가 신뢰할 수 없고, 밖으로 내보낼 수도 없다.<br>
+· 즉 <b>"AI에게 회의록을 주자"가 곧바로 답이 되지 않는 조건</b>이었습니다. 이 절의 설계는 대부분 이 두 번째 겹에 대한 것입니다.</div>
+
+<h3>2-2. 접근과 구현</h3>
+<p class="qref"><b>과제 질문</b> — 어떤 방식으로 문제를 <b>해결</b>하였습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span>AI 에이전트를 실무자로 넣되, <b>권한을 감이 아니라 문서화된 규칙으로 못 박았습니다.</b> 회의록 → 에이전트 제안 → <b>사람 항목별 승인</b> → 보드.
+<ul>
+  <li><b>승인 게이트</b> — 읽기는 자동, 쓰기는 건별 승인, 삭제·권한 변경은 <b>승인을 받아도 금지</b>. 제안마다 회의록 원문 인용을 강제했습니다.</li>
+  <li><b>작업 모델</b> — "이거 done이야 아니야에 답할 수 있으면 작업 고도". 제목이 아니라 <b>구조에 정보를 넣습니다.</b></li>
+  <li><b>유출 게이트</b> — 회의록은 git 추적 밖 폴더에 먼저 들어오고, 제가 검토한 것만 올라갑니다. 기계 패턴 검사가 2단으로 받칩니다.</li>
+  <li><b>판단을 기록으로</b> — 결정마다 근거와 기각한 대안을 ADR로 남겼습니다.</li>
+</ul></div>
+
+
+<h4 class="dev" data-nav="2-2-1 · 승인 게이트">2-2-1 · 승인 게이트 — 제안은 AI, 쓰기는 사람</h4>
+<table>
+  <tr><th style="width:22%">권한</th><th>무엇</th></tr>
+  <tr><td><b>묻지 않고 함</b></td><td>보드 관찰 · 중복 항목 검색 · <b>변경안 작성</b>까지</td></tr>
+  <tr><td><b>건별 승인 필요</b></td><td>모든 쓰기. 기본값이 <b>항목별</b>이고, 전체 승인은 사람이 목록을 다 본 뒤 <b>명시적으로 말할 때만</b></td></tr>
+  <tr><td><b>승인해도 금지</b></td><td>삭제 · 권한·공개범위 변경 · 지정된 보드 <b>밖</b> 쓰기 · 보드 아래의 코드·이슈 · <b>회의록 내용을 GitHub에 노출</b></td></tr>
+  <tr><td><b>항상 지킬 것</b></td><td>제안마다 <b>근거가 된 회의록 문장을 그대로 인용</b> · 모호하면 짐작하지 말고 <b>드러내서 되묻기</b></td></tr>
+</table>
+<div class="note green"><span class="lbl">규칙을 왜 이렇게 갈랐나</span>
+"되돌릴 수 있나?"가 아니라 <b>"이 도구의 권한 범위를 벗어나나?"</b>를 기준으로 삼았습니다. 되돌릴 수 있는 일도 권한 밖이면 금지고, 그래서 <b>승인을 받아도 안 되는 칸</b>이 따로 있습니다.<br>
+결정 기록에 비용도 같이 적었습니다 — <i>"완전 자동화보다 느리다. 모든 쓰기에 사람이 임계 경로에 있다. <b>의도적으로 수용한다 — 신뢰가 목적이므로.</b>"</i></div>
+
+<h4 class="dev" data-nav="2-2-2 · 작업 모델">2-2-2 · 작업 모델 — 제목이 아니라 구조에 정보를 넣는다</h4>
+<p>회의의 말을 보드 항목으로 옮길 때 <b>어느 고도로 적을지</b>가 계속 흔들렸습니다. 궁극 목표를 적을 수도, 체크리스트 한 줄을 적을 수도 있으니까요.</p>
+<p><b>판별법 하나로 고정했습니다</b> — <b>"이거 done이야, 아니야?"에 명확히 답할 수 있으면</b> 작업 고도입니다.</p>
+<table>
+  <tr><th style="width:16%">고도</th><th style="width:34%">판별</th><th style="width:28%">예</th><th>어디로</th></tr>
+  <tr><td>너무 높음</td><td>끝이 없어 <b>done 판정 불가</b></td><td><i>인력 추천 시스템 만들기</i></td><td>마일스톤</td></tr>
+  <tr><td><b>작업 (표준)</b></td><td><b>done 여부에 답할 수 있음</b></td><td><i>특정 화면에 필터 추가</i></td><td><b>이슈</b></td></tr>
+  <tr><td>너무 낮음</td><td>체크박스 한 줄</td><td><i>함수에 파라미터 추가</i></td><td>작업 목록</td></tr>
+</table>
+<p><b>식별자 접두어는 걷어냈습니다</b> — 이슈로 만드는 순간 GitHub이 고유번호를 주므로 <code>AP-1</code> 같은 접두어는 <b>중복 식별자</b>가 됩니다.</p>
+<div class="note teal"><span class="lbl">한 줄로 남은 원칙</span><b>제목에 정보를 넣을수록 손해, 구조에 넣을수록 이득.</b> 상위 항목에 하위 항목을 묶어 두면 진척도가 자동으로 계산되지만, 같은 정보를 제목에 적어 두면 손으로 갱신해야 합니다.</div>
+
+<h4 class="dev" data-nav="2-2-3 · 유출 게이트">2-2-3 · 유출 게이트 — 회의록이 기계 밖으로 나가지 않게</h4>
+<table>
+  <tr><th style="width:18%">층</th><th style="width:40%">무엇</th><th>왜</th></tr>
+  <tr><td><b>1단 · 사람 검토</b></td><td>회의록은 먼저 <b>git 추적에서 제외된</b> 폴더로. 제가 검토해 통과시킨 것만 저장소로 올라갑니다.</td><td>한 번 push되면 나중에 파일을 지워도 <b>이력에는 남습니다.</b> 게이트는 <b>push 이전</b>에 있어야 합니다.</td></tr>
+  <tr><td><b>2단 · 기계 패턴</b></td><td>승격 스크립트가 주민번호·전화번호·카드번호·계좌·이메일 <b>5종</b>을 차단</td><td>사람 검토가 놓친 것을 잡는 <b>마지막 그물</b>입니다.</td></tr>
+  <tr><td><b>안 한 것</b></td><td>브랜치로 분리하기</td><td>스테이징 브랜치도 <b>push되면 원격에 올라갑니다.</b> 분리가 아니라 <b>추적 제외</b>여야 합니다.</td></tr>
+</table>
+<div class="note amber"><span class="lbl">이 게이트의 한계를 같이 적어 뒀습니다</span>
+· 정규식 게이트는 <b>"마지막 그물"이지 검토를 대체하지 않습니다.</b> 오탐으로 정상 파일을 막을 수도, 변형된 표기를 놓칠 수도 있습니다.<br>
+· git 무시 규칙은 <b>방어선이지 암호화가 아닙니다.</b> 강제 추가하면 뚫립니다.<br>
+· 그래서 <b>사람 검토 → 기계 게이트 2단</b>으로 뒀습니다. 하나가 뚫려도 다른 하나가 남게.</div>
+
+<h4 class="dev" data-nav="2-2-4 · 판단을 기록으로">2-2-4 · 판단을 기록으로</h4>
+<table>
+  <tr><th style="width:22%">남긴 것</th><th>내용</th></tr>
+  <tr><td><b>결정 기록(ADR) 3건</b></td><td>도구를 옮긴 이유 · 작업 모델 · 안전 계약. <b>왜 그렇게 정했는지</b>를 각각 기록했습니다.</td></tr>
+  <tr><td><b>기각한 대안</b></td><td>기록마다 함께 적었습니다. 예 — "먼저 쓰고 나중에 감사"는 <b>되돌릴 수 없는 동작은 사후에 못 되돌린다</b>는 이유로 기각.</td></tr>
+  <tr><td><b>미결 사항</b></td><td>미결이라고 박아 뒀습니다 — <i>"이것들은 정말로 안 정해진 것이다. <b>정해진 척하지 않도록</b> 적어 둔다."</i></td></tr>
+  <tr><td><b>버린 경로</b></td><td>탐색하다 접은 도구도 지우지 않고 <b>읽기 전용으로 보존</b>. 삭제가 아니라 <b>경로의 기록</b>으로.</td></tr>
+</table>
+<div class="note green"><span class="lbl">여기가 §1과 이어지는 지점</span>
+<b>코드는 시스템이 무엇을 하는지 보여주고, 결정 기록은 왜 그렇게 되어 있는지 보여줍니다.</b> §1에서 숫자마다 원본을 붙인 것과 같은 동작입니다 — 결과만 남기지 않고 <b>결과가 나온 경로</b>를 남기는 것.</div>
 
 <h3>2-3. 효과</h3>
+<p class="qref"><b>과제 질문</b> — 생산성에 어떤 변화가 일어났습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span><b>[진술]</b> 지침서 분석이 <b>10시간 → 2시간</b>이 됐고, 비개발자가 워크플로를 직접 실행하게 됐습니다.<br>
+<b>[로그]</b> 회의록 34건을 한 폴더로(4→1), 결정 기록 3건, 인수인계 레슨 6개.
+<ul>
+  <li>숫자보다 중요한 것 — AI가 "거의 확실"하다던 배정을 제가 뒤집었고, AI가 쓴 문서에 남은 사내 도메인 단서를 잡아냈습니다.</li>
+  <li>그리고 지표가 시험받는 중 — 6월 중순부터 제 가용 시간이 <b>하루 2시간</b>으로 줄고 팀원 둘이 합류했습니다. "담당자가 바뀌어도 재현되는가"가 계획에 없이 검증대에 올랐습니다.</li>
+  <li>다만 아직 통과했다고 말하지 않습니다 — 진행 중이고, 그 기간의 성과를 재지 않았습니다.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="2-3-1 · 조직에서 체감한 변화">2-3-1 · 조직에서 체감한 변화</h4>
+<p><b>[진술]</b> 조직에서 제가 직접 체감한 변화입니다.</p>
 <ul>
   <li>지침서 분석 10시간 → 2시간 (약 80% 단축)</li>
-  <li>비개발자가 워크플로우를 직접 실행 — 특정 담당자에 대한 의존이 사라졌습니다. 시간 단축보다 중요한 변화였습니다.</li>
-  <li>회의 결정이 보드에 남아 같은 논의를 반복하지 않게 됐습니다.</li>
-  <li>승인 로그가 쌓이며 "에이전트가 무엇을 하려 했고 사람이 무엇을 막았는지"가 기록으로 남았습니다.</li>
+  <li>비개발자가 워크플로를 직접 실행하게 됐습니다. 특정 담당자에 대한 의존이 줄었고, 시간 단축보다 이쪽이 중요한 변화였습니다.</li>
 </ul>
 
-<h3>2-4. 같은 원리를 조직 밖에서 — 가르쳐서 남기기</h3>
-<p>제가 일관되게 해온 일은 <b>"한 사람에게 묶인 일을 조직이 이어받을 수 있게 만드는 것"</b>입니다.</p>
-<ul>
-  <li>비전공자를 엔지니어로. 함께 <b>École 42</b>(42 Seoul, 같은 학교)를 시작한 동료 한 명은 문과 출신에 개발 경험이 없었습니다. 3년에 걸쳐 함께 공부했고, 현재 AI 분야에서 일하고 있습니다. 저는 스터디를 3년간 운영했습니다.</li>
-  <li>내 무지를 공개 자산으로. 학습 사이트를 만들다 모르는 게 나오면 AI에게 묻고, 그 대화를 강의 콘텐츠로 되돌립니다. 실제로 제가 틀린 퀴즈의 오답이 지금 사이트의 오답 보기입니다 — 다음 학습자는 거기서 그냥 넘어가지 않습니다.</li>
-  <li>일회성 수정 대신 구조적 제거. 퀴즈 버튼이 8개 중 5개에서 안 됐습니다. 채점 스크립트가 인라인이라 3곳에만 복사돼 있었죠. 공용 파일로 분리하자 그 부류 버그가 통째로 사라졌습니다. 다이어그램 색도 손으로 안 칠하고 도형에서 자동 유도합니다 — 렌더러가 정하는 일은 잊을 수가 없으니까요.</li>
-</ul>
+<h4 class="dev" data-nav="2-3-2 · 기록으로 확인되는 것">2-3-2 · 기록으로 확인되는 것</h4>
+<p><b>[로그]</b> 저장소와 세션 기록으로 확인되는 것입니다.</p>
+<table>
+  <tr><th style="width:38%">항목</th><th>값</th></tr>
+  <tr><td>한 보드로 모은 조직 저장소</td><td>3개</td></tr>
+  <tr><td>보드로 이관된 작업 항목</td><td>8개 (전량)</td></tr>
+  <tr><td>한 폴더로 모은 회의록</td><td>34건 · 폴더 4개 → 1개</td></tr>
+  <tr><td>결정 기록(ADR)</td><td>3건</td></tr>
+  <tr><td>인수인계용 학습 과정</td><td>6개 레슨 (레슨당 5~15분)</td></tr>
+  <tr><td>회의록 유입</td><td>주 2회 — 계속 도는 파이프라인</td></tr>
+</table>
 
-<div class="note teal"><span class="lbl">제가 보는 생산성 지표</span>
-단축된 시간보다 <b>"담당자가 바뀌어도 재현되는 범위"</b>를 봅니다. 도구가 특정 개인에게만 의존하면 그건 조직의 자산이 아니라 한 사람에 대한 리스크이고, 그 사람이 빠지는 순간 멈춥니다.</div>
+<h4 class="dev" data-nav="2-3-3 · 사람이 무엇을 막았는가">2-3-3 · 사람이 무엇을 막았는가</h4>
+<p>이 시스템이 작동한다는 증거는 속도가 아니라 사람이 무엇을 막았는가입니다.</p>
+<table>
+  <tr><th style="width:30%">AI가 한 것</th><th style="width:30%">사람이 한 것</th><th>그래서</th></tr>
+  <tr><td>보드 항목과 저장소를 짝지으며 특정 항목을 "거의 확실"하다고 1순위로 제안</td><td>다른 항목이 맞다고 뒤집음</td><td>도메인 판단은 넘길 수 없습니다.</td></tr>
+  <tr><td>저장소 소개 문서를 작성 — 사내 도메인을 식별시키는 용어가 남음</td><td>그것을 잡아냄 — <i>"좀 더 general해야 회사정보를 유출하지 않으면서…"</i></td><td>§1의 보안 기준을 제 산출물에 스스로 적용한 셈입니다.</td></tr>
+  <tr><td>"끝났다"고 선언</td><td>두 번 되돌림</td><td>소개가 옛 도구 기준으로 남아 있었고, 예시가 사내 업무 그대로였습니다.</td></tr>
+</table>
 
-<div class="note amber"><span class="lbl">남은 한계</span>
-· 조직 규모가 작아(개발자 3명) <b>대규모 조직에서의 확산은 검증되지 않았습니다.</b><br>
-· 승인 정책은 <b>승인자에게 의존</b>합니다 — 승인자가 바쁘면 병목이 이동할 뿐이며, 저신뢰 항목만 사람에게 큐잉하는 식의 개선이 필요합니다.<br>
-· 교육 효과를 <b>지표로 측정하지 못했고</b> 정성적 서술에 머뭅니다.</div>
+<h4 class="dev" data-nav="2-3-4 · 지표가 시험받는 중">2-3-4 · 지표가 시험받는 중</h4>
+<p>이 절 첫머리에 "담당자가 바뀌어도 재현되는 범위"를 지표로 내걸었습니다. 그 지표가 지금 제가 설계하지 않은 방식으로 시험받고 있습니다.</p>
+<table>
+  <tr><th style="width:26%">시점</th><th>상태</th></tr>
+  <tr><td>2026년 5월</td><td>이 시스템 착수. 제가 전담.</td></tr>
+  <tr><td>6월 중순</td><td>팀원 2명 합류. 같은 시기에 제 가용 시간이 하루 2시간으로 축소.</td></tr>
+  <tr><td>현재</td><td>실무는 팀원이 주로 진행. 저는 조율과 검토.</td></tr>
+</table>
+
+<div class="note teal"><span class="lbl">왜 하루 2시간인가</span>
+6월 22일부터 8주간 미국 시애틀에 있습니다. 42서울·42경산에서 30명을 선발한 글로벌 교육 프로그램으로, 경산이노베이션아카데미 주최·워싱턴기술산업협회(WTIA) 공동주관입니다. 아이디어 발굴부터 투자 유치까지 실전 비즈니스 전 과정을 다룹니다.<br>
+가는 대신 손을 떼는 게 아니라 원장과 <b>하루 2시간</b>으로 조율하고, 나머지는 팀원이 이어받는 구조로 바꿨습니다. <a href="https://v.daum.net/v/20260623162955145">관련 보도</a><br>
+<b>8월 14일에 끝납니다.</b> 그 뒤로는 가용 시간 제약이 없습니다. 그리고 이 8주는 <b>영어로 일하고 발표하는 환경</b>이었습니다 — 글로벌 파트너와 기술로 소통해야 하는 자리라면, 이 기간 자체가 그 준비였습니다.</div>
+
+<div class="note green"><span class="lbl">그래서 이 절의 주장이 뜻밖에 검증대에 올랐습니다</span>
+· 만든 사람의 가용 시간이 1/4로 줄고, 새 사람 둘이 들어왔습니다.<br>
+· 이런 상황에서 필요한 것이 정확히 결정 기록 · 운영 매뉴얼 · 인수인계 레슨입니다. 원래 "나중에 필요할 것"이라 만든 것들인데, 만든 지 한 달 만에 실제 조건이 왔습니다.<br>
+· 이 문서에서 제가 왜 산출물보다 이어받을 수 있는 형태를 앞에 두는지 — 이유가 여기 있습니다.</div>
+
+<h4 class="dev" data-nav="2-3-5 · 한계와 다음 단계">2-3-5 · 한계와 다음 단계</h4>
+<div class="note amber"><span class="lbl">먼저, 아직 말할 수 없는 것</span>
+· 이 인수인계가 성공했다고 아직 말하지 않습니다. 8주 과정이 8월 14일에 끝나므로 진행 중이고, 그 기간의 성과를 아직 재지 않았습니다. <b>시험이 시작됐다</b>까지가 사실입니다.<br>
+· 속도 개선 수치가 공개 근거로 뒷받침되지 않습니다. 위 [진술] 항목은 제 경험입니다. 보드 drift 감소나 회의→작업 반영 시간 같은 지표를 아직 재지 않았습니다.<br>
+· 보드가 아직 "계획 보드"입니다. 8개 항목 중 5개는 갈 저장소 자체가 없어 초안으로 묶여 있습니다.<br>
+· 내부 채택이 균일하지 않습니다. 한 동료는 이 자동화의 가치를 아직 보지 못했다고 기록에 남아 있습니다. 도구를 만드는 것과 조직이 쓰게 만드는 것은 다른 일입니다.<br>
+· 승인 게이트는 승인자에게 의존합니다. 승인자가 바쁘면 병목이 사라지는 게 아니라 이동할 뿐입니다.</div>
+
+<div class="note teal"><span class="lbl">그래서 다음 — 승인을 판단이 아니라 대조로</span>
+· 승인 지점을 둘로 나눕니다 — ①은 착수해도 되는 요구인가, ②는 구현이 그 요구에 맞는가. ①에서 만든 체크리스트가 ②의 합격 기준이 되므로 앞에서 든 품이 뒤에서 회수됩니다.<br>
+· 그리고 아직 없는 것 — 자동 검증.
+지금 §2에는 사람 승인과 정규식 게이트뿐, 파이프라인을 기계가 검증하는 층이 없습니다.<br>
+반면 §1에는 그 답이 이미 있습니다 — 원본 대조 · 채널 검증 · 교차 파일 불변식 · 독립 2차 추정, 그리고 정답셋이 있을 때의 자동 채점. 다음에 붙일 것은 그 설계를 이 파이프라인으로 옮기는 일입니다.<br>
+구체적으로는 셋입니다 — ① 보드와 회의록의 불변식 검사(결정된 항목이 보드에 실제로 있는가), ② 에이전트 제안의 인용 정합성 자동 확인, ③ 그 검사를 사람 승인 앞단에 두어 승인을 판단이 아니라 대조로 만드는 것.</div>
+
+
 
 <!-- ================= §3 ================= -->
 <h2 id="s3"><span class="no">3.</span>도구 및 모델 분석</h2>
@@ -493,126 +1351,162 @@ flowchart LR
 <pre class="mermaid">
 flowchart TB
   C1["사용 도구 · 모델<br/><i>무엇을 썼나</i>"]:::s3 --> C2["선정 이유<br/><i>왜 이 도구인가 — 전략적 선택</i>"]:::s3 --> C3["장점 · 한계<br/><i>어디까지 믿고 어디서 의심하나</i>"]:::s3
-  classDef s3 fill:#eef3f6,stroke:#33505f,color:#22333c,stroke-width:1.3px;
+  classDef s3 fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.3px;
 </pre>
 
-<h3>3-1. 사용 도구와 모델</h3>
-<p><b>주력:</b> Claude Code(유료 구독, 일상 사용) · 비교 사용: Codex, Cursor, Antigravity · 로컬: Ollama(개인 노트북) · 모델 API: Upstage Solar, Claude, GPT</p>
+<h3>3-1. 사용 도구 및 모델</h3>
+<p class="qref"><b>과제 질문</b> — (예: Cursor, Claude Code, ChatGPT, Gemini, Perplexity 등)</p>
+<div class="ans"><span class="lbl">짧은 답</span><b>주력은 Claude Code</b>(유료 구독, 일상 사용)입니다. 비교 사용으로 Codex · Cursor · Antigravity, 로컬은 Ollama, 모델 API는 Upstage Solar · Claude · GPT를 썼습니다.</div>
+<p>주력: Claude Code(유료 구독, 일상 사용) · 비교 사용: Codex, Cursor, Antigravity · 로컬: Ollama(개인 노트북) · 모델 API: Upstage Solar, Claude, GPT</p>
 
 <h3>3-2. 선정 이유</h3>
+<p class="qref"><b>과제 질문</b> — 수많은 AI 모델 중 <b>왜 해당 모델(또는 도구)을 선택</b>하셨습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span><b>결과와 이해가 함께 남기 때문</b>입니다. 대신 짜주는 도구가 아니라 <b>시니어이자 교사</b>로 쓸 수 있어야 했습니다 — 이해 없이 만든 코드는 책임질 수 없으니까요.
 <ul>
-  <li>학습이 함께 일어나는 출력 방식. Claude Code의 <b>출력 스타일을 'learning'으로 전환</b>(<code>/output-style</code>)하면, 답을 주기 전에 왜 그렇게 했는지·무엇을 배워야 하는지를 함께 설명합니다. 계속 새 기술을 배워야 하는 저에겐 결과와 이해가 같이 남는 게 중요했습니다 — 취향이 아니라 도구 선택의 전략이었죠. (국내엔 이 모드를 쓰는 사람이 드뭅니다.)</li>
+  <li>큰 저장소에서 <b>맥락이 끊기지 않아</b> 여러 파일에 걸친 검증 코드를 만들 수 있었습니다.</li>
+  <li>산문 품질이 좋아 <b>왜 그렇게 했는지가 문서로 남습니다.</b> §2의 기준(담당자가 바뀌어도 재현)에는 부수 효과가 아니라 본론입니다.</li>
+  <li>단, 마감이 급하면 이 규칙을 <b>의도적으로 깼습니다.</b> 원칙이 아니라 판단이라서요.</li>
+</ul></div>
+<ul>
+  <li>학습이 함께 일어나는 출력 방식. Claude Code의 출력 스타일을 'learning'으로 전환(<code>/output-style</code>)하면, 답을 주기 전에 왜 그렇게 했는지·무엇을 배워야 하는지를 함께 설명합니다. 계속 새 기술을 배워야 하는 저에겐 결과와 이해가 같이 남는 게 중요했습니다 — 취향이 아니라 도구 선택의 전략이었죠. (국내엔 이 모드를 쓰는 사람이 드뭅니다.)</li>
   <li>큰 저장소에서 맥락을 유지하며 파일 탐색·수정·실행을 이어가는 에이전틱 작업이 안정적이었습니다.</li>
   <li>산문 품질이 좋아 기술 문서를 많이 쓰는 작업에 유리했습니다.</li>
 </ul>
-<p>다만 도구보다 <b>사용 규칙</b>이 중요합니다. AI가 모듈을 통째로 짜려 하면 멈추고 역할을 재정의했습니다 — AI는 시니어이자 교사, 코드는 내가 친다. 대신 짜면 산출물은 생겨도 이해는 안 생기고, 이해 없이는 그 코드를 책임질 수 없기 때문입니다. (마감이 급하면 이 규칙을 의도적으로 깼습니다. 원칙이 아니라 판단이라서요.)</p>
+<p>다만 도구보다 사용 규칙이 중요합니다.</p>
+<ul>
+  <li>AI가 모듈을 통째로 짜려 하면 멈추고 역할을 재정의했습니다 — AI는 시니어이자 교사, 코드는 내가 친다.</li>
+  <li>대신 짜면 산출물은 생겨도 이해는 안 생깁니다. 이해 없이는 그 코드를 책임질 수 없습니다.</li>
+  <li>단, 마감이 급하면 이 규칙을 의도적으로 깼습니다. 원칙이 아니라 판단이라서요.</li>
+</ul>
 
-<h3>3-3. 한계 — 직접 관찰한 것</h3>
+<h3>3-3. 모델에 대한 평가 — 장점과 한계</h3>
+<p class="qref"><b>과제 질문</b> — 해당 작업 수행 시 느꼈던 모델의 <b>장점과 한계점</b>은 무엇이었습니까?</p>
+<div class="ans"><span class="lbl">짧은 답</span><b>장점</b> — 원칙을 한 번 세우면 개별 지시 없이 따랐고, 자기 계획을 비판하게 시키면 <b>실제로 유효한 반박</b>을 냈습니다.
+<ul>
+  <li><b>한계 ① 모르는 것도 안다고 말함</b> — 제가 만든 서비스를 두고 모르면서 아는 척 답했습니다.</li>
+  <li><b>한계 ② 확신의 강도 ≠ 정확도</b> — "정확한 측정"이라 써 붙인 표가 추정이었습니다. 확신도를 신호로 쓸 수 없습니다.</li>
+  <li><b>한계 ③ 비용의 비선형 증가</b> — agentic 루프에서 토큰이 제곱에 가깝게 늘었습니다(81k vs 2.3k).</li>
+  <li>그래서 <b>사실은 도구·원문에서 가져오고, 모델에는 판단과 조립만</b> 맡깁니다.</li>
+</ul></div>
+<h4 class="dev" data-nav="3-3-1 · 장점 — 값을 한 것">3-3-1 · 장점 — 값을 한 것</h4>
+<table>
+  <tr><th style="width:26%">장점</th><th>관찰과 근거</th></tr>
+  <tr><td>① 원칙을 세우면 지시 없이도 따른다</td><td>§1-2에서 "validation이 가장 중요"를 한 번 못 박은 뒤, §1-3의 검증 장치 네 개는 <b>개별 지시 없이</b> 나왔습니다. 매번 무엇을 검증하라 시키지 않아도 후속 작업이 그 기준을 유지했습니다. → 사람이 정할 것은 원칙이고, 그 원칙의 반복 적용은 위임할 수 있습니다.</td></tr>
+  <tr><td>② 자기 계획을 비판하게 시키면 실제로 문다</td><td>RAG 실험 계획을 스스로 반박하게 하자 <b>여섯 건의 유효한 반박</b>이 나왔습니다 — "무료 축까지 순차 탐색할 이유가 없다", "이진 Recall은 다중정답 질문에서 거짓 신호다", "라벨 검증 전엔 점수를 믿지 마라". 전부 제 원안의 결함이었고 실험 설계에 반영했습니다.</td></tr>
+  <tr><td>③ 큰 저장소에서 맥락이 끊기지 않는다</td><td>파일 탐색 → 수정 → 실행을 이어가는 동안 앞의 결정을 유지했습니다. 여러 파일에 걸친 불변식 검사처럼 <b>한 파일만 봐서는 못 만드는 코드</b>가 여기서 나옵니다.</td></tr>
+  <tr><td>④ 판단 근거를 글로 남긴다</td><td>산문 품질이 좋아 코드와 함께 <b>왜 그렇게 했는지</b>가 문서로 남습니다. 담당자가 바뀌어도 이어받을 수 있느냐(§2)를 생산성 지표로 보는 저에겐 부수 효과가 아니라 본론이었습니다.</td></tr>
+</table>
+<h4 class="dev" data-nav="3-3-2 · 한계 — 직접 관찰한 것">3-3-2 · 한계 — 직접 관찰한 것</h4>
 <table>
   <tr><th style="width:26%">한계</th><th>관찰과 결론</th></tr>
   <tr><td>① 모르는 것도 안다고 말한다</td><td>도서관 통합검색 에이전트를 Upstage Solar API로 만들어 정상 동작했습니다. 그런데 그 서비스 이름을 대고 "이게 뭐냐"고 묻자 모르면서 아는 척 답했습니다. → 도구를 호출하는 에이전트로는 믿을 만해도, <b>모델이 사실을 안다고 가정하면 안 됩니다.</b> 사실은 도구·원문에서 가져오고 모델엔 판단·조립만 맡깁니다.</td></tr>
-  <tr><td>② 검증도 대상이 틀리면 무의미</td><td>1-5의 사례. 네 겹의 검증이 모두 사실이었으나 모두 엉뚱한 대상을 검증했습니다. → AI에게 검증을 위임할 때 검증 대상은 사람이 지정해야 하고, "사용자가 실제로 보는 것"을 재현하게 해야 합니다.</td></tr>
-  <tr><td>③ 확신의 강도 ≠ 정확도</td><td>①과 ② 모두 모델이 자신 있게 틀렸습니다. 확신도를 신호로 쓸 수 없다면, 구조로 반증 가능하게 만드는 수밖에 없습니다. §1의 장치들이 선택이 아니라 필수였던 이유입니다.</td></tr>
-  <tr><td>④ 비용의 비선형 증가</td><td>검색 품질을 높이려 반복 호출하는 agentic 루프에서 토큰이 제곱에 가깝게 증가했습니다(약 81k vs 단발 약 2.3k). 품질 이득은 그만큼 크지 않았습니다. → 품질이 동률이면 저렴한 쪽을 택하고, 루프는 문서화된 실험으로 남겼습니다.</td></tr>
+    <tr><td>② 확신의 강도 ≠ 정확도</td><td>①도, 아래 ③도 모델이 자신 있게 틀린 경우입니다. 확신도를 신호로 쓸 수 없다면, 구조로 반증 가능하게 만드는 수밖에 없습니다. §1의 장치들이 선택이 아니라 필수였던 이유입니다.</td></tr>
+  <tr><td>③ 비용의 비선형 증가</td><td>검색 품질을 높이려 반복 호출하는 agentic 루프에서 토큰이 제곱에 가깝게 증가했습니다(약 81k vs 단발 약 2.3k). 품질 이득은 그만큼 크지 않았습니다. → 품질이 동률이면 저렴한 쪽을 택하고, 루프는 문서화된 실험으로 남겼습니다.</td></tr>
 </table>
 
-<div class="note teal"><span class="lbl">한계에서 멈추지 않기</span>이 한계들은 지적으로 끝내지 않습니다. 예컨대 Solar가 <b>확신도를 표현하지 못하는 문제</b>는 별도 검증 신호(Groundedness Check 등)를 붙여 점수로 되돌릴 수 있습니다 — 도구의 한계를 짚고 그걸 개선하는 쪽을 만드는 게 제가 하고 싶은 일입니다.</div>
+<div class="note teal"><span class="lbl">한계에서 멈추지 않기</span>이 한계들은 지적으로 끝내지 않습니다. 예컨대 Solar가 확신도를 표현하지 못하는 문제는 별도 검증 신호(Groundedness Check 등)를 붙여 점수로 되돌릴 수 있습니다 — 도구의 한계를 짚고 그걸 개선하는 쪽을 만드는 게 제가 하고 싶은 일입니다.</div>
 
-<h3>3-4. 그래서 언제 무엇을 쓰는가</h3>
+<h4 class="dev" data-nav="3-3-3 · 언제 무엇을 쓰는가">3-3-3 · 언제 무엇을 쓰는가</h4>
 <table>
   <tr><th style="width:30%">상황</th><th style="width:32%">선택</th><th>이유</th></tr>
   <tr><td>탐색 · 학습 · 문서 작성</td><td>Claude Code (learning 모드)</td><td>결과와 이해가 함께 남음</td></tr>
   <tr><td>사실 조회</td><td>모델에 묻지 않고 도구·원문으로</td><td>한계 ①</td></tr>
-  <tr><td>대량 반복 처리</td><td>단발 호출 우선, 루프는 측정 후에만</td><td>한계 ④</td></tr>
+  <tr><td>대량 반복 처리</td><td>단발 호출 우선, 루프는 측정 후에만</td><td>한계 ③</td></tr>
   <tr><td>민감 데이터</td><td>로컬 실행 또는 온프레미스</td><td>데이터를 외부로 낼 수 없는 환경이 실재함</td></tr>
 </table>
 
+<div class="note green"><span class="lbl">그 규칙을 정한 실제 대화</span>
+AI가 모듈을 통째로 구현하려 하자 이렇게 끊었습니다. <span style="color:var(--muted);font-size:.9em;">(llm-app-lab · 원문)</span><br>
+"워워.. <b>니가 다 짜면 안 된다.</b> 우리는 공부중이고. 다시 전으로 돌아가서 개념노트를 보고 뭘할지 같이 고민하자. 내가 코딩을 하면서 공부할거고 … <b>너가 시니어라 생각하고 나를 가르쳐주면서</b> 같이 파일을 만들고 하면서 공부해야지."</div>
+
 <div class="note teal"><span class="lbl">마지막 항목에 대하여</span>
-개인 노트북에서 로컬 모델을 돌려보며 체감했습니다. 데이터를 밖으로 못 내는 환경에선 <b>모델을 데이터 옆으로</b> 가져가야 하고, 그때 하드웨어·메모리·모델 로딩이 제품의 제약이 됩니다. 온프레미스 솔루션이 왜 별도 엔지니어링을 요구하는지 그 지점에서 이해했습니다.</div>
+개인 노트북에서 로컬 모델을 돌려보며 체감했습니다. 데이터를 밖으로 못 내는 환경에선 모델을 데이터 옆으로 가져가야 하고, 그때 하드웨어·메모리·모델 로딩이 제품의 제약이 됩니다. 온프레미스 솔루션이 왜 별도 엔지니어링을 요구하는지 그 지점에서 이해했습니다.</div>
 
 <!-- ================= APPENDIX ================= -->
-<h2 id="ap-a"><span class="no">A.</span>부록 — 프롬프트 흐름 (원문)</h2>
-<p class="lead" style="font-size:.97rem">§1을 만든 <b>실제 프롬프트를 원문 그대로</b> 남깁니다. 오디오 받아쓰기라 거칠지만 그래서 사고의 흐름이 보입니다 — 핵심은 <em>하이라이트</em>, 의도는 → 로 따로 적었습니다. (금액·발주처·내부 파일명은 마스킹.)</p>
+<h2 id="ap-a"><span class="no">A.</span>부록 — 운영 중인 인프라를 남이 검증할 수 있게</h2>
+<p class="lead" style="font-size:.97rem">§2의 주장은 <b>조직</b>에 관한 것이고, 이 부록은 같은 원리를 <b>혼자 운영하는 시스템</b>에 적용한 기록입니다. 조직 사례가 아니므로 본문에서 내렸지만, "AI가 쓴 것을 제3자가 반증할 수 있게 만든다"는 이 문서의 주제와는 같은 줄에 있습니다.</p>
 
+<p class="sec-note" style="color:var(--muted);font-size:.93rem;">대상은 제가 2025년부터 혼자 운영해 온 단일 노드 k3s 클러스터 — <code>*.bit-habit.com</code> 아래 약 20개 서비스가 여기서 돕니다.</p>
+
+<h4 class="dev" data-nav="A-1 · 왜 여기까지 왔나">A-1 · 왜 여기까지 왔나</h4>
+<p>중학교 1학년 때 리눅스 자격증을 땄습니다. <b>암기로 땄고, 이해한 게 아니라는 걸 그때 알았습니다.</b> 지금 서른여덟이니 그 뒤로 <b>25년</b>, 계속 그걸 뒤집는 방식을 찾아왔습니다.</p>
+<ul>
+  <li><b>2022</b> · École 42 — VM을 직접 세웠습니다.</li>
+  <li><b>2023</b> · Dockerfile을 직접 썼습니다.</li>
+  <li><b>2024</b> · 남의 k3s 과제를 평가하며 다시 붙잡고 싶어졌습니다.</li>
+  <li><b>2025</b> · Oracle Cloud 무료 티어에 서버를 올렸습니다.</li>
+</ul>
+<p>지금 이 클러스터는 그 연장선이고, 제약을 스스로 걸었습니다 — <i>1인이 무료 한 대로 어디까지 갈 수 있나.</i> ARM 4코어에 서비스 20개, 월 $0입니다.</p>
+<div class="note teal"><span class="lbl">제약이 문서를 강제했다</span>
+여유가 없으니 무엇이 왜 그렇게 돼 있는지 적지 않으면 내가 먼저 잊습니다. 그래서 이 사례에서 AI에게 시킨 일은 인프라를 <i>만드는</i> 것이 아니라, 이미 돌고 있는 인프라를 제3자가 반증할 수 있게 서술하는 것이었습니다.</div>
+
+<h4 class="dev" data-nav="A-2 · AI에게 시킨 것 · 안 시킨 것">A-2 · AI에게 시킨 것 · 안 시킨 것</h4>
+<table>
+  <tr><th style="width:34%">일</th><th>누가</th></tr>
+  <tr><td>클러스터 실제 상태 수집 (<code>kubectl</code> 실측)</td><td><b>AI</b> — 문서의 주장과 대조할 원본</td></tr>
+  <tr><td>5단계 학습 구조 · 체크포인트 · 용어집 작성</td><td><b>AI</b> — 비계(scaffolding)</td></tr>
+  <tr><td>무엇을 공개하고 무엇을 한계로 적을지</td><td><b>사람</b> — 판단</td></tr>
+  <tr><td>프로덕션 클러스터에 손대는 일</td><td><b>사람</b> — AI에게 실행권을 주지 않음</td></tr>
+</table>
+<p>결과물은 <a href="https://infra.bit-habit.com">infra.bit-habit.com</a>입니다. 소스는 공개 저장소 <a href="https://github.com/bookseal/bit-habit-infra">bookseal/bit-habit-infra</a>에 있고, 라이브 상태는 <a href="https://status.bit-habit.com">status.bit-habit.com</a>에서 60초마다 외부에서 확인됩니다.</p>
+
+<h4 class="dev" data-nav="A-3 · 반증 가능한 문서의 세 표식">A-3 · 반증 가능한 문서의 세 표식</h4>
+<p>"문서를 잘 썼다"는 검증 불가능한 주장입니다. 대신 제3자가 대조할 수 있는 형태인지를 봅니다. 세 가지를 넣었습니다.</p>
+
+<div class="note green"><span class="lbl">① 스코어카드에 ❌가 있다</span>
+잘한 것만 적힌 문서는 대조할 수 없습니다. 그래서 GitOps 기준 대비 현재 위치를 표로 놓고 못 한 칸을 그대로 뒀습니다 — <code>Secrets ❌ gitignored, 손으로 적용</code> · <code>Namespaces ⚠️ 대부분 default 하나</code>. 그리고 결론을 한 줄로 적었습니다: "업계 표준과의 격차는 도구도 서비스도 아니고 <i>비밀값</i> 하나다."</div>
+
+<div class="note green"><span class="lbl">② 고치지 않기로 한 것을 이름 붙여 남긴다</span>
+장애 회고 끝에 같은 변경에서 일부러 고치지 않은 것을 따로 적었습니다 — 다른 저장소에 남은 낡은 라우팅 표 사본, 커밋 해시를 알 수 없는 이미지 마운트 방식. 이유는 문서에 그대로 있습니다:<br>
+"고치지 않기로 한 것을 적는 것도 회고의 일부다. 적히지 않은 기지(旣知) 이슈는 미지(未知) 이슈와 구별되지 않는다."</div>
+
+<div class="note green"><span class="lbl">③ 안 한 결정에 근거와 순서를 붙인다</span>
+ArgoCD는 아직 설치하지 않았고, 그것을 결정으로 적었습니다 — 매니페스트를 매 배포마다 다시 적용하는 것만으로 <code>selfHeal</code>(GitOps에서 실제로 원하는 성질)은 이미 얻고 있고, ArgoCD는 무료 ARM 한 대에 파드 5개와 잠가야 할 웹 UI를 더합니다. 그래서 순서를 명시했습니다 — <i>비밀값 암호화 → 앱별 네임스페이스 → 그다음에야 ArgoCD.</i> 역순으로 하면 "진실이 담기지 않은 저장소를 동기화하려는 컨트롤러와 일주일을 싸운다"고 적어 뒀습니다.</div>
+
+<h4 class="dev" data-nav="A-4 · 장애 회고 — 200 OK">A-4 · 장애 회고 — 200 OK</h4>
+<p><code>habit.bit-habit.com</code>이 몇 달간 다른 사이트를 서빙했습니다. 에러 페이지가 아니라 정상 인증서와 <code>200 OK</code>로, 완벽하게 잘못된 사이트를 내보냈습니다. 업타임 모니터도, 제 상태 페이지도 "200이 왔나?"만 물었기 때문에 모든 자동 점검에 이 장애는 보이지 않았습니다.</p>
+<p>진단은 층별 이분법으로 했습니다 — 매 단계마다 "문제가 이 층 위인가 아래인가"를 묻고 한쪽을 잘라냅니다. 결정타는 클러스터 내부에서 앱의 Service를 직접 호출한 것이었습니다. 앱은 멀쩡했고, 따라서 결함은 그 앞단에 있었습니다. 실제로 원인은 독립된 두 실패가 겹친 것이었습니다.</p>
 <pre class="mermaid">
-flowchart LR
-  A["전체 파악<br/><i>P1</i>"]:::c1 --> B["목적 정정 ⚡<br/><i>P2 · 원가 검증이다</i>"]:::cp --> C["점점 지엽으로<br/><i>P3·P4 · 수문 1개</i>"]:::c1 --> D["근거를 원본에 더 가깝게<br/><i>P5–P7 · 좌표→조각→이미지→수식</i>"]:::c2
-  classDef c1 fill:#e9f3f2,stroke:#0b6b63,color:#0b3f3a;
-  classDef cp fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:2px;
-  classDef c2 fill:#fdf4e8,stroke:#a8560a,color:#7a3d06;
+flowchart TB
+  B["브라우저가<br/>habit.bit-habit.com 요청"]:::s2b --> T["Traefik이 라우팅 표를 읽음"]:::s2b
+  T --> F1["실패 ①<br/>규칙이 엉뚱한 Service를 가리킴<br/><i>포트폴리오 ← 앱이 아님</i>"]:::bad
+  F1 --> N["포트폴리오 Pod의 nginx가<br/>요청을 받음"]:::s2b
+  N --> F2["실패 ②<br/>이 호스트와 맞는 server_name이 없어<br/>기본 블록으로 폴백"]:::bad
+  F2 --> R["200 OK + 잘못된 사이트<br/><i>어디에도 에러가 없음</i>"]:::bad
+  APP["Flutter 앱<br/>정상 · 건강 · 도달 불가<br/><b>103일간 트래픽 0</b>"]:::ghost
+  classDef s2b fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.6px;
+  classDef ghost fill:#f2f2f4,stroke:#8a8a95,color:#55555f,stroke-dasharray:4 3;
 </pre>
+<p>근본 원인은 라우팅 버그가 아니었습니다. 단일 진실 공급원(single source of truth) 버그였습니다 — 그 앱은 클러스터에는 있고 어느 저장소에도 없었고, 그래서 그것을 가리키는 한 줄이 그 앱의 존재를 모르는 파일에 살고 있었습니다. 주인 없는 규칙은 표류하고, 아무도 눈치채지 못합니다.</p>
 
-<h3>P1 · 전체 파악 — 검증을 코드보다 먼저 요구</h3>
-<div class="log">
-  <div class="cap">최초 요청 (전문은 §1-2에)</div>
-  <div class="turn me"><span class="who"></span>… 처음에는 아주 간단한 하나의 feature 고려하는 것처럼 <em>정확도는 떨어지더라도 validation이 될 수 있는 방향</em>으로 … 다시한번 말하는데 <em>validation이 가장 중요</em>하니, 각 문장의 근거는 실제 [내부 데이터]를 한번 가공해서 <em>매번 citation</em>해줘.</div>
-  <div class="cap">→ 의도: 단계적 이해(1분→10분→궁극) · 휴리스틱부터 · 정확도보다 검증 · 모든 값 citation</div>
-</div>
+<div class="note amber"><span class="lbl">여기서 나온 것 — 검증 체계 자체의 결함</span>
+상태 코드가 아니라 내용을 단언해야 합니다. 이미 돌고 있는 Gatus는 응답 본문에 특정 문자열이 있는지를 요구할 수 있습니다. 서비스당 한 줄이면 "응답했다"가 "자기 자신으로 응답했다"가 됩니다.<br>
+그리고 클러스터가 아니라 파일을 고쳐야 합니다. 라이브만 고치면 다음 <code>apply</code>가 조용히 되돌립니다. 실제로 이 사건의 수정은 라우팅 한 줄이 아니라, 저장소에 없던 앱을 저장소로 들여오고 공용 라우팅 표(15개 호스트)에서 규칙을 앱 옆으로 분리해 폭발 반경을 한 사이트로 줄인 것이었습니다.</div>
 
-<h3>P2 · 목적을 잡아 되돌린 지점 ⚡</h3>
-<div class="log">
-  <div class="cap">앱 초안을 직접 써본 뒤 — AI가 "총예산 이해 도구"로 만든 것을 발견</div>
-  <div class="turn me"><span class="who"></span>아이고 니가 <em>목적을 완전히 헷갈렸는데</em> 이거 목적은 우리가 이런 여러 예산들을 <em>원가 검증</em>을 하는 프로젝트를 하고 있거든. 그래서 이 예산이 얼만큼 실제 그 <em>법령하고 맞는지</em>를 항상 보는 그런 프로젝트야. 그걸 하기 전에 내가 <em>실무에 대해서 감을 익히기 위해서</em> 하는 거고, 마지막 비용 모델도 <em>새로운 강의 프로젝트가 있을 때 예산이 얼마일지</em>를 보는 거거든. (… 예산 규모 감각 부분 생략 …) 처음처럼 <em>총 예산을 얘기하는 게 아니고 특정 강(예: 한강) 프로젝트로 계산</em>해야 된다. 그리고 <em>이 데이터들이 실제로 그런지가 궁금</em>하니, <em>엑셀 자료를 스프레드시트로 가져와 보여줄 수 있으면</em> 한다.</div>
-  <div class="cap">→ 의도: 목적을 <b>원가 검증</b>으로 정정 · 원본 엑셀을 앱에서 직접 보게 → "원본 엑셀 뷰어" 페이지</div>
-</div>
+<h4 class="dev" data-nav="A-5 · ArgoCD — 실행은 내 몫">A-5 · ArgoCD — 실행은 내 몫</h4>
+<ul>
+  <li><b>현재 배포</b> — GitHub Actions가 서버에 SSH로 붙어 <code>git reset --hard origin/main</code>을 돌립니다.</li>
+  <li><b>키 제한</b> — <code>authorized_keys</code>에 강제 명령(forced command)으로 묶어 뒀습니다. 어떤 명령이 와도 정해진 스크립트 하나만 실행됩니다.</li>
+  <li><b>그래서</b> — 키가 유출돼도 그 이상은 할 수 없습니다.</li>
+</ul>
+<p>다음은 ArgoCD 대시보드에서 자동 배포가 도는 것을 직접 보는 것입니다.</p>
+<ul>
+  <li>그래서 AI에게 설치를 시키지 않았습니다. 대신 설치 튜토리얼을 쓰게 했습니다.</li>
+  <li>클러스터의 특이사항이 반영된 단계별 실습 · 퀴즈 · 진행 체크리스트로.</li>
+  <li><b>비계는 AI가, 실행과 이해는 제가</b> 가져갑니다.</li>
+</ul>
+<p>중학생 때 암기로 자격증을 딴 뒤로 <b>25년째 지켜 온 기준</b>이 그것이라서입니다 — 산출물이 아니라 이해가 남아야 한다는 것.</p>
 
-<h3>P3 · 방향 고정 — 몇 명·몇 시간·얼마부터</h3>
-<div class="log">
-  <div class="cap">v0에 남긴 TODO를 두고</div>
-  <div class="turn me"><span class="who"></span>누가 그냥 todo를 해줘. 비용모델은 <em>1개 강의 수문 조사시 몇명이 몇시간 얼마의 비용인지</em> 부터 아는거로 하자.</div>
-</div>
 
-<h3>P4 · 지엽으로 — 수문 1개, 법령대로 나오나</h3>
-<div class="log">
-  <div class="cap">범위를 원자 단위로 좁힘</div>
-  <div class="turn me"><span class="who"></span>새로운 비용모델을 만들자. 즉 <em>매우 지엽적인 수문 1개 조사시에 몇명이 몇시간 얼마</em>의 비용이 들어가는 지. 즉 특정 수문을 현재 조건을 보고 <em>법령에 맞게 실제로 나오는지</em>. 다른 예산은 일단 필요없다.</div>
-</div>
-
-<h3>P5 · 근거 강화 — 좌표 말고 원본 조각</h3>
-<div class="log">
-  <div class="cap">인용을 원본까지 되짚으려다 추적이 끊긴 뒤</div>
-  <div class="turn me"><span class="who"></span>그 근거라는 부분을 <em>spreadsheet의 일부를 복사붙여넣기 해서 누구나 spreadsheet에서 온 것처럼</em> 해줘. 그래서 그 측정종류를 왜 두개를 했느니부터, <em>새로운 수식이 나오면 그걸 근거를 보여줘</em>.</div>
-</div>
-
-<h3>P6 · 추출 채널 자체를 불신 — PDF는 이미지로</h3>
-<div class="log">
-  <div class="cap">렌더된 근거 발췌가 표로 읽히지 않음을 확인한 뒤</div>
-  <div class="turn me"><span class="who"></span>pdf는 확실히 표로 되어 있으니 읽기가 어렵네. <em>pdf는 스크린샷도 그냥 찍어서 근거로 보여주라</em></div>
-  <div class="turn ai"><span class="who"></span>부수 효과로 검증도 하나 완료됐습니다: 스크린샷을 렌더링하면서 <em>제가 전사했던 기준인원수가 원본 표와 정확히 일치함을 재확인</em>했습니다.</div>
-</div>
-
-<h3>P7 · 매직 넘버의 출처를 캐물음 — 모든 수식 전개</h3>
-<div class="log">
-  <div class="cap">기본값 3이 사용자 입력처럼 보이는 것을 발견</div>
-  <div class="turn me"><span class="who"></span>현장 출동인원이 몇명이 필요한지는 <em>원래 알 수 없나?</em> 그리고 적용보정계수 같이 수식으로 계산한것들은 <em>그 수식까지 표현해야지. 모든 수식은 다 표현해줘.</em></div>
-  <div class="turn ai"><span class="who"></span>결과 숫자만 있으면 틀렸을 때 재계산해야 하지만, <em>수식+대입이 남아 있으면 어느 항이 틀렸는지 눈으로 좁힐 수 있습니다.</em></div>
-</div>
-
-<h3>그 밖에 · 검증이 실패한 대화 — 네 번의 옳은 증거, 하나의 틀린 결론 <span style="color:var(--muted);font-weight:400;font-size:.85em">(llm-app-lab)</span></h3>
-<div class="log">
-  <div class="cap">공개 학습 사이트 · 사이드바가 보이지 않는 문제</div>
-  <div class="turn ai"><span class="who"></span>즉, 코드·빌드·배포 모두 정상이고 <em>사이드바가 라이브에 올라가 있습니다.</em> … 앞서 '안 바뀐 것 같다'던 건 역시 <em>로컬 브라우저 캐시</em>였던 게 재확인됩니다.</div>
-  <div class="turn me"><span class="who"></span>아닌데? <em>진짜 사이드 바가 안 보이는데?</em></div>
-  <div class="turn ai"><span class="who"></span>라이브 사이트에서 <em>사이드바가 정상적으로 보입니다</em> … 그런데도 안 보인다면 원인은 둘 중 하나입니다: 1. 브라우저 캐시 2. 창 폭이 1000px 미만</div>
-  <div class="turn me"><span class="who"></span>그럼 토글 없이 강제로 나오게 하는건 어떨까? <em>아니면 스크린샷찍어서 나한테 보여주던지</em></div>
-  <div class="turn ai"><span class="who"></span>잠깐 — 가장 유력한 원인이 떠올랐습니다. <em>랜딩 페이지에는 제가 사이드바를 일부러 제외</em>했어요. 사이트 첫 화면을 열면 사이드바가 없으니 '안 보인다'가 됩니다.</div>
-  <div class="turn ai"><span class="who"></span>디버깅의 핵심은 <em>'사용자가 실제로 본 화면'을 똑같이 재현</em>하는 것이었어요. 저는 모듈 페이지만 확인하며 '되는데?'라고 했지만, 사용자가 가장 먼저 여는 건 홈이고 거기엔 사이드바를 안 넣었습니다.</div>
-</div>
-
-<h3>그 밖에 · 도구 사용 규칙을 정한 지점 <span style="color:var(--muted);font-weight:400;font-size:.85em">(llm-app-lab)</span></h3>
-<div class="log">
-  <div class="cap">AI가 모듈을 통째로 구현하려 하자</div>
-  <div class="turn me"><span class="who"></span>워워.. <em>니가 다 짜면 안 된다.</em> 우리는 공부중이고. 다시 전으로 돌아가서 개념노트를 보고 뭘할지 같이 고민하자. 내가 코딩을 하면서 공부할거고 … <em>너가 시니어라 생각하고 나를 가르쳐주면서 같이 파일을 만들고 하면서 공부해야지.</em></div>
-</div>
-
-<h2><span class="no">B.</span>부록 — 마스킹 정책</h2>
+<h2 id="ap-b"><span class="no">B.</span>부록 — 마스킹 정책</h2>
 <div class="panel">
-<p>공개 전 다음 기준으로 <b>전수 치환 후 재검색으로 재확인</b>했습니다.</p>
+<p>공개 전 다음 기준으로 전수 치환 후 재검색으로 재확인했습니다.</p>
 <table>
   <tr><th style="width:34%">대상</th><th>처리</th></tr>
   <tr><td>발주처·기관·고객사 명칭</td><td><code>[발주처]</code> 등으로 치환</td></tr>
   <tr><td>내부 조직·팀 명칭</td><td>삭제</td></tr>
-  <tr><td>시설·지점 명칭 및 주소</td><td>삭제(건수만 유지)</td></tr>
+  <tr><td>시설·지점 주소</td><td>삭제(건수만 유지). 국가 관측망처럼 <b>정부가 공표하는 지점 명칭</b>은 화면 판독을 위해 유지</td></tr>
   <tr><td>내부 예산 절대금액</td><td>전부 제거, 비율만 사용(±1.7%, 약 40%)</td></tr>
   <tr><td>내부 파일명</td><td>일반 명칭으로 대체</td></tr>
   <tr><td>로컬 경로 · 계정</td><td>삭제 또는 일반화</td></tr>
@@ -621,17 +1515,17 @@ flowchart LR
   <tr><td>표준품셈 등 공개 문서</td><td>정부 공표 자료이므로 그대로 인용</td></tr>
 </table>
 <div class="note green" style="margin-bottom:0"><span class="lbl">참고 — 동일 기준을 평소에도 적용하고 있습니다</span>
-관련 프로젝트를 공개 저장소로 옮길 때 <b>"법령·품셈 PDF는 공개 문서이므로 포함, 내부 예산 엑셀은 제외"</b>라는 기준으로 <code>.gitignore</code>를 구성했습니다.
-또한 AI 세션 로그는 학습 자산이지만 <b>그대로 공개하지 않습니다</b> — 터미널 출력이 절대경로·환경값·자격증명을 함께 끌고 오기 때문에, 익스포터 스크립트는 추적하고 산출물은 제외하도록 분리했습니다.</div>
+관련 프로젝트를 공개 저장소로 옮길 때 "법령·품셈 PDF는 공개 문서이므로 포함, 내부 예산 엑셀은 제외"라는 기준으로 <code>.gitignore</code>를 구성했습니다.
+또한 AI 세션 로그는 학습 자산이지만 그대로 공개하지 않습니다 — 터미널 출력이 절대경로·환경값·자격증명을 함께 끌고 오기 때문에, 익스포터 스크립트는 추적하고 산출물은 제외하도록 분리했습니다.</div>
 </div>
 
 <h2><span class="no">C.</span>부록 — 공개 자료</h2>
 <div class="panel">
-<p>본문의 각 주장을 뒷받침하는 <b>공개 저장소와 라이브 사이트</b>입니다. 직접 열어 확인하실 수 있습니다.</p>
+<p>본문의 각 주장을 뒷받침하는 공개 저장소와 라이브 사이트입니다. 직접 열어 확인하실 수 있습니다.</p>
 <table>
   <tr><th style="width:24%">뒷받침하는 곳</th><th>저장소 · 라이브</th></tr>
   <tr>
-    <td>§1-5 검증이 실패하는 방식<br>§2-4 오답을 콘텐츠로 · 공용 파일 분리</td>
+    <td>§1-4 ~ §1-6 <b>사례 2</b> — 정답셋 · 45개 설정 벤치마킹 · 채점 코드</td>
     <td><a href="https://github.com/bookseal/llm-app-lab">github.com/bookseal/llm-app-lab</a><br><a href="https://llm-app-lab.bit-habit.com">llm-app-lab.bit-habit.com</a> (라이브)</td>
   </tr>
   <tr>
@@ -643,8 +1537,9 @@ flowchart LR
     <td><a href="https://github.com/bookseal/bit-habit-infra">github.com/bookseal/bit-habit-infra</a><br><a href="https://status.bit-habit.com">status.bit-habit.com</a> (라이브 상태)</td>
   </tr>
 </table>
-<p class="note teal" style="margin-bottom:0"><span class="lbl">공개하지 않는 것</span>이 문서의 중심 사례인 <b>§1 원가 검증 앱의 저장소는 클라이언트 데이터를 다루므로 비공개</b>입니다. 위 §1 화면들은 내부 예산 수치·조사지점 주소·내부 파일명을 마스킹하고 공개 표준품셈만 남긴 것입니다(부록 B). 가장 강한 증거를 그대로는 보일 수 없다는 것이 이 종류의 일에서 감수하는 대가입니다.</p>
+<p class="note teal" style="margin-bottom:0"><span class="lbl">공개하지 않는 것</span>이 문서의 중심 사례인 §1 원가 검증 앱의 저장소는 클라이언트 데이터를 다루므로 비공개입니다. 위 §1 화면들은 내부 예산 수치·조사지점 주소·내부 파일명을 마스킹하고 공개 표준품셈만 남긴 것입니다(부록 B). 가장 강한 증거를 그대로는 보일 수 없다는 것이 이 종류의 일에서 감수하는 대가입니다.</p>
 </div>
+
 
 <footer>
   AI를 믿을 수 있게 쓰는 법 · 이기찬 · <a href="https://bit-habit.com">bit-habit.com</a> · 2026
@@ -662,8 +1557,8 @@ flowchart LR
     theme: 'base',
     themeVariables: {
       fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif',
-      primaryColor: '#e9f3f2', primaryBorderColor: '#8fc9c2', primaryTextColor: '#16211f',
-      lineColor: '#5c6b69', fontSize: '14px',
+      primaryColor: '#EFEBFE', primaryBorderColor: '#B9A8F7', primaryTextColor: '#1E2536',
+      lineColor: '#5B6478', fontSize: '14px',
     },
   });
 </script>
@@ -671,19 +1566,64 @@ flowchart LR
 <!-- 사이드바: .wrap 안의 h2에서 목차를 만들고, 스크롤 위치를 표시한다. 숨기기/열기 토글 포함. -->
 <script>
 (function(){
-  var heads = Array.prototype.slice.call(document.querySelectorAll('.wrap h2, .wrap h3'));
+  // 사이드바는 '과제가 요구한 9개 항목'만 보여준다 — h2(대주제 3 + 부록)와
+  // "1-1." 꼴로 번호가 붙은 h3만. 부록 안의 P1~P7 같은 h3는 목차를 흐리므로 제외.
+  // 제목 앞에 사례 표식(💧 ✈️)이 붙을 수 있으므로 번호 판정은 표식을 뗀 뒤에 한다.
+  var numbered = function(h){
+    var t = h.textContent.trim();
+    var mk = h.querySelector('.mk');
+    if(mk) t = t.slice(mk.textContent.length).trim();
+    return /^\d-\d\./.test(t);
+  };
+  var heads = Array.prototype.slice.call(document.querySelectorAll('.wrap h2, .wrap h3, .wrap h4.branch, .wrap h4.dev'))
+    .filter(function(h){ return h.tagName!=='H3' || numbered(h); });
   if(!heads.length) return;
   heads.forEach(function(h,i){ if(!h.id) h.id='sec-'+i; });
 
+  // 본문 차례(#toc): h2와 번호 붙은 h3만. 인쇄본에서 유일한 목차가 된다.
+  (function(){
+    var tl=document.getElementById('toc-list'); if(!tl) return;
+    heads.filter(function(x){ return x.tagName==='H2' || x.tagName==='H3'; }).forEach(function(x){
+      var a=document.createElement('a'), li=document.createElement('li');
+      var no=x.querySelector('.no'), mk=x.querySelector('.mk');
+      var txt=x.textContent.trim(), num='';
+      if(mk) txt=txt.replace(mk.textContent,'').trim();
+      if(no){ num=no.textContent.trim(); }
+      else { num=(txt.match(/^\d-\d\./)||[''])[0]; }
+      if(num && txt.indexOf(num)===0) txt=txt.slice(num.length).trim();
+      a.href='#'+x.id;
+      a.className = x.tagName==='H2' ? 't2' : 't3';
+      if(num){ var s=document.createElement('span'); s.className='tn'; s.textContent=num; a.appendChild(s); }
+      a.appendChild(document.createTextNode(txt));
+      a.addEventListener('click', function(ev){ ev.preventDefault(); measure();
+        window.scrollTo({top: (document.getElementById(x.id).getBoundingClientRect().top+window.scrollY-14)}); });
+      li.appendChild(a); tl.appendChild(li);
+    });
+  })();
+
   var list=document.getElementById('sidenav-list');
   var links=heads.map(function(h){
-    var no=h.querySelector('.no'), label=h.textContent.trim();
+    var no=h.querySelector('.no'), label=h.getAttribute('data-nav') || h.textContent.trim();
     if(no){ var n=no.textContent.trim(); label=n+' '+label.slice(n.length).trim(); }
-    var lv3 = h.tagName==='H3';
-    if(lv3){ var em=label.indexOf(' — '); if(em>0) label=label.slice(0,em); }  // 사이드바용 축약
+    var lv3 = h.tagName==='H3',
+        lv4 = h.classList.contains('branch'),
+        lv5 = h.classList.contains('dev');
+    if((lv3||lv4||lv5) && !h.hasAttribute('data-nav')){ var em=label.indexOf(' — '); if(em>0) label=label.slice(0,em); }  // 사이드바용 축약
     var a=document.createElement('a');
     a.href='#'+h.id; a.textContent=label;
-    if(lv3) a.className='lv3';
+    if(lv3) a.className='lv3'; else if(lv4) a.className='lv4'; else if(lv5) a.className='lv5';
+    // 브라우저 기본 해시 점프는 쓰지 않는다 — mermaid가 늦게 렌더되며 높이가 바뀌면
+    // 점프한 뒤에 목표가 밀려서 엉뚱한 곳에 서 있게 된다. 클릭 시점에 다시 재서 이동한다.
+    a.addEventListener('click', function(ev){
+      ev.preventDefault();
+      measure();
+      var y=h.getBoundingClientRect().top+window.scrollY-14;
+      // behavior:'smooth'는 환경에 따라 조용히 무시된다(확인함) — 즉시 이동으로 확정한다.
+      window.scrollTo({top:Math.max(0,y)});
+      history.replaceState(null,'','#'+h.id);
+      last=-1; sync();
+      links.forEach(function(x){ x.classList.toggle('active', x===a); });
+    });
     list.appendChild(a); return a;
   });
 
@@ -713,6 +1653,12 @@ flowchart LR
     requestAnimationFrame(function(){ ticking=false; sync(); }); }, {passive:true});
   addEventListener('resize', function(){ measure(); last=-1; sync(); });
   addEventListener('load',   function(){ measure(); last=-1; sync(); });  // mermaid가 늦게 렌더되며 높이가 바뀐다
+  // 본문 높이가 바뀔 때마다 다시 잰다 (mermaid·이미지가 비동기로 들어온다)
+  if(window.ResizeObserver){
+    var rt; new ResizeObserver(function(){
+      clearTimeout(rt); rt=setTimeout(function(){ measure(); last=-1; sync(); }, 120);
+    }).observe(document.querySelector('.wrap'));
+  }
   measure(); sync();
 
   document.getElementById('navhide').onclick=function(){ document.body.classList.add('nav-hidden'); };

@@ -4,3 +4,6 @@
 *.xlsx
 *.xls
 /private/
+
+# 편집 중 생긴 백업 (제출물 아님)
+index.html.bak-*
