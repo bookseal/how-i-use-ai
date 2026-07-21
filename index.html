@@ -85,9 +85,15 @@
   .twopath .mut{color:var(--muted);font-size:.85em;}
   @media(max-width:680px){.twopath{grid-template-columns:1fr;}.twopath .vs{padding:8px 0;}}
 
-  figure.shot{margin:18px 0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--panel);}
-  figure.shot img{display:block;width:100%;height:auto;}
-  figure.shot figcaption{padding:9px 15px 11px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);line-height:1.55;}
+  /* 스크린샷 = 브라우저 창 프레임(상단 크롬 바 + 신호등 3점)으로 "화면 캡처"임을 즉시 알림 */
+  figure.shot{position:relative;margin:22px 0;padding-top:34px;border:1px solid #cdd6d4;border-radius:12px;
+    overflow:hidden;background:#fff;box-shadow:0 4px 16px rgba(16,33,31,.10);}
+  figure.shot::before{content:"";position:absolute;top:0;left:0;right:0;height:34px;
+    background:#e7eceb;border-bottom:1px solid #cdd6d4;}
+  figure.shot::after{content:"";position:absolute;top:12.5px;left:15px;width:9px;height:9px;border-radius:50%;
+    background:#f0645d;box-shadow:16px 0 #f5be4f, 32px 0 #55c74a;}
+  figure.shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line);}
+  figure.shot figcaption{padding:9px 15px 11px;font-size:.85rem;color:var(--muted);line-height:1.55;background:var(--panel);}
   figure.shot figcaption b{color:var(--ink);}
   blockquote{margin:12px 0;padding:10px 16px;border-left:4px solid var(--teal-ln);background:var(--teal-bg);
     border-radius:0 8px 8px 0;color:#0c4640;}
