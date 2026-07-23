@@ -1,0 +1,1858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Using AI in a Way You Can Trust · Gichan Lee</title>
+<meta name="description" content="Making AI output falsifiable, and handing it over so it keeps running after the owner changes — a field record from a cost-verification app, organizational automation, and tool analysis.">
+<meta property="og:title" content="Using AI in a Way You Can Trust · Gichan Lee">
+<meta property="og:description" content="Making AI output falsifiable, and handing it over so it keeps running after the owner changes.">
+<meta property="og:type" content="article">
+</head>
+<body>
+<style>
+  /* 색: Upstage 브랜드 가이드 기준 — 보라 #7B5EF2, 네이비 #1E2536.
+     본문 대비를 위해 보라는 조금 진한 #5B3FD9를 쓴다. 로고·워드마크는 쓰지 않는다. */
+  :root{
+    --ink:#1E2536; --muted:#5B6478; --line:#E5E6EE; --bg:#fff; --panel:#F7F7FB;
+    --brand:#5B3FD9; --brand-bg:#EFEBFE; --brand-ln:#B9A8F7;
+    --amber:#a8560a; --amber-bg:#fdf4e8;
+    --green:#0a7048; --green-bg:#eaf6f0;
+    --slate:#33505f; --slate-bg:#eef3f6;
+    --red:#a3241d; --red-bg:#fdeeec;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15.5px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+    font-variant-numeric:tabular-nums;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 26px 90px;}
+
+  /* cover */
+  .cover{padding:44px 0 26px;border-bottom:3px solid var(--brand);}
+  .cover .doctype{font-size:.78rem;font-weight:800;letter-spacing:.1em;color:var(--brand);text-transform:uppercase;}
+  .cover h1{font-size:2.5rem;font-weight:800;line-height:1.25;margin:12px 0 16px;letter-spacing:-.03em;}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;color:var(--muted);font-size:.93rem;margin-top:4px;}
+  .meta b{color:var(--ink);}
+
+  h2{font-size:2.3rem;font-weight:800;margin:58px 0 12px;padding-bottom:9px;border-bottom:2px solid var(--brand-ln);letter-spacing:-.02em;}
+  h2 .no{color:var(--brand);font-weight:800;margin-right:8px;}
+  h3{font-size:1.72rem;font-weight:700;margin:40px 0 12px;color:#2E2159;padding-left:14px;border-left:5px solid var(--brand-ln);}
+  h3 .mk{margin-right:4px;font-size:.95em;}
+  h3 .cs{display:inline-block;background:#EFEBFE;border:1px solid #B9A8F7;color:#3B2A82;border-radius:5px;padding:0 7px;margin-right:5px;font-size:.72em;font-weight:700;vertical-align:middle;letter-spacing:.02em;}
+  h4{font-size:1.12rem;font-weight:700;margin:18px 0 6px;color:var(--ink);}
+  h4.dev{font-size:1.28rem;font-weight:800;margin:30px 0 10px;padding-left:11px;border-left:4px solid var(--brand-ln);color:#2E2159;}
+  /* .step 안의 h4는 이미 번호 뱃지가 있으므로 좌측 바를 겹치지 않는다 */
+  .step h4.dev{border-left:none;padding-left:0;margin-top:0;font-size:1.22rem;}
+  h4.branch{font-size:1.42rem;font-weight:800;margin:38px 0 4px;padding:9px 14px;
+    color:#3B2A82;background:var(--brand-bg);border:1px solid var(--brand-ln);border-radius:9px;}
+  h4.sub{font-size:1.34rem;margin:30px 0 9px;padding-bottom:5px;color:#2E2159;
+    border-bottom:1px dashed var(--brand-ln);}
+  p{margin:10px 0;} b{color:#1A1440;}
+  ul,ol{margin:10px 0;padding-left:22px;} li{margin:5px 0;}
+  code{background:#F1EEFD;padding:1px 6px;border-radius:5px;font-size:.89em;}
+  a{color:var(--slate);}
+
+  .lead{background:var(--brand-bg);border:1px solid var(--brand-ln);border-radius:12px;padding:16px 20px;margin:18px 0;font-size:1.03rem;}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 18px;margin:14px 0;}
+  /* 의도/결과 상자(.io)와 같은 형태 — 왼쪽 3px 테두리 + 색이 채워진 라벨 */
+  .note{border-radius:0 8px 8px 0;padding:9px 13px 10px;margin:12px 0;font-size:.96rem;line-height:1.72;}
+  .note .lbl{display:block;width:fit-content;font-weight:800;font-size:.8rem;letter-spacing:.04em;
+       margin:0 0 5px;padding:1px 8px;border-radius:4px;color:#fff;}
+  .note ul,.note ol{margin:5px 0 0;padding-left:18px;}
+  .note li{margin:3px 0;}
+  .note.teal{background:var(--brand-bg);border-left:3px solid var(--brand);}   .note.teal .lbl{background:var(--brand);}
+  .note.green{background:var(--green-bg);border-left:3px solid var(--green);}  .note.green .lbl{background:var(--green);}
+  .note.amber{background:var(--amber-bg);border-left:3px solid var(--amber);}  .note.amber .lbl{background:var(--amber);}
+  .note.red{background:var(--red-bg);border-left:3px solid var(--red);}        .note.red .lbl{background:var(--red);}
+
+  /* prompt log */
+  .log{background:#1E2536;color:#DDE1EC;border-radius:11px;padding:6px 16px 12px;margin:14px 0;font-size:.9rem;line-height:1.68;}
+  .log .turn{margin:11px 0;padding-left:64px;position:relative;}
+  .log .who{position:absolute;left:0;top:1px;font-size:.68rem;font-weight:800;letter-spacing:.05em;
+    border-radius:4px;padding:2px 6px;}
+  .log .turn.me .who{color:#1E2536;background:#A78BFA;}
+  .log .turn.ai .who{color:#DDE1EC;background:#33505f;}
+  .log .turn.me .who::after{content:"나";}
+  .log .turn.ai .who::after{content:"AI";}
+  .log .cap{color:#96A0B8;font-size:.79rem;padding:8px 0 2px;border-bottom:1px solid #333C52;}
+  .log em{color:#f0c98a;font-style:normal;}
+
+  .step{display:flex;gap:12px;margin:14px 0;}
+  .step .n{flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--brand);color:#fff;
+    font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .step .c{flex:1 1 auto;}
+
+  table{width:100%;border-collapse:collapse;font-size:.93rem;margin:14px 0;display:block;overflow-x:auto;}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--muted);font-weight:700;font-size:.83rem;background:var(--panel);}
+
+  pre.mermaid{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px;margin:16px 0;text-align:center;overflow-x:auto;}
+
+  .codecap{background:#2A3348;color:#A78BFA;font-size:.79rem;font-weight:700;letter-spacing:.02em;padding:7px 14px;border-radius:10px 10px 0 0;margin-top:16px;}
+  .codecap .fn{color:#7C88A4;font-weight:400;margin-left:7px;}
+  pre.code{background:#1E2536;color:#DFE3EE;border-radius:0 0 10px 10px;padding:13px 16px;margin:0 0 6px;overflow-x:auto;font:.82rem/1.62 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;}
+  pre.code .cm{color:#7C88A4;}
+
+  .twopath{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:0;margin:14px 0;}
+  .twopath .path{border:1px solid var(--line);border-radius:11px;padding:12px 15px;background:var(--panel);font-size:.93rem;line-height:1.6;}
+  .twopath .ph{font-weight:800;color:var(--brand);font-size:.8rem;letter-spacing:.02em;margin-bottom:6px;}
+  .twopath .vs{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--amber);font-size:1.15rem;padding:0 14px;}
+  .twopath .mut{color:var(--muted);font-size:.85em;}
+  @media(max-width:680px){.twopath{grid-template-columns:1fr;}.twopath .vs{padding:8px 0;}}
+  .tiers{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:0;margin:14px 0 6px;}
+  .tiers .tier{border:1px solid var(--line);border-radius:11px;padding:13px 15px;background:var(--panel);font-size:.92rem;line-height:1.62;}
+  .tiers .tno{font-weight:800;color:var(--brand);font-size:.78rem;letter-spacing:.03em;margin-bottom:3px;}
+  .tiers .tname{font-weight:800;font-size:1.02rem;margin-bottom:8px;}
+  .tiers dl{margin:0;}
+  .tiers dt{font-size:.76rem;font-weight:800;color:var(--muted);letter-spacing:.02em;margin-top:7px;}
+  .tiers dd{margin:1px 0 0;}
+  .tiers .arw{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--amber);font-size:1.2rem;padding:0 11px;}
+  @media(max-width:820px){.tiers{grid-template-columns:1fr;}.tiers .arw{padding:7px 0;transform:rotate(90deg);}}
+
+  /* 스크린샷 = 브라우저 창 프레임(상단 크롬 바 + 신호등 3점)으로 "화면 캡처"임을 즉시 알림 */
+  figure.shot{margin:24px 0;padding:10px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);box-shadow:0 6px 22px rgba(16,33,31,.11);}
+  figure.shot img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff;}
+  figure.shot figcaption{padding:10px 4px 2px;font-size:.85rem;color:var(--muted);line-height:1.55;}
+  figure.shot figcaption::before{content:"SCREENSHOT";display:inline-block;margin-right:8px;padding:1px 7px;
+    border:1px solid var(--line);border-radius:4px;background:var(--bg);
+    font-size:.7rem;font-weight:800;letter-spacing:.03em;color:var(--brand);vertical-align:1.5px;}
+  figure.shot figcaption b{color:var(--ink);}
+  blockquote{margin:12px 0;padding:10px 16px;border-left:4px solid var(--brand-ln);background:var(--brand-bg);
+    border-radius:0 8px 8px 0;color:#3B2A82;}
+  mark{background:#fde6b8;color:#5a3d00;padding:0 3px;border-radius:3px;}
+  /* 원문 프롬프트 = 부록 A의 대화 로그와 같은 옷을 입힌다.
+     같은 성격(내가 실제로 친 말)이면 같은 표기여야 독자가 두 번 배우지 않는다. */
+  /* 본문 안의 작은 구분 라벨. 위/아래를 가리키지 않고 "여기서부터 이 얘기"만 표시한다. */
+  .minihead{display:flex;align-items:center;gap:9px;margin:24px 0 6px;
+    color:var(--muted);font-size:.86rem;font-weight:800;letter-spacing:.02em;}
+  .minihead::before{content:"";flex:0 0 auto;width:18px;height:3px;border-radius:2px;background:var(--brand-ln);}
+  .minihead::after{content:"";flex:1 1 auto;height:1px;background:var(--line);}
+  .cap.intent{margin-top:9px;}
+  .cap.intent ul{margin:5px 0 0;padding-left:17px;}
+  .cap.intent li{margin:2px 0;line-height:1.55;}
+  .sit{margin:6px 0 9px;color:#4a4f63;font-size:.95rem;}
+  .sit b{color:#333C52;}
+  /* 생각의 사슬 — 세로로 흐르는 판단 과정 (다이어그램 대신) */
+  .chain{list-style:none;margin:12px 0 16px;padding:0 0 0 26px;position:relative;counter-reset:ch;}
+  .chain::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:#ddd5f8;}
+  .chain li{position:relative;margin:0 0 13px;padding:0 0 0 4px;counter-increment:ch;line-height:1.7;}
+  .chain li::before{content:counter(ch);position:absolute;left:-26px;top:2px;width:17px;height:17px;
+       border-radius:50%;background:#EFEBFE;border:2px solid #B9A8F7;color:#3B2A82;
+       font-size:.68rem;font-weight:800;text-align:center;line-height:15px;}
+  .chain li b{display:block;color:#2E2159;font-size:1.02rem;}
+  .chain li span{display:block;color:var(--muted);font-size:.93rem;margin-top:1px;}
+  .chain li.q::before{content:"?";background:#fdf4e8;border-color:#e0a76a;color:#7a3d06;}
+  .chain li.q b{color:#7a3d06;}
+  .chain li.key::before{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .chain li.key b{color:var(--brand);}
+  @media print{ .chain li{break-inside:avoid;page-break-inside:avoid;} }
+  .io{margin:10px 0 0;padding:9px 13px 10px;border-radius:0 8px 8px 0;}
+  .io.intent{background:#f6f4fe;border-left:3px solid #5B3FD9;}
+  .io.result{background:#f2f8f5;border-left:3px solid #0a7048;}
+  .io .ioh{display:block;width:fit-content;font-weight:800;font-size:.8rem;letter-spacing:.06em;
+       margin:0 0 5px;padding:1px 8px;border-radius:4px;color:#fff;}
+  .io.intent .ioh{background:#5B3FD9;}
+  .io.result .ioh{background:#0a7048;}
+  .io ul,.io ol{margin:5px 0 0;padding-left:18px;}
+  .io li{margin:3px 0;line-height:1.68;}
+  .io p{margin:5px 0 0;}
+  /* 과제 질문 + 짧은 답 — 노트(.note)와 같은 골격: 라벨 → 줄바꿈 → 본문 */
+  /* 언어 전환 */
+  .langsw{position:absolute;top:0;right:0;display:flex;gap:2px;align-items:center;
+      font-size:.82rem;font-weight:700;letter-spacing:.04em;}
+  .langsw a,.langsw span{padding:3px 9px;border-radius:5px;text-decoration:none;}
+  .langsw .on{background:var(--brand);color:#fff;}
+  .langsw a{color:var(--muted);border:1px solid var(--brand-ln);}
+  .langsw a:hover{background:var(--brand-bg);color:var(--brand);}
+  .cover{position:relative;}
+  @media print{ .langsw{display:none;} }
+  .qa{border-radius:0 8px 8px 0;padding:9px 13px 11px;margin:4px 0 18px;
+      background:#f6f4fe;border-left:3px solid #5B3FD9;font-size:.96rem;line-height:1.72;}
+  .qa .lbl{display:block;font-weight:800;font-size:.8rem;letter-spacing:.04em;
+      margin:0 0 4px;padding:1px 8px;border-radius:4px;color:#fff;background:#5B3FD9;width:fit-content;}
+  .qa .qtext{display:block;color:#5c5480;font-size:.93rem;margin:0 0 9px;
+      padding-bottom:8px;border-bottom:1px dashed #d5cbf5;}
+  .qa .qtext b{color:#3B2A82;}
+  .repo{display:block;margin:9px 0 0;padding-top:8px;border-top:1px dashed #d5cbf5;
+        font-size:.9rem;color:#5c5480;}
+  .repo b{color:#3B2A82;}
+  .repo a{color:#5B3FD9;}
+  .repo .none{color:#8a8399;}
+  .qa ul,.qa ol{margin:6px 0 0;padding-left:18px;}
+  .qa li{margin:3px 0;}
+  .q{background:#eef3f6;border:1px solid #c3cfd8;border-radius:5px;padding:1px 6px;color:#333C52;font-size:.94em;}
+  blockquote.rawp{background:#1E2536;color:#DDE1EC;border:0;border-radius:11px;
+    margin:14px 0;padding:14px 17px 15px 74px;font-size:.9rem;line-height:1.68;position:relative;}
+  blockquote.rawp::before{content:"나";position:absolute;left:17px;top:15px;
+    font-size:.68rem;font-weight:800;letter-spacing:.05em;border-radius:4px;padding:2px 6px;
+    color:#1E2536;background:#A78BFA;}
+  blockquote.rawp mark{background:transparent;color:#f0c98a;font-weight:600;padding:0;}
+  blockquote.rawp b{color:#ffffff;}
+  blockquote.rawp em{color:#f0c98a;font-style:normal;}
+  blockquote.rawp code{background:#333C52;color:#DDE1EC;}
+  .garble{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;background:#2b1f1f;color:#f0b8b0;
+    padding:9px 13px;border-radius:8px;display:block;margin:9px 0;overflow-x:auto;}
+
+  footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.87rem;}
+  @media print{
+    @page{margin:14mm 13mm;}
+    body{font-size:10.5pt;} .wrap{max-width:none;padding:0;}
+    /* 제목은 뒤따르는 본문과 떨어지지 않게 */
+    h2,h3,h4,.codecap{page-break-after:avoid;break-after:avoid;}
+    h2{page-break-before:auto;}
+    /* 한 덩어리로 읽혀야 하는 블록은 페이지 경계에서 쪼개지 않는다 */
+    .panel,.note,.log,.step,pre.mermaid,pre.code,table,figure.shot,
+    .twopath,.tiers,blockquote.rawp{page-break-inside:avoid;break-inside:avoid;}
+    /* 어두운 배경(코드·로그)은 기본적으로 인쇄에서 탈락 → 강제 출력
+       ※ Chrome '다른 이름으로 저장 → PDF'에서 [배경 그래픽] 체크 필요 */
+    .log,pre.code,blockquote.rawp{background:#1E2536 !important;}
+    .log,pre.code,blockquote.rawp,.note,figure.shot,.tiers .tier,.twopath .path,table th{
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    /* 세로로 긴 스크린샷이 페이지를 넘기지 않도록 */
+    figure.shot img{max-height:180mm;width:auto;max-width:100%;margin:0 auto;}
+    figure.shot{box-shadow:none;}
+    pre.mermaid svg{max-width:100% !important;height:auto !important;}
+  }
+  /* ── 사이드바 (현재 읽는 위치) ── */
+  #sidenav{position:fixed;left:0;top:0;width:242px;height:100vh;overflow-y:auto;
+    background:var(--panel);border-right:1px solid var(--line);z-index:30;display:none;padding-bottom:40px;}
+  #sidenav .nav-head{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:15px 12px 11px 20px;position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);}
+  #sidenav .nav-title{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  #navhide{border:none;background:none;color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer;line-height:1;padding:5px 8px;border-radius:6px;white-space:nowrap;}
+  #navhide:hover{background:var(--line);color:var(--ink);}
+  #sidenav-list{padding:8px 10px 0;}
+  #sidenav-list a{display:block;font-size:.855rem;line-height:1.4;color:var(--muted);text-decoration:none;
+    padding:7px 11px;margin:1px 0;border-left:2px solid transparent;border-radius:0 7px 7px 0;}
+  #sidenav-list a:hover{background:#EFEBFE;color:var(--ink);}
+  #sidenav-list a.active{background:var(--brand-bg);color:var(--brand);font-weight:700;border-left-color:var(--brand);}
+  #sidenav-list a.lv3{font-size:.8rem;padding:5px 10px 5px 24px;color:#8A90A2;line-height:1.35;}
+  #sidenav-list a.lv4{font-size:.78rem;padding:4px 10px 4px 34px;color:#7C8296;line-height:1.32;font-weight:600;}
+  #sidenav-list a.lv5{font-size:.74rem;padding:3px 10px 3px 48px;color:#A6ABBC;line-height:1.28;}
+  #navshow{display:none;position:fixed;left:14px;top:14px;z-index:31;width:40px;height:40px;
+    border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1.1rem;cursor:pointer;
+    border-radius:9px;box-shadow:0 1px 5px rgba(0,0,0,.09);}
+  #navshow:hover{border-color:var(--brand-ln);color:var(--brand);}
+  @media(min-width:1180px){
+    #sidenav{display:block;}
+    body{padding-left:242px;}
+    body.nav-hidden #sidenav{display:none;}
+    body.nav-hidden{padding-left:0;}
+    body.nav-hidden #navshow{display:block;}
+  }
+  /* 본문 차례 — 인쇄에는 사이드바가 없으므로 여기가 유일한 목차가 된다 */
+  #toc{margin:22px 0 8px;padding:16px 20px 18px;background:#fbfaff;
+       border:1px solid #ddd5f8;border-radius:10px;}
+  #toc .toc-h{font-weight:800;font-size:.82rem;letter-spacing:.06em;color:#fff;
+       background:#5B3FD9;border-radius:4px;padding:2px 9px;display:inline-block;margin-bottom:10px;}
+  #toc ol{list-style:none;margin:0;padding:0;}
+  #toc li{break-inside:avoid;margin:0;}
+  #toc a{display:block;text-decoration:none;color:var(--ink);line-height:1.5;padding:2px 0;}
+  #toc a:hover{color:var(--brand);}
+  #toc a.t2{font-weight:800;font-size:1.02rem;margin-top:9px;color:#2E2159;}
+  #toc li:first-child a.t2{margin-top:0;}
+  #toc a.t3{font-size:.9rem;color:#5a6072;padding-left:15px;}
+  #toc a .tn{color:var(--brand);font-weight:800;margin-right:5px;}
+  @media print{
+    #sidenav,#navshow{display:none;} body{padding-left:0;}
+    #toc{page-break-inside:avoid;break-inside:avoid;background:#fbfaff !important;
+         -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+    /* 한 덩어리로 읽혀야 하는 블록 — 페이지 경계에서 쪼개지 않는다 */
+    .qa,.io,.chain li,figure.shot,blockquote.rawp,pre.code,pre.mermaid,
+    .note,.log,.twopath,.tiers,.codecap{break-inside:avoid;page-break-inside:avoid;}
+    /* 표는 통째로 avoid 하면 한 쪽을 넘길 때 통으로 밀린다 — 행 단위로 */
+    table{break-inside:auto;page-break-inside:auto;}
+    tr,th,td{break-inside:avoid;page-break-inside:avoid;}
+    thead{display:table-header-group;}   /* 쪽이 넘어가도 머리행 반복 */
+
+    /* 제목·라벨은 뒤따르는 본문과 떨어지지 않게 */
+    h2,h3,h4,.codecap,.qa .lbl,.io .ioh,.note .lbl{
+      break-after:avoid;page-break-after:avoid;}
+    h3,h4{orphans:3;widows:3;}
+    p,li{orphans:2;widows:2;}
+
+    /* 배경색·라벨이 인쇄에서 탈락하지 않게 */
+    .qa,.io,.note,.repo,.chain li::before,figure.shot,table th,
+    .log,pre.code,blockquote.rawp{
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+    /* 링크는 종이에서 주소가 보여야 확인 가능하다 */
+    .repo a::after{content:" (" attr(href) ")";font-size:.86em;color:#666;word-break:break-all;}
+
+    /* 스크린샷이 한 쪽을 넘기지 않게 */
+    figure.shot img{max-height:170mm;width:auto;max-width:100%;}
+    pre.mermaid svg{max-width:100% !important;height:auto !important;max-height:150mm;}
+  }
+</style>
+<nav id="sidenav" aria-label="Contents">
+  <div class="nav-head"><span class="nav-title">Contents</span><button id="navhide" title="Hide sidebar" aria-label="Hide sidebar">✕ Hide</button></div>
+  <div id="sidenav-list"></div>
+</nav>
+<button id="navshow" title="Open contents" aria-label="Open contents">☰</button>
+
+<div class="wrap">
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="langsw"><a href="./index.html">KO</a><span class="on">EN</span></div>
+  <div class="doctype">How I work with AI · A field record</div>
+  <h1>Using AI in a Way You Can Trust</h1>
+  <div style="font-size:1.03rem;color:var(--muted);margin:-4px 0 14px;">Making the output falsifiable, and handing it over so it keeps running after the owner changes</div>
+  <div class="meta">
+    <span>Gichan Lee · AI Product Engineer</span>
+    <span><a href="https://bit-habit.com">bit-habit.com</a></span>
+    <span>Real project cases · 2026</span>
+  </div>
+</div>
+
+<!-- ================= 세 질문 ================= -->
+<div style="font-weight:800;color:var(--brand);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 2px;">The three questions this document answers</div>
+<p style="color:var(--muted);margin:2px 0 4px;">Using AI comes down to proving three things — whether the result can be trusted enough to put into real work, whether the gain stays with the organization and keeps running, and whether the tools are chosen critically. What each topic asks, and why, is restated at the head of its own section.</p>
+
+<pre class="mermaid">
+flowchart TB
+  R(["🧭 How I use AI — three things to prove"]):::root
+  R --> H1
+  R --> H2
+  R --> H3
+  H1["① Problem solving · architecture &nbsp;(§1)<br/><b>Can the result be trusted in real work</b><br/><i>reliability = risk management</i>"]:::h1
+  H2["② Work productivity &nbsp;(§2)<br/><b>Does the gain stay and keep running</b><br/><i>personal skill → team capability</i>"]:::h2
+  H3["③ Tools · models &nbsp;(§3)<br/><b>Chosen knowing the limits</b><br/><i>technical decision-making</i>"]:::h3
+
+  classDef root fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:2.4px;
+  classDef h1 fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.5px;
+  classDef h2 fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.5px;
+  classDef h3 fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.5px;
+</pre>
+
+<nav id="toc" aria-label="Contents">
+  <div class="toc-h">Contents</div>
+  <ol id="toc-list"></ol>
+</nav>
+
+<!-- ================= §0 ================= -->
+<h2><span class="no">0.</span>Summary</h2>
+
+<div class="lead">
+My work is not to use AI faster, but to make its results <b>trustworthy</b>.<br>
+Models are <b>confidently wrong.</b> So confidence cannot be used as a signal.<br>
+That leaves one method — make the output <b>falsifiable</b>, and hand it over so someone else can carry it on.
+</div>
+
+<table>
+  <tr><th style="width:16%">Topic (assignment prompt)</th><th style="width:27%">One line</th><th>Case · evidence</th></tr>
+  <tr>
+    <td><b>1.</b><br>Problem solving or<br>architecture improvement</td>
+    <td><b>On a problem whose answers cannot be graded, I made every value the AI produced traceable back to its source.</b><br>
+        <span style="color:var(--muted);font-size:.9em;">accuracy → replaced by traceability</span></td>
+    <td><b>💧 Case 1 · Hydrological survey cost verification</b> — Korea Management Analysis Institute, government budget verification<br>
+        Four layers of verification — source comparison · image evidence · cross-file invariants · independent second estimate<br>
+        <span style="color:var(--muted);font-size:.92em;">The goal: <b>someone who knows nothing about hydrological surveys can verify it in an hour</b></span><br><br>
+        <b>✈️ Case 2 · Aviation-law RAG</b> — the same problem under different conditions<br>
+        A ground-truth set can be built, so <b>45 configurations were graded automatically</b>. The retrieval axis was made free — 0 API calls<br>
+        <span style="color:var(--muted);font-size:.92em;">On a tie, take the cheaper one — adopted a 38% token saving, rejected agentic at 27×</span></td>
+  </tr>
+  <tr>
+    <td><b>2.</b><br>Productivity gains<br>using AI</td>
+    <td><b>I left the gain in a form that reproduces without me.</b><br>
+        <span style="color:var(--muted);font-size:.9em;">the metric is not hours saved but the scope that reproduces after the owner changes</span></td>
+    <td><b>The way the same organization works</b> — meeting notes → AI proposal → <b>human item-by-item approval</b> → Board<br>
+        Three mechanisms — approval gate · task model · leak gate (human review + machine pattern check, two layers)<br>
+        <b>[stated]</b> document review <b>10h → 2h</b> · non-developers run it themselves<br>
+        <b>[log]</b> <b>3</b> ADRs · <b>6</b> learning lessons · three team repositories onto one Board</td>
+  </tr>
+  <tr>
+    <td><b>3.</b><br>Tool and model analysis</td>
+    <td><b>I observed the limits myself, wrote them down, and chose knowing them.</b></td>
+    <td>Primary tool <b>Claude Code</b> — why it was chosen, and how alternatives compared<br>
+        Limits observed — claims to know what it does not · confidence ≠ accuracy · non-linear cost growth<br>
+        <span style="color:var(--muted);font-size:.92em;">Why on-premise is separate engineering when data cannot leave the building</span></td>
+  </tr>
+</table>
+
+<div class="note teal"><span class="lbl">How the three topics connect</span>
+<b>§3 raises the problem</b> (models are confidently wrong), <b>§1 builds the mechanisms</b> (make it falsifiable), and <b>§2 leaves them with the organization</b> (personal skill → team capability).<br>
+So the same move repeats across all three sections — <b>never leave only the result; leave the path the result came from.</b> §1 attached a source to every number; §2 attached a rationale to every decision.</div>
+
+<div class="note amber"><span class="lbl">Grades of evidence</span>
+Throughout the text I mark <span class="q">[log]</span> (verifiable in a repository or session record) and <span class="q">[stated]</span> (internal material that cannot be published, so stated only). The cost-verification app in §1 has a private repository and its figures are masked, but <b>the verification design is published in full</b>.</div>
+
+<!-- ================= §1 ================= -->
+<h2 id="s1"><span class="no">1.</span>Problem solving or architecture improvement</h2>
+<p class="sec-note" style="color:var(--muted);font-size:.93rem;margin:2px 0 0;">What this topic asks — can the result be trusted enough to put into real work.</p>
+<p style="margin:10px 0 0;">Two projects are laid out in the same order — background → key prompts → verification. Read one, and the other puts the same things in the same places.</p>
+<ul style="margin:8px 0 0;">
+  <li><b>Case 1 · 💧 Hydrological survey cost verification</b> — a government project done at the Korea Management Analysis Institute. There is no ground-truth set to grade against. (1-1 · 1-2 · 1-3)</li>
+  <li><b>Case 2 · ✈️ Aviation-law RAG</b> — a learning project built in a public repository. A ground-truth set can be built. (1-4 · 1-5 · 1-6)</li>
+</ul>
+<p style="margin:8px 0 0;">I chose these two because the presence or absence of a ground-truth set splits the entire verification design. The domains (river budgets / aviation law) have nothing to do with each other, and that is what separates what the design earned from what the domain gave.</p>
+<pre class="mermaid">
+flowchart TB
+  subgraph GA["💧 Case 1 · hydrology · no ground truth"]
+    direction LR
+    A1["1-1 Background"]:::s1 --> A2["1-2 Key prompts"]:::s1 --> A3["1-3 Verification<br/><i>traceable to the source</i>"]:::s1
+  end
+  subgraph GB["✈️ Case 2 · aviation RAG · ground truth exists"]
+    direction LR
+    B1["1-4 Background"]:::s1 --> B2["1-5 Key prompts"]:::s1 --> B3["1-6 Verification<br/><i>hundreds of runs, auto-graded</i>"]:::s1
+  end
+  GA --> GB
+  classDef s1 fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+</pre>
+
+<h3><span class="mk">💧</span> 1-1. <span class="cs">Case 1</span> Background — what the work was, and why verification was hard</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What was the problem, and what were the technical constraints at the time?</span>
+The work is verifying whether a government hydrological survey budget conforms to the Standard Estimate Manual (government-published labor/cost standards). Previously it was done by hand in Excel, taking more than 10 hours per case, and because estimation and checking happened in the same hands and the same sheet, errors had nowhere to surface.
+<ul>
+  <li><b>A wrong number is the risk itself</b> — the result is evidence in a budget review, so an error is not a bug but a legal and financial risk.</li>
+  <li><b>Heterogeneous sources</b> — the standard is a PDF table (Standard Estimate Manual); the data is scattered across several Excel files.</li>
+  <li><b>No ground-truth set to grade against</b> — there is no settled value called "the true cost of this survey".</li>
+  <li><b>The verifier is not a developer</b> — someone who cannot read code has to be able to trust the result.</li>
+  <li><b>Data cannot leave the building</b> — it is client material, so the repository is private too.</li>
+</ul>
+<span class="repo"><b>Repository</b> — <span class="none">private</span> (client data, <b>common to 1-1~1-3</b>). Instead, the raw prompts, verification code and screens are carried in this document → <a href="#ap-b">Appendix B, masking policy</a></span></div>
+
+<h4 class="dev" data-nav="1-1-1 · What a hydrological survey is">1-1-1 · What a hydrological survey is</h4>
+
+<div class="note teal"><span class="lbl">One word first</span>
+In Korean, <i>sumun</i> (水文) is not the <i>floodgate</i> (水門) of a dam. It means "the record of water" — hydrology.</div>
+
+<ul>
+  <li><b>Hydrological survey</b> — a national program that repeatedly measures discharge at river sites.</li>
+  <li><b>Discharge</b> — how many m³ of water pass that site per second.</li>
+  <li><b>Where it is used</b> — flood forecasting · dam release decisions · water allocation · river planning.</li>
+  <li><b>Scale</b> — several hundred sites nationwide. Repeated every year. Funded every year.</li>
+</ul>
+
+<h4 class="dev" data-nav="1-1-2 · What cost verification is">1-1-2 · What cost verification is</h4>
+<ul>
+  <li>The budget is built on a per-site annual unit cost — "how much to survey one site for one year".</li>
+  <li>The bidding contractor submits its own cost estimate.</li>
+  <li>A third-party institute independently re-estimates the same cost — that is the role of the Korea Management Analysis Institute.</li>
+  <li>The two values are compared, over-estimated items are identified, and the findings are presented to the government with evidence.</li>
+</ul>
+<p>The point is to trace everything back to <b>the standards the state has published</b>, not to instinct or custom.</p>
+
+<div class="note green"><span class="lbl">The Standard Estimate Manual — that standard</span>
+<ul>
+  <li>A national standard that fixes how many people and how many hours a given task takes.</li>
+  <li>Wages are multiplied onto it and overheads added. This is called the cost-plus-fixed-fee method.</li>
+  <li>In other words, it works back not from "what was spent" but from "what it should be by the standard".</li>
+</ul></div>
+
+<pre class="mermaid">
+flowchart LR
+  A["Allocated budget<br/><i>per-site annual unit cost</i><br/><b>money actually set aside</b>"]:::a
+  B["Back-calculated from the Manual<br/><i>cost-plus-fixed-fee</i><br/><b>money the standard implies</b>"]:::b
+  A --- Q{{"The two differ<br/><b>at which assumption?</b>"}}:::q --- B
+  Q --> T["Trace each assumption back to the source<br/><i>measurement count · staffing · adjustment factors …</i>"]:::t
+  classDef a fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef b fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+  classDef q fill:#EFEBFE,color:#3B2A82,stroke:#5B3FD9,stroke-width:2.4px;
+  classDef t fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.3px;
+</pre>
+
+<h4 class="dev" data-nav="1-1-3 · What the app did · did not do">1-1-3 · What the app did · did not do</h4>
+<table>
+  <tr><th style="width:50%">What it did not do</th><th>What it did</th></tr>
+  <tr>
+    <td>Rule on which side is right</td>
+    <td>Put the two values side by side and let the source of the difference be traced</td>
+  </tr>
+  <tr>
+    <td>Substitute "the AI calculated it" for evidence</td>
+    <td>Attach the source document and cell to every assumption</td>
+  </tr>
+</table>
+<p>Three things are traced — how many measurements were assumed, how many people and hours per measurement, and which adjustment factors were applied. Change an assumption and the screen shows how the numbers move.</p>
+
+<div class="note amber"><span class="lbl">What was at stake</span>
+<ul>
+  <li>The output becomes evidence in a budget review.</li>
+  <li>So a wrong number is not a bug but a legal and financial risk.</li>
+  <li>The reader is a non-developer who cannot read code.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="1-1-4 · The previous method (10 hours → 1 minute)">1-1-4 · The previous method (10 hours → 1 minute)</h4>
+<ul>
+  <li>The current procedure is manual Excel work. No code, no AI.</li>
+  <li>It takes more than 10 hours per case.</li>
+  <li>Estimation and checking happen in the same hands, inside the same sheet. So even when an error creeps in, it has nowhere to surface.</li>
+  <li>Above all, no one but the person who produced the result can readily check it.</li>
+</ul>
+
+<div class="note teal"><span class="lbl">The aim — separate estimation from verification</span>
+The point was never to make the calculation fast. The point was to move the time spent calculating into verification.<br>
+Once the logic is set up, estimation takes a minute, and all the time left goes to asking "where did this number come from".</div>
+
+<table>
+  <tr><th style="width:34%"></th><th>Previous (manual Excel)</th><th>The app</th></tr>
+  <tr><td><b>Estimation</b></td><td>over 10 hours</td><td><b>1 minute</b></td></tr>
+  <tr><td><b>Verification</b> — hydrology expert</td><td colspan="1">not separated from estimation</td><td><b>about 10 minutes</b></td></tr>
+  <tr><td><b>Verification</b> — non-expert</td><td>effectively impossible</td><td><b>about 1 hour</b> <span style="color:var(--muted);font-size:.9em;">← this is the real goal</span></td></tr>
+</table>
+
+<p>That last row is the actual goal of the project: letting someone who knows nothing about hydrological surveys verify the work within an hour, just by following the evidence the app presents. It is about increasing the number of people who can verify.</p>
+
+<h4 class="dev" data-nav="1-1-5 · There is no ground-truth set">1-1-5 · There is no ground-truth set</h4>
+<ul>
+  <li><b>There is someone who judges</b> — an experienced verifier decides after looking at the evidence.</li>
+  <li>But there are no labels to grade against in advance — no settled value called "the true cost".</li>
+  <li>All that exists is the calculation procedure fixed by law — and even its application leaves room for interpretation.</li>
+  <li>So accuracy cannot be measured automatically. A person has to look.</li>
+</ul>
+<p>So I replaced accuracy with traceability. Instead of grading whether a value is right, the criterion became whether every number can be traced back to its source — because if it can be compared by eye, you can say it is wrong even without knowing the right answer.</p>
+
+<div class="note teal"><span class="lbl">Work that does not end</span>
+The practitioners' know-how keeps being collected and reflected. Why a given assumption is set the way it is is not fully written in the standards; it is filled in by judgment accumulated in the field. Moving those judgments one by one into the app's evidence is ongoing work (→ the decision-maker feedback in §1-3).</div>
+<h3><span class="mk">💧</span> 1-2. <span class="cs">Case 1</span> Key prompts — demanding verification before code</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What was the key prompt (question) you gave the AI, and what was its answer? Describe how the conversation proceeded afterwards.</span>
+The first prompt did not ask for code. It asked instead that "validation matters most, so cite the evidence for every sentence, every time".
+<ul>
+  <li><b>The AI's answer</b> — a Streamlit app and the three screens (1-minute · 10-minute · final) came out as asked, but it fixed the purpose wrongly as a "tool for understanding the total budget".</li>
+  <li><b>Five corrections followed</b> — fix the purpose → narrow the scope to a single survey → reject coordinate citations → render PDFs as images → express every calculation as a formula.</li>
+  <li>In all five, the AI was wrong first, and I found it by using the app.</li>
+</ul></div>
+<h4 class="dev" data-nav="1-2-1 · The first prompt, verbatim">1-2-1 · The first prompt, verbatim</h4>
+<p>Instead of a polished summary, the first prompt is kept raw. It came from audio dictation, so the sentences are rough and there are typos (<i>"파악을 할 수 있느", "validtion"</i>) — which is exactly why it shows the flow of thought rather than a conclusion. Only the key parts are highlighted. (One internal data folder name is masked.)</p>
+
+<blockquote class="rawp">강 별로 수문조사들을 한 것들이 다 저장되어 있는 데 너무 내용이 많고 그 예산이라고 할만한 부분도 카테고리가 너무 많다. 그래서 이 전체적으로 파악이 안되는데. 파악을 할 수 있느. 어떻게 보면 <mark>1분만에 이해할 수 있는</mark> 적절한 spread sheet와 인사이트를 보여주는 html을 만들어주고, 그 후 <mark>10분 정도</mark> 시간 들여서 이해할 수 있는 html도 만들어주고. 그 다음에 결국에는 궁극적으로 내가 원하는것은 <mark>1개 강의 수문을 조사시 몇명이 몇시간 얼마의 비용이 들어가는지</mark> 분석하는 것이다. 하지만 이게 바로 하게 되면 <mark>환각이 일어날수도있고</mark>, 이게 나름의 방정식일텐데 이해하기가 어려울 수도 있다. 마치 선형회귀로 서울 아파트 가격을 예측할때 다양한 feature들을 고려해서 더 정확하게 예측할 수 있겠다만, 그러면 이해가 안되니 <mark>heuristic하게 일단 size만 가지고 예측하는 것처럼</mark>. 처음에는 아주 간단한 마치 하나의 feature 고려하는 것처럼 <mark>정확도는 떨어지더라도 validtion이 될 수 있는 방향</mark>으로 해야겟다. html을 만들때 아무래도 streamlit으로 해야될 거 같으니. <mark>아까 말한것과 다르게 html이 아니라 streamlit으로</mark> 만들어줘. 다시한번 말하는데 <mark>validation이 가장 중요</mark>하니, 가 문장의 근거는 실제 <b>[내부 데이터]</b>를 한번 가공해서 그 데이터를 <mark>매번 citation</mark>해줘.</blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+
+<p class="minihead">The line of thought inside that one paragraph</p>
+<ol class="chain">
+  <li><b>There is too much data to see the whole</b>
+      <span>Many files, and the budget categories are chopped far too finely.</span></li>
+  <li><b>So I asked for the forest and the tree at once</b>
+      <span>It will take a while anyway, so get both out of a single wait. The AI is good at the overall structure; I adjust the details.</span></li>
+  <li class="q">Why not ask only for the detail?
+      <span>The narrower and deeper the result, the more easily it diverges from what I wanted. And if the AI invents plausible numbers, there is no way to notice.</span></li>
+  <li><b>So I asked first for a form I could check</b>
+      <span>Even at some cost in accuracy, I must be able to follow where a value came from. Even if it fails, the overall context remains as material for the next turn.</span></li>
+  <li class="key">In the end what matters most is verification
+      <span>Before building fast comes whether the result can be trusted.</span></li>
+  <li><b>So I made it attach a source to every number</b>
+      <span>Which file, which cell a value came from is shown on screen alongside it.</span></li>
+  <li><b>I switched tools mid-request too</b>
+      <span>Static HTML → Streamlit. Because I need to change values and see the effect.</span></li>
+</ol>
+
+<p>Not a single line about code. Every requirement is about "how will I trust this", not "what shall we build".</p>
+
+<h4 class="dev" data-nav="1-2-2 · Why I asked for the forest and the tree at once">1-2-2 · Why I asked for the forest and the tree at once</h4>
+<p>This is the most misread part. It does not mean "make me three screens", nor "I will cross-check three results".</p>
+<ul>
+  <li><b>The wait happens only once</b> — a large request takes a long time anyway. That single wait returns both the final target (the tree) and the overall context (the forest). With luck, the tree arrives right away.</li>
+  <li><b>The more local it is, the more it misses</b> — detailed calculations get built while the AI still does not know what I want. Narrow and deep means easy to diverge.</li>
+  <li><b>The overall structure it usually gets right</b> — pulling a skeleton out of scattered material is something it does well. So the forest is delegated and only the tree is adjusted.</li>
+  <li><b>Failing costs nothing</b> — even if the tree misses, the forest remains. That forest becomes material the AI refers to in the next turn, so the same background never has to be explained again.</li>
+</ul>
+
+<div class="tiers">
+  <div class="tier">
+    <div class="tno">Forest</div>
+    <div class="tname">1-minute view — overall scale</div>
+    <dl>
+      <dt>What it makes</dt><dd>Totals and unit costs by river and year, summarized on one screen</dd>
+      <dt>Who reads it</dt><dd>The decision-maker. One minute, no explanation</dd>
+      <dt>Why delegate it</dt><dd>Pulling an overall structure out of scattered material is what AI does well</dd>
+    </dl>
+  </div>
+  <div class="arw">→</div>
+  <div class="tier">
+    <div class="tno">Between</div>
+    <div class="tname">10-minute view — decomposition</div>
+    <dl>
+      <dt>What it makes</dt><dd>Which items sum to that total, with a source citation on every value</dd>
+      <dt>Who reads it</dt><dd>Practitioners. They follow the numbers down to the source</dd>
+      <dt>Its role</dt><dd>The stair from forest to tree. Which item to dig into is decided here</dd>
+    </dl>
+  </div>
+  <div class="arw">→</div>
+  <div class="tier">
+    <div class="tno">Tree</div>
+    <div class="tname">Final — cost of one survey</div>
+    <dl>
+      <dt>What it makes</dt><dd>How many people · how many hours · how much — a unit cost built up from the statutory manual</dd>
+      <dt>Who reads it</dt><dd>The cost negotiation with the contracting authority</dd>
+      <dt>Its role</dt><dd>The basis for a ruling in that negotiation — "what the law implies", presented with the formula</dd>
+    </dl>
+  </div>
+</div>
+
+<h4 class="dev" data-nav="1-2-3 · How the three screens actually came out">1-2-3 · How the three screens actually came out</h4>
+<figure class="shot">
+  <img src="./screenshots/s1-tier1-30sec.png" alt="Forest screen — four numbered insights, each with a source citation in its footer">
+  <figcaption>Forest · overall scale. Four conclusions and, right beneath them, the evidence lines, all on one screen — down to which file, which sheet, which cell a value came from (<code>D24×E24=F24</code>). All figures here are masked. Even reading only the remaining sentences, you can see what this screen does — every conclusion carries where it came from. And this screen was not a showpiece: the fourth item found that "the Standard Estimate Manual already prescribes person-days per measurement", and it ends with <code>→ used on the cost model v0 page</code>. The key to the final calculation was picked up in the forest.</figcaption>
+</figure>
+<figure class="shot">
+  <img src="./screenshots/s1-tier2-sites.png" alt="Middle screen — a bar chart of survey sites by province, travel-cost distribution by base, and a note confirming that the site counts in two files match">
+  <figcaption>Between · decomposition. The total is broken down by province and by base. The single line at bottom right is the point of this screen — "sum of the serial-number ranges in the travel-cost file = 355 sites, exactly matching the survey-site file". Two different files were checked for saying the same number; mechanism 3 of §1-3 (cross-file invariants) makes its first appearance here. Travel-cost amounts and internal file names are masked; the site count, which is the basis of the comparison, is kept.</figcaption>
+</figure>
+<figure class="shot">
+  <img src="./screenshots/s1-tier3-costmodel.png" alt="Tree screen — top of cost model v2. Question, statutory formula, collapsible source excerpt, station selector">
+  <figcaption>Tree · final. The question is written verbatim at the very top of the screen — <i>"for one measurement, how many people, how many hours, how much should the law produce?"</i>. Directly beneath it is the statutory formula behind that answer, with page 1 of the Standard Estimate Manual attached in a collapsible panel. The order shows the legal path to the value before the value itself.</figcaption>
+</figure>
+
+<p>The conversation that followed is carried below in <b>1-2-4~1-2-8</b> as raw (masked) text, and the outcome is organized in 1-3 — the process of turning back an AI that had mistaken the purpose, refusing coordinate citations, and distrusting the extraction channel itself.</p>
+
+<p class="minihead">How the conversation developed — five corrections</p>
+<p>In every one, the AI was wrong first and I found it and changed direction.</p>
+<figure class="shot" style="max-width:340px;">
+  <img src="./screenshots/s1-app-pages.png" alt="App sidebar — 10-minute deep dive, cost model v0/v1/v2, raw Excel viewer, question history page list">
+  <figcaption>Nothing was built in one shot; increasingly local models were stacked as v0 → v1 → v2. The raw viewer and the question history were kept as pages too.</figcaption>
+</figure>
+
+<h4 class="dev" data-nav="1-2-4 · Misreading the purpose itself">1-2-4 · Misreading the purpose itself</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">아이고 니가 <mark>목적을 완전히 헷갈렸는데</mark> … 우리가 <mark>원가 검증</mark>을 하는 프로젝트를 하고 있거든. 이 예산이 실제 그 <mark>법령하고 맞는지</mark>를 항상 보는 …</blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>Not "fix what you built" but "change the objective function itself".</li>
+  <li>I nailed down that the purpose is not "a tool for understanding the total budget" but "verifying whether this budget conforms to the statutory standard".</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li>A polished app appeared in about 50 minutes — but the framing was wrong. The artifact looked plausible while the objective function was off.</li>
+  <li><b>How I found it</b> — by using the app, not by reading the code. What the app emphasized clashed with my sense of the domain, and having a prior expectation made the mismatch visible.</li>
+  <li>The corrected purpose was written into project memory — so it persists into later conversations.</li>
+  <li>The demand "I want to know whether the data really says that" produced the raw Excel viewer.</li>
+  <li>Pages were versioned rather than overwritten, so earlier conclusions survive.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="1-2-5 · Narrowing the scope to an atom">1-2-5 · Narrowing the scope to an atom</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">누가 그냥 todo를 해줘. 비용모델은 <mark>1개 강의 수문 조사시 몇명이 몇시간 얼마의 비용인지</mark> 부터 아는거로 하자.<br><br>
+새로운 비용모델을 만들자. 즉 <mark>매우 지엽적인 수문 1개 조사시에 몇명이 몇시간 얼마</mark>의 비용이 들어가는 지. 즉 특정 수문을 현재 조건을 보고 <mark>법령에 맞게 실제로 나오는지</mark>. 다른 예산은 일단 필요없다.</blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li><b>Fix the output first</b> — how many people · how many hours · how much. Not what to build, but what must come out.</li>
+  <li><b>Fix the criterion for judgment</b> — "does it come out as the law says".</li>
+  <li><b>Exclude the rest explicitly</b> — "the other budget items are not needed for now".</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li>With a criterion in place, the later verification becomes comparison — without one, verification is only impression.</li>
+  <li><b>If the scope is not closed in words, the AI widens it on its own</b> — once closed, increasingly narrow models stacked up as v0 → v1 → v2.</li>
+  <li>The raw viewer and question history became separate pages, so earlier stages are never erased.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="1-2-6 · Evidence that cannot be falsified">1-2-6 · Evidence that cannot be falsified</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">그 근거라는 부분을 <mark>spreadsheet의 일부를 복사붙여넣기 해서 누구나 spreadsheet에서 온 것처럼</mark> 해줘. … <mark>새로운 수식이 나오면 그걸 근거를 보여줘</mark></blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>Attach the source fragment itself, not a coordinate string.</li>
+  <li>Whenever a new formula appears, produce its evidence with it.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li><b>What was wrong</b> — the citations were coordinates like <code>📎 source: unit-price table D4</code>. It looks rigorous but cannot be checked on the spot, and above all a fabricated coordinate is outwardly indistinguishable from a real one.</li>
+  <li><b>What changed</b> — collapsible excerpts that preserve the Excel rows and columns, with cited rows in pale yellow and cited cells in deep yellow.</li>
+  <li><b>Present it in the screen the worker already knows</b> — if the source is Excel, show it like Excel. Verification only actually happens when the reviewer does not have to learn a new UI.</li>
+  <li>Derived questions ("why are there two kinds of measurement") were answered by the fact that only two rows exist in the source.</li>
+</ul></div>
+<figure class="shot">
+  <img src="./screenshots/s1-evidence-xlsx.png" alt="Evidence excerpt displayed as an Excel viewer — row numbers and column letters preserved, cited rows highlighted in yellow">
+  <figcaption>Each value carries a collapsed evidence excerpt. Opened, it shows the source sheet coordinates (<code>B101:D103</code>) along with the rows before and after the cited one — you need the neighbours to judge whether a value was truncated or is simply like that. Amounts, addresses and internal file names are masked; the grid structure is exactly as in the source.</figcaption>
+</figure>
+
+<h4 class="dev" data-nav="1-2-7 · Do not trust text extraction">1-2-7 · Do not trust text extraction — show the source as it is</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">pdf는 확실히 표로 되어 있으니 읽기가 어렵네. <mark>pdf는 스크린샷도 그냥 찍어서 근거로 보여주라</mark></blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>Exclude the text-extraction channel from PDFs out of the evidence path entirely.</li>
+  <li>The reason is single — when it fails, it does not raise an error. A plausible string comes out and the calculation keeps running.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<p>Extracting the staffing table as text actually produces this.</p>
+<span class="garble">(1) 평ㆍ저수 유량측정회0.050.650.850.90②●</span>
+<ul>
+  <li>There are six grade columns but only four values — no way to tell which value belongs to which grade. One shift, and the entire labour-cost calculation is quietly contaminated.</li>
+  <li><b>The rule changed</b> — PDF evidence is always the source page as it is. A table looks like a table, the line spacing is intact, and there is nothing to worry about regarding what the extractor dropped.</li>
+  <li>The values themselves were re-extracted in layout-preserving mode and confirmed against the source (total 2.45 person-days). But the evidence shown on screen is always the source image.</li>
+  <li>Leaving only the source gives no clue where to look, so the cited phrase alone is highlighted. The images are generated by a script — they are rebuilt if the source changes.</li>
+</ul></div>
+
+<figure class="shot">
+  <img src="./screenshots/s1-pumsem-manpower.png" alt="Evidence rendered as an image of the Standard Estimate Manual staffing table — a published government document">
+  <figcaption>This is how PDF evidence is attached — the page is rendered as an image so the table stays a table, and only the cited part is highlighted. Since nothing passes through an extractor, there is nothing to suspect was dropped, and the reader only has to look at the highlighted part. (Standard Estimate Manual — a published government document.)</figcaption>
+</figure>
+
+<div class="note amber"><span class="lbl">The method in use, and its limit</span>
+<ul>
+  <li>Right now the source page is shown as a screenshot with only the cited part highlighted, and a human compares it directly. Nothing passes through an extractor, so there is no path for contamination.</li>
+  <li>But it only works for humans. The moment a machine has to read the value again, we are back to the extraction problem.</li>
+  <li>That is exactly the place for a dedicated parser such as Upstage Document Parse — a product that solves the point where general-purpose extraction fails silently.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="1-2-8 · Demand the formula, not the result">1-2-8 · Demand the formula, not the result — so the evidence, not the answer, can be compared</h4>
+<blockquote class="rawp" style="margin:8px 0 11px;font-size:.9rem;">현장 출동인원이 몇명이 필요한지는 <mark>원래 알 수 없나?</mark> … 적용보정계수 같이 수식으로 계산한것들은 <mark>그 수식까지 표현해야지. 모든 수식은 다 표현해줘.</mark></blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>I demanded three columns — formula → substituted numbers → result — not a result number.</li>
+  <li>I pressed on the origin of default values that sat there without evidence.</li>
+  <li>If only the result is given, the only way to check is to recompute everything, and for a reviewer that amounts to being told not to check.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li><b>Review became comparison rather than recomputation.</b> Where each term's number came from is confirmed on its own line, and a mismatch only requires pointing at that term.</li>
+  <li><b>A side effect — constants without evidence surfaced.</b></li>
+</ul>
+<ol>
+  <li><b>Finding</b> — "on-site crew size" was hard-coded to the default <code>3</code>. There was nothing to write in the formula slot as evidence.</li>
+  <li><b>Check</b> — the Standard Estimate Manual prescribes only cumulative person-days; it does not fix how many people work simultaneously.</li>
+  <li><b>Derivation</b> — a range from the data. Assuming completion within one day, and since people cannot be split, <code>⌈2.45⌉ = 3 people</code>, with an upper bound of <code>4</code> given the grade composition.</li>
+</ol>
+<p>A constant was turned into a derivation. Without demanding the formula, that spot would never have been visible.</p></div>
+<figure class="shot">
+  <img src="./screenshots/s1-calib.png" alt="Derivation of the water-surface-width adjustment factor — page 7 of the Standard Estimate Manual rendered as an image">
+  <figcaption>The adjustment factor is the example. Writing only <code>1.0</code> gives no way to check why it is 1.0, but unfolding the decision rule alongside makes the evidence comparable right there: 100 ≤ B=150 &lt; 200 → factor 1.0. Page 7 of the published manual, the source of the rule, is attached as the original image.</figcaption>
+</figure>
+<h3><span class="mk">💧</span> 1-3. <span class="cs">Case 1</span> Verification and rollout — four layers before it reaches real work</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">Before applying AI-written code or guidance to a real environment, what verification (test/review) did it go through?</span>
+With no ground-truth set, accuracy was replaced by "traceability". Instead of grading whether a value is right, the criterion is whether every number can be traced back to its source.
+<ul>
+  <li><b>Source comparison</b> — the cited cell is excerpted with its Excel row and column coordinates intact and pinned on screen.</li>
+  <li><b>Channel verification</b> — PDFs are not extracted as text; the source page is shown as an image.</li>
+  <li><b>Cross-file invariants</b> — a machine checks whether different files state the same fact (38 of 42 with zero error).</li>
+  <li><b>Independent second estimate</b> — the same value is derived by a second path that never looks at the budget.</li>
+  <li><b>After rollout</b> — feedback from the reporting session with the decision-maker (a non-developer) becomes the input to the next cycle.</li>
+</ul></div>
+<h4 class="dev" data-nav="1-3-1 · How to read this section">1-3-1 · How to read this section</h4>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">This is the core of the work — the validation that AI output passes through before it enters real use. In an environment where data cannot leave the building and a wrong value is immediately a legal and financial risk, reliability was not a feature but a requirement.</p>
+<div class="note teal"><span class="lbl">No individual prompts</span>Unlike 1-2, these verification mechanisms had no individual instructions. Under the principle set in P1 — "verification comes first" — the AI built them itself, and I reviewed and adopted them. Deciding what to verify is human; executing it is AI. That is where judgment is spent.</div>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">Since there is no single correct answer, nothing can be scored. Instead every value is made traceable to its source, so that if something is wrong, a person can find where.</p>
+<pre class="mermaid">
+flowchart TB
+  A["AI output"]:::src
+  A --> B["Source comparison<br/>excerpt keeping row·column coords"]:::dev
+  A --> C["Channel verification<br/>PDF as image, table intact"]:::dev
+  A --> D["Cross-file invariants<br/>do other files say the same"]:::dev
+  A --> E["Independent 2nd estimate<br/>a path that never sees the budget"]:::dev
+  B --> F["Put into real use"]:::ok
+  C --> F
+  D --> F
+  E --> F
+  D -.->|"mismatches are not hidden"| G["published as known data issues"]:::warn
+  classDef src fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.3px;
+  classDef dev fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+  classDef ok fill:#5B3FD9,stroke:#3A2A7A,color:#ffffff,stroke-width:1.4px;
+  classDef warn fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+</pre>
+
+<p>Below is the actual code — not a claim, but how it runs. (File names and amounts are parameters, so nothing is exposed; the logic is unchanged.)</p>
+
+<h4 class="dev" data-nav="1-3-2 · Source comparison">1-3-2 · Source comparison — show the cited cell in its original grid</h4>
+<pre class="mermaid">
+flowchart LR
+  Q["cell to cite<br/>e.g. E9"]:::inp --> R["raw_slice<br/>keeps Excel row no. · column letter"]:::act
+  R --> S["_row_style<br/>called for every table row"]:::act
+  S --> T{"is this cell<br/>in the cited list"}:::dec
+  T -->|"cell matches"| U["deep yellow + bold"]:::ok
+  T -->|"row only"| V["pale yellow"]:::ok
+  T -->|"no"| W["no colour"]:::inp
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">Highlighting cited rows and cells <span class="fn">applib.py</span></div>
+<pre class="code">def evidence(rel_file, sheet_name, row_from, row_to, col_from="A", col_to=None,
+             note="", expanded=False, hl_rows=None, hl_cells=None):
+    <span class="cm">"""Attach evidence as an excerpt of the original spreadsheet, highlighting cited rows (pale yellow) and cells (deep yellow)."""</span>
+    if hl_rows is None:
+        hl_rows = []
+    if hl_cells is None:
+        hl_cells = []
+    rows = set(hl_rows)    <span class="cm"># Excel row numbers to highlight</span>
+    cells = set(hl_cells)  <span class="cm"># cell coordinates to highlight (e.g. "E9")</span>
+    df = raw_slice(rel_file, sheet_name, row_from, row_to, col_from, col_to)
+
+    <span class="cm"># callback pandas Styler calls per row (same role as a function pointer argument in C)</span>
+    def _row_style(row):
+        out = []
+        for col in df.columns:
+            cell_name = col + str(row.name)  <span class="cm"># column letter + row number = cell coord (e.g. "E9")</span>
+            if cell_name in cells:
+                out.append("background-color:#ffd54a; font-weight:600")  <span class="cm"># cited cell</span>
+            elif row.name in rows:
+                out.append("background-color:#fff3c4")                   <span class="cm"># cited row</span>
+            else:
+                out.append("")
+        return out
+<span class="cm"># → an invented coordinate and a real one are separated by colour on screen.</span></pre>
+<figure class="shot">
+  <img src="./screenshots/s1-highlight-cell.png" alt="Evidence excerpt screen — Excel row numbers 50·51·52 and column letters A~E preserved, cited row in pale yellow and cited cell in deep yellow">
+  <figcaption>This is the screen the code above produces. Row numbers 50·51·52 and column letters A~E are exactly the original Excel coordinates, so the reviewer can open the source file and check the same spot. Pale yellow is the cited row, deep yellow the cell the value actually came from — the two branches of <code>_row_style</code> rendered directly as colour. Keeping the neighbouring rows (50·52) was deliberate too. Internal file names are masked.</figcaption>
+</figure>
+
+<h4 class="dev" data-nav="1-3-3 · Channel verification">1-3-3 · Channel verification — distrust the extraction path itself</h4>
+<pre class="mermaid">
+flowchart LR
+  A["PDF evidence requested"]:::inp --> B{"is there a rendered<br/>image of that page"}:::dec
+  B -->|"yes"| C["show the image as is<br/>table layout survives"]:::ok
+  B -->|"no"| D["fall back to extracted text<br/>accept that tables may break"]:::bad
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">PDFs as images, with a text fallback <span class="fn">applib.py</span></div>
+<pre class="code">def evidence_pdf(label, txt_name, note="", expanded=False, hl=None):
+    <span class="cm">"""PDF evidence: show a page screenshot (cited part highlighted). Fall back to text if absent."""</span>
+    title = "📎 근거 발췌 — `표준품셈(2023).pdf` " + label
+    with st.expander(title, expanded=expanded):
+        png = DATA / (txt_name + ".png")
+        if png.exists():
+            st.image(str(png), width='stretch')      <span class="cm"># the image as is — nothing breaks the table</span>
+            st.caption("↑ PDF 페이지 스크린샷 (etl.py가 렌더링, 🟡 = 인용 문구). " + note)
+        else:
+            st.code(_read_txt(txt_name), language=None)  <span class="cm"># fallback: machine-extracted text</span>
+            st.caption("↑ PDF에서 기계 추출한 원문. " + note)
+
+<span class="cm"># raw_slice — slice into a 2-D array keeping Excel coordinates (row number, column letter) alive</span>
+data = []           <span class="cm"># data[row][col]</span>
+row_names = []      <span class="cm"># Excel row numbers as the index</span>
+for r in range(row_from, row_to + 1):
+    line = []
+    for c in range(c0, c1 + 1):
+        line.append(ws.cell(r, c).value)
+    data.append(line)
+    row_names.append(r)</pre>
+
+<h4 class="dev" data-nav="1-3-4 · Cross-file invariants">1-3-4 · Cross-file invariants — do different files state the same fact</h4>
+<p>This first checks whether the baseline the last mechanism will use is sound. The per-site unit price in the budget table is not a value to accept just because <i>it is written down</i>, and if the baseline is wrong, however precisely the gap (%) is computed it means nothing.</p>
+<p>Where the previous three mechanisms make things <b>checkable by a person</b>, this check <b>catches things even when nobody looks.</b> A self-consistent hallucination cannot pass it.</p>
+<table>
+  <tr><th style="width:26%">Invariant checked</th><th style="width:38%">How</th><th>Result</th></tr>
+  <tr><td><code>quantity × unit price = total</code></td><td>Recompute the product <b>without looking at</b> the total cell, then compare</td><td><b>38 of 42 exact</b> · 4 within ±1.7%</td></tr>
+  <tr><td>Number of survey sites</td><td>Counted separately from the site-status file and from a separate travel-cost file</td><td>Both give <b>355</b></td></tr>
+  <tr><td>Before / after revision</td><td>Row-by-row comparison</td><td>7 mismatching rows printed individually</td></tr>
+  <tr><td>Missing values</td><td>Check whether the address carries a province</td><td>1 case found</td></tr>
+</table>
+<pre class="mermaid">
+flowchart TB
+  A["row list: records"]:::inp --> B{"any blank among<br/>qty · price · total"}:::dec
+  B -->|"yes"| S["not eligible — skip"]:::inp
+  B -->|"no"| C["model = qty × price<br/><b>the total cell is not read</b>"]:::act
+  C --> D["err = total − model"]:::act
+  D --> E{"is the error below 0.5"}:::dec
+  E -->|"yes"| F["exact-match count +1"]:::ok
+  E -->|"no"| G["update max error rate, publish"]:::bad
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">The invariant check loop <span class="fn">app.py</span></div>
+<pre class="code"><span class="cm"># Cross-file invariant check: quantity × unit price = total. Recompute the product without reading the total cell, then compare.</span>
+records = items.to_dict("records")  <span class="cm"># DataFrame → array of dicts (iterated like an array of structs in C)</span>
+n_exact = 0         <span class="cm"># count of rows matching with zero error</span>
+max_err_pct = 0.0   <span class="cm"># maximum error rate (%)</span>
+for i in range(len(records)):
+    row = records[i]
+    qty, price, total_val = row["수량"], row["단가_백만원"], row["총계_백만원"]
+    if pd.isna(qty) or pd.isna(price) or pd.isna(total_val):
+        continue  <span class="cm"># if any of the three is blank, the row is not eligible</span>
+    model = qty * price          <span class="cm"># these are facts stated by different cells, so</span>
+    err = total_val - model      <span class="cm"># a self-consistent hallucination cannot satisfy this equation</span>
+    if abs(err) &lt; 0.5:
+        n_exact = n_exact + 1
+    if total_val != 0:  <span class="cm"># rows with a zero total are excluded from the error rate</span>
+        err_pct = abs(err) / total_val * 100.0
+        if err_pct &gt; max_err_pct:
+            max_err_pct = err_pct</pre>
+<figure class="shot">
+  <img src="./screenshots/s1-invariant.png" alt="Invariant check screen — item, year and quantity columns visible alongside an error column, every row showing zero error">
+  <figcaption>The actual screen. The last column, error (in millions of won), is zero throughout — meaning the value recomputed as <code>quantity × unit price</code>, without reading the total cell, matches the original total. The sentence above is its summary (38 of 42 with zero error, the other 4 within ±1.7%). The unit-price, total and model columns are masked because they are internal budget amounts, but what this mechanism proves is not those values but the equation among the three, so masking leaves the argument intact.</figcaption>
+</figure>
+
+<p class="minihead">How the 4 mismatches were handled</p>
+<table>
+  <tr><th style="width:14%">Where</th><td>They were not random but <b>clustered in one item group</b> — the new programme line being converted to automated measurement.</td></tr>
+  <tr><th>Why</th><td>The total is not an Excel formula but a <b>separately computed value</b>, and the unit price is that value rounded to an integer for display, so dividing the total by the quantity diverges below the decimal point.</td></tr>
+  <tr><th>Outcome</th><td>A single equation caught a 0.13% difference no eye would find — and narrowed it down to which item group, at that.</td></tr>
+  <tr><th>Therefore</th><td>The items used as the baseline held with zero error across all years. The divergences were not in the baseline, so the final comparison could proceed as planned. Without this check, there would have been no way even to ask whether the baseline was sound.</td></tr>
+</table>
+
+<div class="note green"><span class="lbl">Anomalies found — published, not hidden</span>
+All of them — the 4, the 7 and the 1 — were published as known source-data issues under "verification status" in the app and in the repository documents. Quietly correcting problems in the source would cost the verification tool its own credibility.</div>
+
+<p class="minihead">The [data] / [assumption] labelling convention settled here</p>
+<table>
+  <tr><th style="width:14%">What</th><td>Values with a confirmed source are distinguished on screen from <b>assumptions that were filled in</b>.</td></tr>
+  <tr><th>Why</th><td>When verification fails, "is the data wrong or is the assumption wrong" has to be separated immediately. Mixed together, that is impossible.</td></tr>
+  <tr><th>In practice</th><td>When the AI plausibly filled in a particular unit price without a source, that value was marked <b>[assumption]</b> and left editable by the user.</td></tr>
+</table>
+
+<h4 class="dev" data-nav="1-3-5 · Independent second estimate">1-3-5 · Independent second estimate — reach the same answer by two paths</h4>
+<p>The same cost is computed by two paths that know nothing of each other. Like debit = credit in double-entry bookkeeping, or two independent witnesses.</p>
+<div class="twopath">
+  <div class="path"><div class="ph">Path A · from the budget</div>allocated budget → per-site unit cost<br><span class="mut">top-down · based on tender material</span></div>
+  <div class="vs">≠ ?</div>
+  <div class="path"><div class="ph">Path B · from the law</div>Standard Estimate Manual × wage rates → cost<br><span class="mut">bottom-up · never sees the budget</span></div>
+</div>
+<table>
+  <tr><th style="width:16%"></th><th style="width:42%">Path A · from the budget</th><th>Path B · from the law</th></tr>
+  <tr><td><b>Direction</b></td><td>top-down — allocated budget → per-site unit cost</td><td>bottom-up — Standard Estimate Manual × published wage rates → cost</td></tr>
+  <tr><td><b>Input</b></td><td>Tender material</td><td>Published law and published wage rates — never sees the budget</td></tr>
+  <tr><td><b>Precondition</b></td><td colspan="2">A's unit price is used as the baseline only after the check in 1-3-4. If the baseline is wrong, the gap is meaningless.</td></tr>
+  <tr><td><b>If the two agree</b></td><td colspan="2">They have verified each other.</td></tr>
+  <tr><td><b>If they differ</b></td><td colspan="2">It is a <b>signal</b> of where something is wrong. In practice a gap of <b>about 40%</b> appeared, and rather than forcing the model to match, the causes of the gap (published wage rates · measurement counts · water-surface width) were exposed as adjustable variables and attributed.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">Why compare against the budget at all</span>
+Because the output is a ruling, not a number. The sentence needed is <i>"within ±20%, therefore consistent"</i> or <i>"outside it, therefore evidence is required"</i> — and without something to compare against, this is calculation, not verification. So an independent path shows its value precisely when the two diverge.</div>
+<pre class="mermaid">
+flowchart TB
+  L["Manual person-days<br/>by grade"]:::inp --> M["× adjustment factor<br/>derived from width band"]:::act
+  M --> N["× published wage rates<br/>summed by grade = direct labour"]:::act
+  N --> O["× overhead·fee + travel"]:::act
+  O --> P["annual cost<br/><b>the budget has never been read</b>"]:::ok
+  P --> R{"gap = annual vs UNIT<br/>how far apart"}:::dec
+  U["allocated unit cost UNIT<br/>an entirely separate source"]:::inp -.-> R
+  R --> Z["expose the causes as adjustable variables"]:::act
+  classDef inp fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.2px;
+  classDef act fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.2px;
+  classDef dec fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef ok  fill:#eaf6f0,stroke:#0a7048,color:#08512f,stroke-width:1.2px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.2px;
+</pre>
+<div class="codecap">Building the cost from the law alone <span class="fn">cost model v2</span></div>
+<pre class="code">def once_cost(task_name, fct):
+    <span class="cm">"""Payment for one measurement (travel included, VAT excluded) — the budget is never read."""</span>
+    r = labor[labor["업무"] == task_name].iloc[0]  <span class="cm"># one row for this task from the manual</span>
+    dl = 0.0                                       <span class="cm"># running sum of direct labour cost</span>
+    for g in GRADES:
+        man_days = float(r[g]) * fct               <span class="cm"># person-days by grade × adjustment factor</span>
+        dl = dl + man_days * wages[g]              <span class="cm"># × published wage rate → accumulate</span>
+    cost = dl * (1 + ovh_rate) * (1 + fee_rate) + team * fare * 2
+    return cost
+
+<span class="cm"># Direct labour for per-site fixed tasks: double loop over task rows × grades</span>
+fixed_records = fixed_tasks.to_dict("records")
+fixed_dl = 0.0
+for i in range(len(fixed_records)):
+    r = fixed_records[i]
+    for g in GRADES:
+        fixed_dl = fixed_dl + float(r[g]) * wages[g]
+
+annual = (n_py*cost_py + n_hs*cost_hs + fixed_cost) * vat_mult  <span class="cm"># annual cost derived from the law alone</span>
+gap = (annual - UNIT) / UNIT * 100      <span class="cm"># UNIT = allocated unit cost (value lives elsewhere). Difference between the two paths (%)</span>
+<span class="cm"># → annual has never seen the budget. That is why the gap is a real signal.</span></pre>
+<figure class="shot">
+  <img src="./screenshots/s1-second-estimate.png" alt="Independent second-estimate screen — annual cost expanded into formula, substituted numbers and result columns, with the law-based cost set beside the budget unit price">
+  <figcaption>Path B running for real. The values on the left are built up from Standard Estimate Manual person-days and published wage rates alone — the budget file is never read. Every amount is masked. Masking only one would let the rest reconstruct it: erase the total and the items still add up; keep the cost and the budget follows from <code>cost ÷ (1+gap)</code>. So absolute amounts, ratios and component items all have to be masked together. The item and formula columns are kept, because this section's claim is about <b>structure</b>, not values — once you can see which terms sum to the annual cost and which formula each term comes from, the screen is verifiable without the numbers.</figcaption>
+</figure>
+
+<h4 class="dev" data-nav="1-3-6 · The screen that passed four layers">1-3-6 · The screen that passed four layers</h4>
+<figure class="shot">
+  <img src="./screenshots/s1-cost-formula.jpg" alt="Cost calculation expanded into formula → substituted numbers → result columns, based on published wage rates">
+  <figcaption>The final output is not just a result number. Formula → substituted numbers → result sit in three columns side by side, so if a value looks off, which term diverged is narrowed down on the spot. The state the four preceding steps aimed at is this screen — not asking to be believed, but letting people check for themselves.</figcaption>
+</figure>
+
+<h4 class="dev" data-nav="1-3-7 · After rollout — decision-maker feedback">1-3-7 · After rollout — decision-maker feedback</h4>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">The four above are verification before shipping; this is after. What is said here becomes the input to the next cycle.</p>
+<p>The analysis closed with a results briefing to <b>the decision-maker</b>, a non-developer. There were three points. <span style="color:var(--muted);font-size:.9em;">(Names and amounts masked; summarized, not verbatim.)</span></p>
+<div class="note green"><span class="lbl">✅ What worked</span>"The direction is right" was confirmed repeatedly. In particular, the structure where you enter inputs and a result comes out was said to be what had been wanted.</div>
+<div class="note amber"><span class="lbl">⚠ What to improve</span>Line items and labour costs should be adjustable by the field staff themselves, an equipment item was missing, and the cost side was expected to produce a more finished, real deliverable.</div>
+<div class="note teal"><span class="lbl">→ Going forward</span>The conclusion was one line — "we need someone available continuously, communicating alongside us and producing results." That remark became the starting point of the role of running an AI-collaboration system on an ongoing basis in that organization. Not a one-off deliverable but a relationship that keeps running.</div>
+<h3><span class="mk">✈️</span> 1-4. <span class="cs">Case 2</span> Background — finding the right clause in 1,297 pages of regulation</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What was the problem, and what were the technical constraints at the time?</span>
+A RAG system that finds the governing clause in the 1,297-page US Federal Aviation Regulations (14 CFR). It is a learning project built in a public repository, so the data, code and scores are all public and reproducible.
+<ul>
+  <li><b>Where it splits from Case 1</b> — here a ground-truth set can be built. The clause sits in a settled document, so this is comparison, not interpretation.</li>
+  <li><b>Large configuration space</b> — chunking × embedding × retrieval method × top-K. It cannot be swept by hand.</li>
+  <li><b>Grading costs money</b> — measuring answer quality needs an LLM judge, and repetition accumulates charges.</li>
+  <li><b>Self-authored bias</b> — I built the ground-truth set myself, so it inherits my bias directly.</li>
+</ul>
+<span class="repo"><b>Repository</b> — <a href="https://github.com/bookseal/llm-app-lab">github.com/bookseal/llm-app-lab</a> · live at <a href="https://llm-app-lab.bit-habit.com">llm-app-lab.bit-habit.com</a><br>The ground-truth set, the grading code and the results for all 45 configurations are public, so <b>everything described in 1-5 and 1-6 can be reproduced</b>.</span></div>
+
+<h4 class="dev" data-nav="1-4-1 · What this project is">1-4-1 · What this project is</h4>
+<ul>
+  <li><b>Corpus</b> — the US Federal Aviation Regulations, 14 CFR. 1,297 pages in the original.</li>
+  <li><b>Task</b> — a RAG that answers a question by finding the clause (§) that supports it.</li>
+  <li><b>Context</b> — a learning project in a public repository, and a submission to a course contest.</li>
+  <li><b>How it differs from 💧</b> — data and code are entirely public, so anyone can reproduce the claims in this document.</li>
+</ul>
+
+<h4 class="dev" data-nav="1-4-2 · What was at stake">1-4-2 · What was at stake</h4>
+<ul>
+  <li><b>Regulation must not be wrong</b> — pointing at the wrong clause makes someone break a rule in fluent prose.</li>
+  <li><b>Plausible and correct look the same</b> — the sentence reads smoothly even when the clause cited is wrong.</li>
+  <li>So judging by eye does not scale.</li>
+</ul>
+
+<h4 class="dev" data-nav="1-4-3 · A ground-truth set can be built">1-4-3 · A ground-truth set can be built</h4>
+<ul>
+  <li>The answer can be written down in advance, like "the governing clause is §91.151" — the clause sits in a settled document, so this is comparison, not interpretation.</li>
+  <li>With a ground-truth set, verification stops being something you look at and becomes an experiment you run overnight.</li>
+  <li>So the bottleneck shifts from "can it be trusted" to "there are too many configurations".</li>
+</ul>
+
+<div class="note amber"><span class="lbl">The constraints that followed</span>
+<ul>
+  <li>The configuration space is large — chunking × embedding × retrieval method × top-K. It cannot be swept by hand.</li>
+  <li>Grading costs money — measuring answer quality needs an LLM judge, and repetition accumulates charges.</li>
+  <li>I built the ground-truth set myself — a self-authored answer key inherits its author's bias directly.</li>
+</ul></div>
+
+<h3><span class="mk">✈️</span> 1-5. <span class="cs">Case 2</span> Key prompts — asking not about the answer, but where it came from</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What was the key prompt (question) you gave the AI, and what was its answer? Describe how the conversation proceeded afterwards.</span>
+I did not argue with the AI's answers; I asked where they came from. All four times, this followed the AI being confidently wrong.
+<ul>
+  <li><b>"When did I ever show you that?"</b> — a table labelled "exact measurement" was in fact an estimate; measured properly it was 1,406 → 2,656 (about 1.9×).</li>
+  <li><b>"At what ratio?"</b> — asked for a concrete number, the AI opened the code, and what it had described as RRF was actually an <code>alpha=0.5</code> weighted sum. Five places in the public docs were corrected.</li>
+  <li><b>Taking back a judgment the AI deferred</b> — the agentic version had better quality but cost 27× the tokens, so it was rejected.</li>
+  <li><b>Putting rules in configuration, not conversation</b> — an instruction that worked once was moved into a config file so it survives into the next session.</li>
+</ul></div>
+<p>This section shows the principles set in 1-2 operating in the same places even as the domain changes. Here too the prompts are kept raw, typos and dictation artefacts included.</p>
+
+<div class="note teal"><span class="lbl">How this differs from 1-2</span>
+1-2 was the prompt at the start of the work. All four here come after the AI had already produced a result — the places where things are turned back, pressed on, and rejected.</div>
+
+<h4 class="dev" data-nav="1-5-1 · Tracing the origin of an 'exact measurement'">1-5-1 · Tracing the origin of an 'exact measurement'</h4>
+<p class="sit">Context — the AI produced a table of token consumption by top-K. It was headed <span class="q">📏 exact measurement</span> and footed with <span class="q">real tokenizer + real answer · real passage · real system prompt</span>. The numbers looked plausible.</p>
+<blockquote class="rawp">네가 아까 붙여준 <mark>실제 답변 + 실제 §91.151 문단 + 실제 시스템 프롬프트를 내가 언제 보여줬더라?</mark> 지금 <mark>너가 직접 한번만 돌려볼래?</mark> 그 후에도 k를 낮추는걸 추천하는지 궁금해</blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>I did not argue that the numbers were wrong. I asked where that "real" came from.</li>
+  <li>To rule out an answer by estimation, I asked it to run the thing once itself.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li><b>The "real answer" had been copy-pasted off the screen</b> — the token counts were estimates from an approximate tokenizer.</li>
+  <li>Measured properly, K=5 went from 1,406 to 2,656. About 1.9× off.</li>
+  <li>The direction "let's lower K" survived; only the numbers used as its evidence were entirely replaced.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">The same move as in 1-2</span>
+It is the same as demanding the three columns "formula → substituted numbers → result" in the hydrology case. Instead of re-checking a result, force open the path by which the result was made. Once the path is open, the wrong step reveals itself.</div>
+
+<h4 class="dev" data-nav="1-5-2 · Catching a description that differed from the code">1-5-2 · Catching a description that differed from the code</h4>
+<p class="sit">Context — the AI described the hybrid search as RRF (rank fusion), and that description went straight into five places in the public documentation: diagrams, glossary, body text. Yet reading it, I never quite got it.</p>
+<blockquote class="rawp">아니, 내가 궁금한건 앙상블을 어떻게 한지 아직 이해안돼. <mark>어느 비율로 어떤 것을 쓰고, 언제 어떤 임베딩을 썼나?</mark></blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>"Explain it" only produces the same explanation once more. I demanded a concrete value: the ratio.</li>
+  <li>A concrete value cannot be answered without opening the code — the question forces the source, not the prose, to be the evidence.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li><b>That is where it collapsed</b> — the implementation was not RRF but an <code>alpha = 0.5</code> weighted sum: normalize scores to 0–1 and add them in halves.</li>
+  <li><b>The AI's own diagnosis</b> — it had assumed "RRF is what people usually use" without reading the code.</li>
+  <li>All five already-published places were corrected.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">Preserving the correction history</span>
+<ul>
+  <li><b>Correction boxes rather than deletion</b> — "this is what we believed until we read the code and fixed it" has to remain visible, because that is the signal that the rest of the text was verified too.</li>
+  <li><b>Refusing to leave anything not understood is itself a verification mechanism</b> — an explanation you cannot follow was usually one the explainer had not checked either.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="1-5-3 · Taking back a judgment the AI deferred">1-5-3 · Taking back a judgment the AI deferred — rejecting agentic</h4>
+<p class="sit">Context — after implementing agentic RAG itself and showing a quality advantage, the AI handed the decision over with <span class="q">Your call. Which way should we settle on?</span></p>
+<blockquote class="rawp">지금 에이전틱으로 하면 그래도 <mark>10배 정도의 토큰 소모</mark>가 있는거 아니가? 우리는 단일 래그로 했을 때 <mark>복잡한 문제도 이미 잘 풀었다는것을 확인</mark>했어. 이정도 데이터에서는 에이전틱 루프 보다는 단일 래그도 잘 된다면 <mark>굳이 토큰 많이 써가면서 에이전트를 붙일 필요성ㅇ ㅣ있을까?</mark></blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>I took back the judgment the AI had handed over. The point is to put <b>quality and cost on the same scale</b> instead of looking at quality alone.</li>
+  <li>The criterion has to be measurement rather than taste, so I cited token counts that had already been measured.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li>81,320 tokens on a broad question — 27× the single-shot path.</li>
+  <li><b>That measurement was not made in order to adopt anything</b> — it was added under time pressure as "let's at least build something simple", and it became the grounds for rejection.</li>
+  <li><b>Discard but keep</b> — the code was committed as <code>harness/agent_rag.py</code> and only dropped from the deployment. It will be needed again once the corpus grows.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">What the human did</span>
+The AI showed "the quality is better" accurately. But it handed over the act of putting quality and cost on the same scale. What to optimize has to be decided by whoever knows the product's constraints.</div>
+
+<h4 class="dev" data-nav="1-5-4 · Put rules in configuration, not conversation">1-5-4 · Put rules in configuration, not conversation</h4>
+<p class="sit">Context — I was running two sessions at once. One handled experiment code, the other documentation, both on the same repository. That leads to one session committing the other's unfinished work.</p>
+<blockquote class="rawp">그리고 너가 커밋할때는 <mark>너가 작업한것만 올려줘</mark>. 너가 작업하지 않은건 그대로 둬<br><br>
+claude-memory-backup 에서 <mark>커밋 관련된 모든 엠디 파일에 '한 세션에서는 그 세션이 작업한 것만 커밋한다'는 것을 추가해줘.</mark></blockquote>
+<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
+<div class="io intent"><span class="ioh">Intent</span>
+<ul>
+  <li>First nail down the commit scope — and then do not stop there.</li>
+  <li>Promote an instruction that worked once into a config file, so it stays alive in the next session.</li>
+</ul></div>
+<div class="io result"><span class="ioh">Result</span>
+<ul>
+  <li>The document-update procedure became a rule the same way — markers planted in the draft, which the AI sweeps before publishing.</li>
+  <li><b>Why do it this way</b> — an instruction given in conversation disappears when that conversation ends. What does not reproduce is a habit, not a system.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">Where this connects to §2</span>
+"Does it reproduce after the owner changes" is the criterion in §2, and that criterion already appears once here. Does the rule survive when the session changes — the same question at a different scale.</div>
+
+<div class="note amber"><span class="lbl">What these four share</span>
+All four happened <b>after the AI was confidently wrong</b>.
+<ul>
+  <li>The table said "exact measurement",</li>
+  <li>the explanation was fluent,</li>
+  <li>and the implementation really did have better quality.</li>
+</ul>
+Outwardly, none of them looked off. So the method used was not better intuition but <b>one and the same question</b> — "that number, where did it come from?"</div>
+
+<h3><span class="mk">✈️</span> 1-6. <span class="cs">Case 2</span> Verification and rollout — with a ground-truth set, grade hundreds of runs automatically</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">Before applying AI-written code or guidance to a real environment, what verification (test/review) did it go through?</span>
+With a ground-truth set available, verification was raised from something a person looks at into an experiment a machine grades. 45 configurations were run overnight.
+<ul>
+  <li><b>A secret exam</b> — of 14 holdout questions, 4 were never used for tuning, and for 3 the correct answer is refusal.</li>
+  <li><b>Cheap grading separated from expensive grading</b> — the retrieval axis runs locally, 0 API calls. The generation axis was only touched after retrieval was settled.</li>
+  <li><b>Verify the grader and the labels first</b> — before the experiment, I checked the thing doing the comparing, not the things being compared.</li>
+  <li><b>Rollout</b> — on a tie, the cheaper one. A configuration 38% cheaper in tokens was adopted, and the result was collected back as an instructor score (9/10).</li>
+</ul></div>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">Where verification in Case 1 was about making things traceable by a person, here it is about making them gradable by a machine. Four mechanisms were built, and 45 configurations were run on top of them.</p>
+
+<h4 class="dev" data-nav="1-6-1 · A secret exam">1-6-1 · A secret exam — set aside questions never used for tuning</h4>
+<p>I wrote 14 holdout questions by hand and split them by purpose.</p>
+<table>
+  <tr><th style="width:16%">Questions</th><th style="width:30%">Purpose</th><th>Why split</th></tr>
+  <tr><td><b>4</b></td><td>Final exam — never used for tuning (<code>split:"final"</code>)</td><td>Fitting configurations to the remaining questions makes you strong only on those questions. Studying from the exam paper raises the score, not the ability.</td></tr>
+  <tr><td><b>3</b></td><td><b>Refusal is the right answer</b> — out-of-scope questions</td><td>Measuring only how well it answers puts the model that bluffs about what it does not know in first place.</td></tr>
+  <tr><td><b>7</b></td><td>For tuning</td><td>The questions used to fit configurations.</td></tr>
+</table>
+
+<h4 class="dev" data-nav="1-6-2 · Cheap grading / expensive grading, separated">1-6-2 · Cheap grading / expensive grading, separated</h4>
+<table>
+  <tr><th style="width:14%"></th><th style="width:34%">Retrieval axis</th><th>Generation axis</th></tr>
+  <tr><td><b>What is measured</b></td><td>Is the correct § among the retrieved results</td><td>Answer quality</td></tr>
+  <tr><td><b>Grading method</b></td><td>Compared in code — local embeddings</td><td>LLM judge</td></tr>
+  <tr><td><b>Cost</b></td><td><b>0 API calls · $0</b></td><td>Charged per call</td></tr>
+  <tr><td><b>Execution</b></td><td><b>All 45 configurations, overnight</b></td><td>Only after retrieval was settled</td></tr>
+</table>
+<p>Splitting the order alone ran the same volume of experiments at roughly a tenth of the cost.</p>
+
+<h4 class="dev" data-nav="1-6-3 · Suspect the grader">1-6-3 · Suspect the grader</h4>
+<p>I checked the thing doing the comparing before the things being compared. Two parts were wrong.</p>
+<table>
+  <tr><th style="width:22%">What was wrong</th><th style="width:36%">Why it is a false signal</th><th>How it was fixed</th></tr>
+  <tr><td>"1 point if any correct clause appears"</td><td>On cross-referencing questions with several correct clauses, getting half right scores full marks.</td><td>Replaced with <b>coverage</b> (found ÷ total correct) and MRR (how high the correct answer ranks)</td></tr>
+  <tr><td>The ruler differed by chunking method</td><td>A char chunk silently scored 0 because it has no <code>section</code> metadata, framing a perfectly good configuration.</td><td>Added a chunking-independent matching rule (<code>R1</code>) and required the <code>§</code> symbol to prevent false matches</td></tr>
+</table>
+<div class="codecap">Measuring different chunkings with the same ruler <span class="fn">harness/score.py</span></div>
+<pre class="code">A retrieved chunk "matches" an expected § when (R1 — chunking-independent):
+  - its `section` meta equals the expected §, OR
+  - (no section meta, i.e. a char chunk) the expected § number appears in its text.
+<span class="cm"># Without this, char chunks silently score 0 for lacking section metadata
+# and a perfectly good configuration gets framed.</span>
+
+def _text_has_section(text, number):
+    <span class="cm"># require the § symbol — without it, '191.151' or '91.1511' is mistaken for §91.151</span>
+    return re.search(rf"§\s*{re.escape(number)}(?!\d)", text) is not None</pre>
+<p>If the ruler favours one side, the 45 experiments that follow are all meaningless.</p>
+
+<h4 class="dev" data-nav="1-6-4 · Label verification">1-6-4 · Label verification</h4>
+<table>
+  <tr><th style="width:14%">Dependency</th><td>This whole free grading scheme rests on a human-applied label saying "the correct answer to this question is §91.151".</td></tr>
+  <tr><th>Risk</th><td>If the labels are wrong, the scoreboard keeps rising while actual quality falls. You run fast in the wrong direction.</td></tr>
+  <tr><th>Action</th><td>Label verification was made a blocking task rather than an optional one. Only after checking in the source text that the clause really contains the question's key terms did the experiments start.</td></tr>
+</table>
+
+<h4 class="dev" data-nav="1-6-5 · Result — on a tie, the cheaper one">1-6-5 · Result — on a tie, the cheaper one</h4>
+<table>
+  <tr><th>Configuration</th><th>Coverage</th><th>MRR</th><th>Tokens</th></tr>
+  <tr><td>§ boundary · bge · hybrid · K8</td><td>0.864</td><td>0.636</td><td>17,284</td></tr>
+  <tr><td><b>§ boundary · bge · vector · K5</b> — adopted</td><td>0.818</td><td><b>0.718</b></td><td><b>10,802</b></td></tr>
+  <tr><td>char count · minilm · hybrid · K3 (last)</td><td>0.136</td><td>0.182</td><td>2,939</td></tr>
+</table>
+<table>
+  <tr><th style="width:18%">Judgment</th><th>Grounds</th></tr>
+  <tr><td><b>The difference is noise</b></td><td>A coverage gap of 0.045 against first place — across 11 questions, effectively one question.</td></tr>
+  <tr><td><b>The adopted one is cheaper</b></td><td>38% fewer tokens, and it ranks the correct answer higher (MRR 0.718 vs 0.636).</td></tr>
+  <tr><td><b>On a tie, the cheaper one</b></td><td>In an on-premise deployment, inference cost is a product constraint.</td></tr>
+  <tr><td><b>Rejected for the same reason</b></td><td>The agentic retrieval loop grows tokens roughly quadratically (81k vs 2.3k), too expensive for the gain. The deployment is single-shot; the loop was kept as a documented experiment.</td></tr>
+  <tr><td><b>The biggest variable</b></td><td>Chunking. Switching from character count to § clause boundaries moved coverage from 0.136 to 0.864. In regulation the clause is the unit of meaning, and cutting at 1,000 characters slices across it.</td></tr>
+</table>
+<h4 class="dev" data-nav="1-6-6 · After rollout — the instructor's score">1-6-6 · After rollout — the instructor's score</h4>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">Same here. After the automatic grading was done, what a person pointed out became the starting point of the next improvement.</p>
+<div class="note green"><span class="lbl">Instructor's score — first among the course participants, 9/10 for completeness</span>
+There was one criticism — "polish the UI further." Retrieved chunks, token counts and scores were exposed on screen as they were. That exposure was deliberate, for verification, but in a setting judging completeness it was the wrong default. Next time it goes behind a toggle — what the builder needs and what the user needs are different.</div>
+
+<div class="note amber"><span class="lbl">The limit of this verification</span>I wrote the grading standard (the ground-truth set) myself. Self-grading struggles to escape self-bias — next time I want someone else to build the ground-truth set, or at minimum to compare it once against human evaluation.</div>
+<h3>1-7. What the two cases leave behind</h3>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">Different conditions split the verification method. Here is where they split, on one page.</p>
+
+<table>
+  <tr><th style="width:24%"></th><th>Case 1 · 💧 hydrology cost verification</th><th>Case 2 · ✈️ llm-app-lab RAG</th></tr>
+  <tr><td><b>Domain</b></td><td>River budgets · government standards</td><td>Aviation law (14 CFR)</td></tr>
+  <tr><td><b>Ground-truth set</b></td><td>None</td><td>Can be built (holdout)</td></tr>
+  <tr><td><b>Verification method</b></td><td>A person traces back to the source</td><td>Code grades automatically</td></tr>
+  <tr><td><b>Bottleneck</b></td><td>Can it be trusted</td><td>Too many configurations · grading costs money</td></tr>
+  <tr><td><b>What is the same</b></td><td colspan="2">Never trust AI output as given — make it falsifiable</td></tr>
+</table>
+
+
+
+<div class="note teal"><span class="lbl">The two verifications side by side</span>The hydrology case (one-off practice · traceability) and llm-app-lab (ground truth · automatic benchmarking) are the two faces of reliability — with no correct answer, make every value traceable to its source; with a correct answer, grade hundreds of runs automatically. They share one thing: instead of "trust me", "check it yourself".</div>
+<!-- ================= §2 ================= -->
+<h2 id="s2"><span class="no">2.</span>Productivity gains using AI</h2>
+<div class="note teal"><span class="lbl">This section's subject — the boundary of delegation</span>
+Give it the meeting notes and the Board fills up. <b>The problem is what comes next.</b>
+<ul>
+  <li><b>Misinterpretation</b> — an ambiguous sentence asserted with confidence.</li>
+  <li><b>Information leakage</b> — internal terminology spilled into a public repository.</li>
+  <li><b>Premature "done"</b> — declared finished while work remained.</li>
+</ul>
+All three actually happened here. So what this section covers is not the pipeline but <b>what was delegated, and how the delegated work was pulled back</b>.</div>
+<p class="sec-note" style="color:var(--muted);font-size:.93rem;margin:2px 0 0;">What this topic asks — does the gain remain as team capability rather than personal skill. And for that, how far can work be delegated to AI.</p>
+
+
+
+
+<pre class="mermaid">
+flowchart LR
+  M{{"productivity = the scope that reproduces<br/>after the owner changes"}}:::root
+  M --> P["Meeting notes<br/><i>where decisions are made</i>"]:::s2
+  P --> A["AI — read and propose<br/><i>quoting the supporting sentence</i>"]:::s2
+  A --> V["Human — judge<br/><i>approve · question · reject, item by item</i>"]:::gate
+  V -->|"only what is approved"| B["GitHub Projects board<br/><i>where the record lives</i>"]:::s2
+  V -.->|"ask back if ambiguous"| P
+  classDef root fill:#EFEBFE,color:#3B2A82,stroke:#5B3FD9,stroke-width:2.4px;
+  classDef s2 fill:#fdf4e8,stroke:#a8560a,color:#7a3d06,stroke-width:1.3px;
+  classDef gate fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.8px;
+</pre>
+<h3>2-1. Background — the problem the organization had</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What problem was the organization facing?</span>
+The bottleneck was not development speed but the transmission of intent. What the decision-maker wanted reached the team lead and stopped there.
+<ul>
+  <li><b>Team members "don't know what it is"</b> — hearing the same meeting does not tell them what to build.</li>
+  <li><b>The notes cannot be used as they are</b> — delegate summarization and the important passages quietly vanish.</li>
+  <li><b>Priority does not survive transcription</b> — urgency and importance travel as nuance, not as words.</li>
+  <li><b>Nothing may leave the building</b> — "company material must not be handed to outside services" is the organization's security standard.</li>
+</ul>
+<span class="repo">Repository — <a href="https://github.com/KIBA-Automation/project_management_with_ai_agent">KIBA-Automation/project_management_with_ai_agent</a> · the raw meeting notes are <span class="none">private</span></span></div>
+
+<h4 class="dev" data-nav="2-1-1 · Intent stops at one person">2-1-1 · Intent stops at one person</h4>
+<p>[stated] About 40 staff, of whom 3 are developers — the team lead (me) and two team members.</p>
+<table>
+  <tr><th style="width:20%">Who</th><th style="width:34%">What they know</th><th>So</th></tr>
+  <tr><td><b>The decision-maker</b></td><td>What they want. Though not interested in AI as such — only whether it gets automated.</td><td>Delegates technical judgment and looks only at results.</td></tr>
+  <tr><td><b>Team lead</b></td><td>Attends the meetings, so gets the intent and the nuance.</td><td>Up to here it travels.</td></tr>
+  <tr><td><b>Team members</b></td><td>Know the meeting outcome but not what to build.</td><td><b>This is where it breaks.</b></td></tr>
+</table>
+<div class="note teal"><span class="lbl">So the team lead is both bottleneck and gate</span>
+<ul>
+  <li>Team members cannot yet judge "is this requirement really needed". Only someone who knows the intent can.</li>
+  <li>So the team lead's confirmation is not a bottleneck to remove but an intended gate — and in exchange the lead filters everything so the decision-maker need not review each item.</li>
+  <li>What must be reduced is not the gate's existence but the human time it takes to pass through it.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="2-1-2 · Why the notes cannot be used as they are">2-1-2 · Why the notes cannot be used as they are</h4>
+<p>Meetings run over video, following whatever comes to mind. Two things are in that record at once.</p>
+<table>
+  <tr><th style="width:22%">What survives transcription</th><th style="width:30%">What does not</th><th>So</th></tr>
+  <tr><td>Decided facts · items mentioned</td><td><b>Urgency · importance</b> — carried by non-verbal expression and the nuance of tone.</td><td>Priority can only be set by someone who was in the meeting, and must be re-aligned with the decision-maker.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">Delegate the summary and it disappears</span>
+<ul>
+  <li>Before meeting notes were handed to AI, the records were effectively meaningless — whoever summarized cut them the way they wanted to, and important content vanished wholesale.</li>
+  <li>So the raw transcript is kept locally, exactly as it is. Only refined Issues go up to the Board.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">The problem in one line</span>
+Intent stopped at the team lead, and turning it into something team members could execute was entirely manual. How far can that work be handed to AI — this section is the record of finding that boundary.</div>
+
+<h3>2-2. Approach and implementation</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">How did you solve the problem?</span>
+I split the work of turning intent into something executable into stages, and divided each stage between AI and human.
+<ul>
+  <li><b>Extraction is AI</b> — reading the transcript in chunks loses no context and pulls out nearly every Issue.</li>
+  <li><b>Requirement Engineering is human</b> — splitting, turning into checklists, assigning priority. Nuance does not survive transcription.</li>
+  <li><b>Reducing that effort</b> — continually injecting context into the AI so less is left for a human to touch.</li>
+  <li><b>Approval gate</b> — reads are automatic · every write needs per-item approval · deletion and permission changes are forbidden even with approval · every proposal must quote the source sentence from the notes.</li>
+  <li><b>Task model</b> — "if you can answer whether it is done, it is at task altitude". Information goes into structure, not titles.</li>
+  <li><b>Leak gate</b> — notes first land in a folder outside git tracking, and only what passes review moves up. A machine pattern check backs it as a second layer.</li>
+  <li><b>Judgment into record</b> — every decision gets an ADR with its rationale and the alternatives rejected.</li>
+</ul></div>
+
+
+<h4 class="dev" data-nav="2-2-1 · Extraction is AI, Requirement Engineering is human">2-2-1 · Extraction is AI, Requirement Engineering is human</h4>
+<table>
+  <tr><th style="width:16%">Stage</th><th style="width:16%">Who</th><th>What</th></tr>
+  <tr><td><b>Extraction</b></td><td><b>AI</b></td><td>Splits the transcript into chunks, reads line by line, pulls out Issues. Nothing is summarized wholesale, so no context is lost, and in practice almost everything is caught.</td></tr>
+  <tr><td><b>Requirement Engineering</b></td><td><b>Human</b></td><td>Splits the extracted Issues, writes the body and the checklist, and assigns urgency and importance.</td></tr>
+  <tr><td><b>Execution</b></td><td>Team members + AI agents</td><td>Take the organized Issue and work on it with AI agents.</td></tr>
+</table>
+<div class="note amber"><span class="lbl">Why priority cannot be handed over</span>
+<ul>
+  <li>Urgency and importance travel through non-verbal expression and the nuance of tone. They do not survive transcription.</li>
+  <li>And they are only settled after re-alignment with the decision-maker. They are not values that can be set from the record alone.</li>
+  <li>So this column stays with whoever was in the meeting.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">The direction for reducing that effort</span>
+Requirement Engineering has to stay human, but the time it takes can shrink. By continually injecting domain context and past judgments into the AI, drafts are coming out with less to fix — lowering the cost of passing the gate, not removing the gate.</div>
+
+<h4 class="dev" data-nav="2-2-2 · Approval gate">2-2-2 · Approval gate — how far to delegate, and where to cut</h4>
+<p>It starts from the premise that AI can be wrong. So what was designed is not "how to instruct it well" but "how to make it come back to a human when it is wrong".</p>
+<table>
+  <tr><th style="width:22%">Permission</th><th>What</th></tr>
+  <tr><td><b>Done without asking</b></td><td>Observing the Board · searching for duplicates · drafting proposed changes</td></tr>
+  <tr><td><b>Per-item approval required</b></td><td>Every write. The default is item by item; blanket approval only when a human has seen the whole list and says so explicitly</td></tr>
+  <tr><td><b>Forbidden even with approval</b></td><td>Deletion · permission and visibility changes · writes outside the designated Board · code and Issues below the Board · exposing note content on GitHub</td></tr>
+  <tr><td><b>Always required</b></td><td>Quote verbatim the sentence from the notes that grounds each proposal · when ambiguous, do not guess — surface it and ask back</td></tr>
+</table>
+<div class="note green"><span class="lbl">The criterion that split the rules</span>
+<ul>
+  <li><b>Not "is it reversible?" but "is it outside the permission scope?"</b> — even a reversible action is forbidden if it is out of scope. Hence a separate column of things not allowed even with approval.</li>
+  <li><b>The cost goes into the ADR too</b> — <i>"Slower than full automation. A human is on the critical path for every write. Accepted deliberately — trust is the objective."</i></li>
+</ul></div>
+
+<h4 class="dev" data-nav="2-2-3 · Task model">2-2-3 · Task model — put information in the structure, not the title</h4>
+<p>Moving what was said in a meeting into a Board item, the altitude to write at kept wobbling. You can write the ultimate goal, or a single checklist line.</p>
+<p>I fixed it with one test — if you can clearly answer "is this done or not?", it is at task altitude.</p>
+<table>
+  <tr><th style="width:16%">Altitude</th><th style="width:34%">Test</th><th style="width:28%">Example</th><th>Goes to</th></tr>
+  <tr><td>Too high</td><td>No end, so doneness cannot be judged</td><td><i>Build a staffing recommendation system</i></td><td>Milestone</td></tr>
+  <tr><td><b>Task (standard)</b></td><td><b>Doneness can be answered</b></td><td><i>Add a filter to a given screen</i></td><td><b>Issue</b></td></tr>
+  <tr><td>Too low</td><td>A single checkbox line</td><td><i>Add a parameter to a function</i></td><td>task list</td></tr>
+</table>
+<div class="note teal"><span class="lbl">The principle in one line</span>The more information you put in the title, the worse; the more into the structure, the better. Nest child items under a parent and progress is computed automatically, but write the same information into the title and it has to be updated by hand.</div>
+
+<h4 class="dev" data-nav="2-2-4 · Leak gate">2-2-4 · Leak gate — keeping meeting notes from leaving the machine</h4>
+<table>
+  <tr><th style="width:18%">Layer</th><th style="width:40%">What</th><th>Why</th></tr>
+  <tr><td><b>1 · Human review</b></td><td>Notes first go into a folder excluded from git tracking. Only what passes review moves into the repository.</td><td>Once pushed, deleting the file later still leaves it in history. The gate has to sit before the push.</td></tr>
+  <tr><td><b>2 · Machine patterns</b></td><td>The promotion script blocks five categories: national ID, phone, card number, bank account, email</td><td>The last net for whatever human review missed.</td></tr>
+  <tr><td><b>Not done</b></td><td>Separating by branch</td><td>A staging branch also lands on the remote once pushed. It must be exclusion from tracking, not separation.</td></tr>
+</table>
+<div class="note amber"><span class="lbl">The limits of this gate</span>
+<ul>
+  <li>A regex gate is a "last net", not a replacement for review. It can block a legitimate file on a false positive, or miss a variant formatting.</li>
+  <li>A git ignore rule is a defence line, not encryption. Force-add and it is bypassed.</li>
+  <li>So it is two layers, human review → machine gate. If one is breached, the other remains.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="2-2-5 · Judgment into record">2-2-5 · Judgment into record</h4>
+<table>
+  <tr><th style="width:22%">What was left</th><th>Content</th></tr>
+  <tr><td><b>3 ADRs</b></td><td>Why the tooling moved · the task model · the safety contract. Each records why it was decided that way.</td></tr>
+  <tr><td><b>Rejected alternatives</b></td><td>Written alongside each record. E.g. — "write first, audit later" was rejected because irreversible actions cannot be undone after the fact.</td></tr>
+  <tr><td><b>Open questions</b></td><td>Pinned down as open — <i>"These really are undecided. Written down so we do not pretend otherwise."</i></td></tr>
+  <tr><td><b>Abandoned paths</b></td><td>Tools explored and dropped were preserved read-only rather than deleted. Not a deletion but a record of the route.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">Where this connects to §1</span>
+Code shows what the system does; an ADR shows why it is that way. It is the same move as attaching a source to every number in §1 — never leave only the result; leave the path the result came from.</div>
+
+<h3>2-3. Effects</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What changed in productivity?</span>
+[stated] Guideline analysis went from 10 hours to 2. And work the team lead alone used to clear began to be shared by the team — though it does not yet run evenly.<br>
+[log] 3 ADRs, 6 learning lessons, three team repositories onto one Board.
+<ul>
+  <li>More important than the numbers — I overturned an assignment the AI called "nearly certain", and I caught internal domain clues left in a document the AI wrote.</li>
+  <li>And the metric is being tested — from mid-June my available time dropped to two hours a day and two team members joined. "Does it reproduce after the owner changes" went on trial without being planned.</li>
+  <li>But I do not claim it has passed — it is in progress, and I did not measure the results over that period.</li>
+</ul></div>
+
+<div class="note teal"><span class="lbl">What productivity is measured by</span>
+Not by hours saved but by "the scope that reproduces after the owner changes" — a tool that depends on one individual is a risk, not an asset.<br>
+The subject is the same organization that did the hydrological survey cost verification in §1, and this time it is the way of working itself.</div>
+<h4 class="dev" data-nav="2-3-1 · Changes felt in the organization">2-3-1 · Changes felt in the organization</h4>
+<p>[stated] Changes felt directly in the organization.</p>
+<table>
+  <tr><th style="width:24%">What</th><th>How it changed</th></tr>
+  <tr><td><b>Long-document review</b></td><td>One guideline document, 10 hours → 2 hours (about 80% less)</td></tr>
+  <tr><td><b>Meeting → Issue</b></td><td>Previously the notes were effectively thrown away. Now Issues are extracted from the transcript without omission and go to the Board.</td></tr>
+  <tr><td><b>Requirement Engineering</b></td><td>Still human work, but the more context is injected, the less there is to fix.</td></tr>
+  <tr><td><b>Execution</b></td><td>Work the team lead used to clear alone began to be shared by the team — not evenly yet (→ 2-3-5).</td></tr>
+</table>
+
+<h4 class="dev" data-nav="2-3-2 · What the records confirm">2-3-2 · What the records confirm</h4>
+<p>[log] Verifiable in the repository and session records.</p>
+<table>
+  <tr><th style="width:38%">Item</th><th>Value</th></tr>
+  <tr><td>Team repositories gathered onto one Board</td><td>3</td></tr>
+  <tr><td>Work items migrated to the Board</td><td>8 (all of them)</td></tr>
+  <tr><td>ADRs</td><td>3</td></tr>
+  <tr><td>Tool-usage learning course</td><td>6 lessons (5–15 min each)</td></tr>
+</table>
+
+<h4 class="dev" data-nav="2-3-3 · What the gates actually caught">2-3-3 · What the gates actually caught</h4>
+<div class="note green"><span class="lbl">Three things a human actually blocked</span>
+· The AI proposed an item assignment as its top choice, calling it "nearly certain" → I overturned it, saying another item was correct. Domain judgment cannot be delegated.<br>
+· A document written by the AI retained terminology that would identify our internal domain → I caught it and generalized it. Security judgment cannot be delegated either.<br>
+· The AI declared "done" → I sent it back twice. Judging completion cannot be delegated.<br>
+<span style="color:var(--muted);font-size:.93em;">The mechanisms in 2-2 exist to make sure these three always reach a human.</span></div>
+<p>This is the evidence that the earlier mechanisms were not decoration. It is the record of the three things named at the head of this section actually being caught — because the proof that a system works is not speed but what a human blocked.</p>
+<table>
+  <tr><th style="width:30%">What the AI did</th><th style="width:30%">What the human did</th><th>So</th></tr>
+  <tr><td>Paired Board items with repositories and proposed one as "nearly certain", ranked first</td><td>Overturned it, saying another item was correct</td><td>Domain judgment cannot be handed over.</td></tr>
+  <tr><td>Wrote a repository introduction — terminology identifying the internal domain remained</td><td>Caught it — <i>"it has to be more general so as not to leak company information…"</i></td><td>In effect, the security standard from §1 applied to its own output.</td></tr>
+  <tr><td>Declared "done"</td><td>Sent it back twice</td><td>The introduction still described the old tooling, and the examples were internal work verbatim.</td></tr>
+</table>
+
+<h4 class="dev" data-nav="2-3-4 · The metric under test">2-3-4 · The metric under test</h4>
+<p>At the head of this section I set "the scope that reproduces after the owner changes" as the metric. That metric is now being tested in a way I did not design.</p>
+<table>
+  <tr><th style="width:26%">Point in time</th><th>State</th></tr>
+  <tr><td><b>May 2026</b></td><td>System started · full-time on it.</td></tr>
+  <tr><td>Mid-June</td><td>Two team members joined. At the same time my available hours shrank to two a day.</td></tr>
+  <tr><td><b>Now</b></td><td>The team members mainly carry the work · my remaining role is coordination and review.</td></tr>
+</table>
+
+<div class="note teal"><span class="lbl">Why two hours a day</span>
+6/22–8/14, eight weeks in Seattle, USA — the global education programme of the Ministry of Science and ICT's AI/SW talent initiative, 30 participants selected (<a href="https://www.etnews.com/20251119000023">Electronic Times</a> · <a href="https://www.kyongbuk.co.kr/news/articleView.html?idxno=4076238">Kyongbuk Ilbo</a>). Based at the University of Washington.<br>
+I did not step away; the structure changed so that I coordinate for two hours a day and the team members carry the rest. After 14 August the constraint is gone.</div>
+
+<div class="note green"><span class="lbl">An unplanned test</span>
+The builder's available time fell to a quarter and two new people joined. ADRs, an operations manual and a learning course are exactly what is needed in that situation — and the real conditions arrived a month after they were made.</div>
+
+<h4 class="dev" data-nav="2-3-5 · Limits and next steps">2-3-5 · Limits and next steps</h4>
+<p>This is not a one-time handover but a loop that keeps turning. A person stands where business language becomes development language, and that spot is passed every week. Two things need to rise — verification speed and accuracy. Raising only one means nothing.</p>
+<table>
+  <tr><th style="width:28%">Where it is stuck</th><th style="width:34%">Current response</th><th>What remains</th></tr>
+  <tr>
+    <td><b>Issues lack detail</b><br>Even organized and handed over, what to start with is unclear</td>
+    <td>Keep injecting context into the AI so drafts need less fixing</td>
+    <td>Split approval into two points — ① is this a requirement worth starting ② does the implementation match that requirement. ①'s checklist becomes ②'s acceptance criteria.</td>
+  </tr>
+  <tr>
+    <td><b>Cannot get started with Claude Code</b><br>Given the tool, they stall on the first move</td>
+    <td><b>Demonstrating it alongside them</b> — not explanation but a scene they can copy</td>
+    <td><b>Turn the demonstration into an asset.</b> I have not yet decided the form in which to preserve what I show — the learning lessons are the beginning of it.</td>
+  </tr>
+  <tr>
+    <td><b>Intent is missed</b><br>What the Issue says gets done, but anything beyond it must go through the team lead</td>
+    <td>Priority judgment stays human — nuance does not survive transcription</td>
+    <td><b>There is no automatic verification.</b> Attach §1's verification design (invariants · citation consistency) ahead of human approval, so approval becomes comparison rather than judgment.</td>
+  </tr>
+</table>
+<div class="note amber"><span class="lbl">What cannot be claimed yet</span>
+<ul>
+  <li><b>I do not claim success</b> — it runs until 14 August and I did not measure results over that period. What is factual is that the test has begun.</li>
+  <li><b>The speed figures have no public evidence</b> — metrics like Board drift or meeting-to-task latency have not been measured yet.</li>
+  <li><b>The Board is still a "plan Board"</b> — 5 of the 8 items have no repository to go to and remain drafts.</li>
+  <li><b>Approver dependency</b> — if the approver is busy, the bottleneck does not vanish, it moves.</li>
+</ul></div>
+<h2 id="s3"><span class="no">3.</span>Tool and model analysis</h2>
+<p class="sec-note" style="color:var(--muted);font-size:.93rem;margin:2px 0 0;">What this topic asks — are the tools chosen with their limits understood.</p>
+<pre class="mermaid">
+flowchart TB
+  C1["Tools · models used<br/><i>what was used</i>"]:::s3 --> C2["Why chosen<br/><i>why this tool — a strategic choice</i>"]:::s3 --> C3["Strengths · limits<br/><i>where to trust, where to doubt</i>"]:::s3
+  classDef s3 fill:#eef3f6,stroke:#33505f,color:#333C52,stroke-width:1.3px;
+</pre>
+
+<h3>3-1. Tools and models used</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">(e.g. Cursor, Claude Code, ChatGPT, Gemini, Perplexity, etc.)</span>
+The current combination — work in Claude Code (flat-rate subscription, learning mode), current-events exploration in Perplexity (Comet browser), long videos and documents absorbed with Gemini. A feel for on-premise came from Ollama (local) and Upstage Solar.
+<ul>
+  <li>Others tried — ChatGPT · Gemini · Grok · Cursor · Antigravity · Codex · GitHub Copilot · NotebookLM · ChatGPT Atlas</li>
+  <li>Arriving here was not taste but the result of measuring each one's limits. Below is that sequence.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="3-1-1 · How I got here">3-1-1 · How I got here</h4>
+<ol class="chain">
+  <li><b>Asking and learning — the arrival of ChatGPT</b>
+      <span>ChatGPT appeared while I was at École 42. I learned concepts by asking them one at a time, and started with copy-and-paste for code. Once search was added, I made it search first for anything current.</span></li>
+  <li class="q"><b>Does it read everything if you put in a lot? — the Gemini context experiment</b>
+      <span>Exploiting the large input, I fed in meeting transcripts of 1, 2 and 10 hours. Up to one hour it held; from two or three hours content started vanishing, and numbers and relationships in particular came out wrong. A million-token context is not the same as accuracy.</span></li>
+  <li><b>Hence RAG — and NotebookLM's opposite limit</b>
+      <span>The conclusion: rather than putting in a lot, find and insert only what is needed. NotebookLM was faithful to its sources but weak at weaving complex context together. That is where I saw that precise citation and broad understanding pull against each other.</span></li>
+  <li class="q"><b>How far does generation go? — images and video</b>
+      <span>I measured the limits while making learning material. Korean text in infographics barely works (GPT ✗ · Gemini ○), and logical development such as matrices or network flows only looks plausible while being wrong. So I draw those myself with Manim (3Blue1Brown's visualization library).</span></li>
+  <li><b>On to agents — Antigravity → Cursor</b>
+      <span>Antigravity gave me my first feel for how an agentic IDE runs, and in Cursor I saw it — what matters is not model performance alone but a design that asks about the workflow first. Attaching a browser, it even checked its own work by screenshot. But the API charges were expensive.</span></li>
+  <li class="key"><b>Converging on Claude Code — and learning mode</b>
+      <span>A flat rate could carry the same work, and above all the output style could be switched to learning. That was decisive.</span></li>
+  <li><b>Now — roles divided</b>
+      <span>Work in Claude Code, current news in Perplexity, long videos and documents in Gemini. And I am checking with local models what kind of constraint on-premise actually is.</span></li>
+</ol>
+
+<h4 class="dev" data-nav="3-1-2 · Role of each tool">3-1-2 · Role of each tool</h4>
+<table>
+  <tr><th style="width:20%">Tool</th><th style="width:26%">Where it is used</th><th>Why there</th></tr>
+  <tr><td><b>Claude Code</b></td><td>Code · verification · documents</td><td>learning mode · Plan · sessions · worktrees · conversation export. A flat rate means no cost anxiety about repeated experiments.</td></tr>
+  <tr><td><b>Perplexity</b><br>(Comet browser)</td><td>Current news · light browser work</td><td>Faster than search, and with browser use it can even make simple configuration changes in a cloud console. ChatGPT Atlas has the same feature but its quota fills up quickly.</td></tr>
+  <tr><td><b>Gemini</b></td><td>Long videos · bulk documents</td><td>Drop in a YouTube link and absorb one to two hours at reading speed. But without custom instructions a generic summary is useless.</td></tr>
+  <tr><td><b>Ollama</b> (local)</td><td>A feel for on-premise</td><td>Running it on a laptop made hardware, memory and load time tangible as product constraints.</td></tr>
+  <tr><td>Grok</td><td>Tried in conversation only</td><td>Relatively unconstrained and free-form. I have not decided where to use it — I am waiting because it is said to be coming to the car (Tesla).</td></tr>
+  <tr><td>GitHub Copilot</td><td>Briefly, at a hackathon</td><td>Tried it at a Microsoft-hosted hackathon. Unremarkable. If it were far cheaper perhaps, but Claude Code is not especially expensive, so there was no reason to switch back.</td></tr>
+  <tr><td><b>Upstage Solar</b></td><td>Service implementation (Booktoss)</td><td>It worked well as an agent that calls tools. Its limit is in 3-3-2 ①.</td></tr>
+</table>
+
+<h3>3-2. Why these were chosen</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">Among the many AI models available, why did you choose that model (or tool)?</span>
+I chose Claude Code as my primary tool, because I needed something usable as a senior engineer and a teacher, not as a thing that writes code for me — you cannot take responsibility for code you built without understanding.
+<ul>
+  <li><b>learning mode</b> — decisive. No other service has it.</li>
+  <li><b>Flat rate</b> — no need to compute the cost of repeated experiments. Cursor is metered, which made me hesitate to experiment.</li>
+  <li>Context does not break in large repositories, and the prose quality is good enough that the reasoning is left behind as documentation.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="3-2-1 · learning mode was decisive">3-2-1 · learning mode was decisive</h4>
+<p>Switch the output to learning with <code>/output-style</code> and, before giving the answer, it also explains why it did it that way and what should be learned.</p>
+<table>
+  <tr><th style="width:24%">What is different</th><th>So</th></tr>
+  <tr><td>It makes you type terminal commands yourself</td><td>Your hands remember. Typed for you, you still cannot type it next time.</td></tr>
+  <tr><td>It gives <b>context and intent</b> alongside</td><td>What remains is not "this was done" but "this was done because of that".</td></tr>
+  <tr><td>It inserts insights along the way</td><td>Something learned remains after the task ends.</td></tr>
+</table>
+<div class="note green"><span class="lbl">Why a prompt cannot substitute</span>
+<ul>
+  <li>If a prompt could do it, there would be no reason to make it a setting. You would just paste it into every conversation.</li>
+  <li>In practice no other service offers this. It is different in kind from the study guides in ChatGPT or Gemini.</li>
+  <li>It is slower in exchange. The reason for using it anyway is single — I can only verify what I understand.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="3-2-2 · Cost is part of the choice">3-2-2 · Cost is part of the choice</h4>
+<table>
+  <tr><th style="width:22%">Tool</th><th style="width:26%">Billing</th><th>Result</th></tr>
+  <tr><td><b>Cursor</b></td><td>Metered API</td><td>The design was good but it got expensive with use. It makes you hesitate to experiment.</td></tr>
+  <tr><td><b>Claude Code</b></td><td><b>Flat rate · around $100/month</b></td><td>The same work can be repeated without cost arithmetic — part of why the 45-configuration experiment in §1 was possible.</td></tr>
+  <tr><td>Gemini</td><td>Family plan</td><td>Google offered it cheaply per family, and I started using it seriously from then. Which tool gets used when is sometimes decided by the pricing plan.</td></tr>
+  <tr><td>GitHub Copilot</td><td>—</td><td>If it were far cheaper perhaps, but Claude Code is not especially expensive, so there was no reason to move.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">Could I have gone cheaper</span>
+I weighed whether Antigravity or Codex would do. The conclusion is that learning mode alone keeps me here — on cost alone there are other choices, but my criterion is whether understanding remains alongside the result.</div>
+
+<h3>3-3. Assessment of the models — strengths and limits</h3>
+<div class="qa"><span class="lbl">Assignment question</span>
+<span class="qtext">What strengths and limits of the model did you feel while doing this work?</span>
+<b>Strengths (Claude)</b> — once a principle was set, it followed without individual instruction, and told to criticize its own plan it produced valid objections.
+<br><b>The limits appeared in different places for different models.</b>
+<table>
+  <tr><th style="width:22%">Model</th><th style="width:16%">Where used</th><th>Limit observed there</th></tr>
+  <tr><td><b>Claude</b></td><td>Work overall</td><td>Confidently wrong (②) · in agentic loops <b>tokens grow close to quadratically</b> (③)</td></tr>
+  <tr><td><b>Upstage Solar</b></td><td>Service implementation</td><td>Works well as a tool-calling agent, but <b>claims to know what it does not</b> (①)</td></tr>
+  <tr><td><b>Gemini</b></td><td>Bulk input</td><td>On long transcripts, <b>numbers and relationships break from the 2–3 hour mark</b> (④)</td></tr>
+  <tr><td><b>GPT · Gemini</b></td><td>Images and video</td><td><b>Cannot draw logical development</b> — plausible but wrong (⑤)</td></tr>
+  <tr><td><b>Local</b> (8B·16B)</td><td>On-premise experiments</td><td><b>Weak</b> on lesser-known localities and narrow domains (⑥)</td></tr>
+</table>
+<b>One shared conclusion</b> — take facts from tools and source documents, and leave <b>only judgment and assembly</b> to the model. The evidence for each number is in 3-3-2.
+<span class="repo"><b>Evidence repositories</b> — <a href="https://github.com/bookseal/Booktoss">bookseal/Booktoss</a> (①) · <a href="https://github.com/bookseal/llm-app-lab">llm-app-lab</a> (②③)</span></div>
+<h4 class="dev" data-nav="3-3-1 · Strengths — earned its keep">3-3-1 · Strengths — where the model earned its keep</h4>
+<table>
+  <tr><th style="width:23%">Strength</th><th style="width:12%">Model observed</th><th>Evidence</th></tr>
+  <tr><td>① Set a principle and it follows without instruction</td><td>Claude</td><td>After nailing down "validation matters most" once in §1-2, the four verification mechanisms in §1-3 appeared without individual instruction. Follow-up work maintained that standard without being told each time what to verify. → What a human must set is the principle; repeatedly applying it can be delegated.</td></tr>
+  <tr><td>② Told to criticize its own plan, it actually bites</td><td>Claude</td><td>Asked to argue against its own RAG experiment plan, it produced six valid objections — "there is no reason to explore even the free axis sequentially", "binary recall is a false signal on multi-answer questions", "do not trust the scores before label verification". All were flaws in my original plan, and all went into the experiment design.</td></tr>
+  <tr><td>③ Context does not break in a large repository</td><td>Claude</td><td>Through file exploration → edit → execution it held on to earlier decisions. Code you cannot write by looking at a single file — such as an invariant check spanning several files — comes from that.</td></tr>
+  <tr><td>④ It leaves the reasoning in writing</td><td>Claude</td><td>The prose quality is good enough that, alongside the code, why it was done that way survives as documentation. For someone who treats "can a successor pick this up" (§2) as the productivity metric, that was the point, not a side effect.</td></tr>
+</table>
+<h4 class="dev" data-nav="3-3-2 · Limits — observed directly">3-3-2 · Limits — observed directly, per model</h4>
+<table>
+  <tr><th style="width:23%">Limit</th><th style="width:12%">Model observed</th><th>Evidence and conclusion</th></tr>
+  <tr><td>① It claims to know what it does not</td><td>Solar</td><td>I built a library federated-search agent on the Upstage Solar API and it worked correctly. But when I named that service and asked "what is this", it answered as if it knew while it did not. → It can be trusted as an agent that calls tools, but you must not assume the model knows facts. Take facts from tools and source documents; leave judgment and assembly to the model.</td></tr>
+    <tr><td>② Strength of confidence ≠ accuracy</td><td>Claude · Solar</td><td>Both ① and ③ below are cases of a model being confidently wrong. If confidence cannot be used as a signal, the only option is to make things falsifiable by structure. That is why the mechanisms in §1 were a requirement, not a choice.</td></tr>
+  <tr><td>③ Non-linear cost growth</td><td>Claude</td><td>In an agentic loop that calls repeatedly to improve retrieval quality, tokens grew close to quadratically (about 81k vs about 2.3k single-shot). The quality gain was not proportionate. → On equal quality take the cheaper option; the loop was kept as a documented experiment.</td></tr>
+  <tr><td>④ It does not read all of a long input</td><td>Gemini</td><td>Feeding meeting transcripts of 1, 2 and 10 hours, it held up to one hour and content began vanishing from two or three. Numbers and relationships in particular came out wrong. → Context size is a ceiling on accuracy, not a guarantee. Rather than inserting a lot, I moved to finding and inserting only what is needed (RAG).</td></tr>
+  <tr><td>⑤ It cannot draw logical development</td><td>GPT · Gemini</td><td>Ask for matrix operations or network flows as images or video and the output is plausible but wrong. Korean infographics barely work either (GPT ✗ · Gemini ○). → I draw this part myself with Manim. Presentation can be delegated; logic cannot.</td></tr>
+  <tr><td>⑥ Weak on small localities and narrow domains</td><td>Local (Ollama)</td><td>I have <b>a benchmark of my own</b> — "where is Gamman-dong?". It is a lesser-known neighbourhood in Busan, so whether a model has learned that far is a ruler for how much it knows. Local models (8B/16B class) said a lot of wrong things here.<br>
+→ Even so, there are places to use them. For short reactions like "nice · keep going" they are sufficient and affordable. But they cannot be used where judgment is required.</td></tr>
+</table>
+
+<div class="note teal"><span class="lbl">Beyond the limits</span>These limits are not left as criticism. For instance, Solar's inability to express confidence can be turned back into a score by attaching a separate verification signal (such as a Groundedness Check) — naming a tool's limit and then building the side that improves it — that is the work I want to do.</div>
+
+<h4 class="dev" data-nav="3-3-3 · When to use what">3-3-3 · When to use what</h4>
+<table>
+  <tr><th style="width:30%">Situation</th><th style="width:32%">Choice</th><th>Reason</th></tr>
+  <tr><td>Exploration · learning · writing documents</td><td>Claude Code (learning mode)</td><td>Result and understanding both remain</td></tr>
+  <tr><td>Looking up a fact</td><td>Not the model — tools and source documents</td><td>Limit ①</td></tr>
+  <tr><td>Bulk repetitive processing</td><td>Single-shot first; loops only after measurement</td><td>Limit ③</td></tr>
+  <tr><td>Sensitive data</td><td>Local execution or on-premise</td><td>Environments where data cannot leave the building really exist</td></tr>
+</table>
+
+<div class="note teal"><span class="lbl">The actual conversation that set the rule</span>
+When the AI tried to implement a whole module, I cut it off like this. <span style="color:var(--muted);font-size:.9em;">(llm-app-lab · original prompt, in Korean — kept verbatim)</span><br>
+"워워.. 니가 다 짜면 안 된다. 우리는 공부중이고. 다시 전으로 돌아가서 개념노트를 보고 뭘할지 같이 고민하자. 내가 코딩을 하면서 공부할거고 … 너가 시니어라 생각하고 나를 가르쳐주면서 같이 파일을 만들고 하면서 공부해야지."</div>
+
+<div class="note teal"><span class="lbl">The last item — on-premise</span>
+Running local models on a laptop made it tangible. Where data cannot leave the building, the model has to be brought next to the data, and at that point hardware, memory and load time become the product's constraints. That is where I understood why on-premise demands separate engineering.</div>
+
+<h4 class="dev" data-nav="3-3-4 · The direction I am interested in">3-3-4 · The direction I am interested in</h4>
+<p>The cost verification in §1 could not send client data outside, and the meeting notes in §2 ran into the standard that "company material must not be handed to outside services". Most of the work I have done has been in places like that.</p>
+<table>
+  <tr><th style="width:24%">Option</th><th>What I weighed</th></tr>
+  <tr><td><b>Local models</b></td><td>I have run them, but the level drops in narrow domains, so they cannot be used as they are. Useful for getting a feel.</td></tr>
+  <tr><td><b>Open-weight models</b></td><td>I intend to attach recently released ones to toy projects. But a model whose training process and alignment method cannot be inspected is hard to put where judgment itself becomes evidence.</td></tr>
+  <tr><td><b>Domestic on-premise</b></td><td>The option that actually remains where data cannot leave. Both cases in this document fall there.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">An aside — on all the noise about domestic AI</span>
+<ul>
+  <li>Whenever domestic models come up, expectation and disappointment pour out together. I too saw the limits while using Solar, and I wrote that observation down as it was in 3-3-2 ①.</li>
+  <li>But noise also means there is interest. Nobody is disappointed by something nobody expected anything from.</li>
+  <li>And there is no obvious alternative. A model whose training process and alignment method cannot be inspected is hard to put where judgment itself becomes evidence — the cost verification in §1 was exactly such a place.</li>
+</ul></div>
+<div class="note green"><span class="lbl">Which is why this role interests me</span>
+§1 was about "how to make a value produced by AI falsifiable", and §2 about "how to leave that method with an organization". If the role requires doing both at once in an environment where data cannot leave the building — the work so far carries straight over.</div>
+<!-- ================= APPENDIX ================= -->
+<h2 id="ap-a"><span class="no">A.</span>Appendix — making a running system verifiable by others</h2>
+<p class="lead" style="font-size:.97rem">The claim in §2 is about an <b>organization</b>; this appendix is the record of applying the same principle to <b>a system run by one person</b>. It is not an organizational case, so it was moved out of the main text, but it sits on the same line as this document's theme — "make what AI wrote falsifiable by a third party".</p>
+
+<p class="sec-note" style="color:var(--muted);font-size:.93rem;">The subject is a single-node k3s cluster I have run alone since 2025 — about 20 services under <code>*.bit-habit.com</code> run on it.</p>
+
+<h4 class="dev" data-nav="A-1 · How I got here">A-1 · How I got here</h4>
+<p>I passed a Linux certification in my first year of middle school. I passed it by rote, and I knew then that I had not understood it. I am thirty-eight now, so for <b>25 years</b> since, I have been looking for ways to overturn that.</p>
+<ul>
+  <li><b>2022</b> · École 42 — set up VMs myself.</li>
+  <li><b>2023</b> · wrote Dockerfiles myself.</li>
+  <li><b>2024</b> · evaluating other people's k3s assignments made me want to take it up again.</li>
+  <li><b>2025</b> · put a server on the Oracle Cloud free tier.</li>
+  <li><b>2026</b> · built a k3s cluster on it and run it myself — around 20 services, with certificates, routing, deployment and incidents all in my own hands.</li>
+</ul>
+<p>This cluster is the continuation of that, and I imposed the constraint myself — <i>how far can one person get on one free machine.</i> Four ARM cores, 20 services, $0 a month.</p>
+<div class="note teal"><span class="lbl">Documentation forced by constraint</span>
+With no slack, if I do not write down what is set up and why, I am the first to forget. So what I asked the AI to do was not to <i>build</i> infrastructure but to <b>describe already-running infrastructure so a third party can falsify it</b>.</div>
+
+<h4 class="dev" data-nav="A-2 · What I asked the AI to do · did not">A-2 · What I asked the AI to do · did not</h4>
+<table>
+  <tr><th style="width:34%">Task</th><th>Who</th></tr>
+  <tr><td>Collecting the cluster's actual state (<code>kubectl</code> measurements)</td><td><b>AI</b> — the source to compare the document's claims against</td></tr>
+  <tr><td>Writing the 5-stage learning structure · checkpoints · glossary</td><td><b>AI</b> — scaffolding</td></tr>
+  <tr><td>Deciding what to publish and what to record as a limit</td><td><b>Human</b> — judgment</td></tr>
+  <tr><td>Touching the production cluster</td><td><b>Human</b> — the AI is given no execution rights</td></tr>
+</table>
+<p>The result is <a href="https://infra.bit-habit.com">infra.bit-habit.com</a>. The source is in the public repository <a href="https://github.com/bookseal/bit-habit-infra">bookseal/bit-habit-infra</a>, and the live state is checked externally every 60 seconds at <a href="https://status.bit-habit.com">status.bit-habit.com</a>.</p>
+
+<h4 class="dev" data-nav="A-3 · Three marks of a falsifiable document">A-3 · Three marks of a falsifiable document</h4>
+<p>"The documentation is good" is an unfalsifiable claim. Instead I look at whether it is in a form a third party can compare against. Three things went in.</p>
+
+<div class="note green"><span class="lbl">① The ❌ on the scorecard</span>
+A document listing only successes cannot be compared. So the current position against the GitOps standard is laid out in a table, with the failing cells left in place — <code>Secrets ❌ gitignored, applied by hand</code> · <code>Namespaces ⚠️ mostly a single default</code>. And the conclusion is written in one line: "the gap from industry standard is not the tooling and not the services, it is <i>secrets</i>."</div>
+
+<div class="note amber"><span class="lbl">② Naming what was deliberately not fixed</span>
+At the end of an incident postmortem, the things deliberately not fixed in the same change were recorded separately — a stale copy of the routing table left in another repository, an image mount method whose commit hash cannot be determined. The reason is in the document as written:<br>
+"Writing down what you decided not to fix is part of the retrospective too. A known issue that is not written down is indistinguishable from an unknown one."</div>
+
+<div class="note green"><span class="lbl">③ Writing the order as a decision</span>
+<ul>
+  <li>The <b>order</b> of the path to GitOps was nailed into the document — <i>encrypt secrets → per-app namespaces → ArgoCD.</i></li>
+  <li><b>Why this order</b> — reversed, it is written down that you "spend a week fighting a controller trying to sync a repository that does not hold the truth". Attach the tool first and syncing starts before the repository holds the real state.</li>
+  <li><b>So there was no hurry</b> — simply re-applying the manifests on every deploy was already giving <code>selfHeal</code>, the property one actually wants from GitOps.</li>
+  <li><b>It is now proceeding in that order.</b> When what to do and when is written <b>in a document rather than felt in a mood</b>, the next person can follow the same order.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="A-4 · Incident postmortem — 200 OK">A-4 · Incident postmortem — 200 OK</h4>
+<p><code>habit.bit-habit.com</code> served a different site for months. Not an error page — a valid certificate and <code>200 OK</code>, serving a perfectly wrong site. Because the uptime monitor and my own status page both asked only "did a 200 come back?", the incident was invisible to every automated check.</p>
+<p>Diagnosis went by layer-wise bisection — at each step, ask "is the problem above or below this layer" and cut one side away. The decisive move was <b>calling the app's Service directly from inside the cluster</b>. The app was fine, so the fault lay in front of it. The real cause was <b>two independent failures overlapping</b>.</p>
+<pre class="mermaid">
+flowchart TB
+  B["Browser requests<br/>habit.bit-habit.com"]:::s2b --> T["Traefik reads the routing table"]:::s2b
+  T --> F1["Failure ①<br/>rule points at the wrong Service<br/><i>portfolio ← not the app</i>"]:::bad
+  F1 --> N["nginx in the portfolio Pod<br/>receives the request"]:::s2b
+  N --> F2["Failure ②<br/>no server_name matches this host,<br/>so it falls back to the default block"]:::bad
+  F2 --> R["200 OK + the wrong site<br/><i>no error anywhere</i>"]:::bad
+  APP["Flutter app<br/>fine · healthy · unreachable<br/><b>0 traffic for 103 days</b>"]:::ghost
+  classDef s2b fill:#EFEBFE,stroke:#5B3FD9,color:#3B2A82,stroke-width:1.3px;
+  classDef bad fill:#fdeeec,stroke:#a3241d,color:#7a1a15,stroke-width:1.6px;
+  classDef ghost fill:#f2f2f4,stroke:#8a8a95,color:#55555f,stroke-dasharray:4 3;
+</pre>
+<p>The root cause was not a routing bug. It was a <b>single-source-of-truth bug</b>. The app existed only in the cluster and <b>in no repository at all.</b> So the one line pointing at that app lived in a file that did not know the app existed. An ownerless rule drifts, and nobody notices.</p>
+
+<div class="note amber"><span class="lbl">What came out of it — a flaw in the verification system itself</span>
+<ul>
+  <li><b>Assert the content, not the status code</b> — Gatus can require a specific string in the response body. One line per service turns "it responded" into <b>"it responded as itself"</b>.</li>
+  <li><b>Fix the file, not the cluster</b> — fix only the live state and the next <code>apply</code> quietly reverts it.</li>
+  <li><b>So the real fix was not one line of routing</b> — the app that was in no repository was brought in, and its rule was separated out of the shared routing table (15 hosts) to sit beside the app, cutting <b>the blast radius down to one site</b>.</li>
+</ul></div>
+
+<h4 class="dev" data-nav="A-5 · Why I built it, and how I used AI">A-5 · Why I built it, and how I used AI</h4>
+<table>
+  <tr><th style="width:20%">Why</th><th>What I got</th></tr>
+  <tr><td><b>Learning was the point</b></td><td>I had seen k3s while evaluating other people's assignments, but <b>without building it myself I did not know it.</b> It is the standard I have kept for 25 years since passing a certification by rote in middle school — <b>what must remain is understanding, not the artifact.</b></td></tr>
+  <tr><td><b>I wanted my own server</b></td><td>I wanted to see how far one free machine goes. Certificates, routing, deployment, incidents — <b>once all of it passes through your own hands</b>, you get a feel for it.</td></tr>
+</table>
+<div class="note green"><span class="lbl">How AI was used — scaffolding by AI, execution by me</span>
+<ul>
+  <li><b>I did not have it install things for me.</b> Instead I had it write <b>an installation tutorial that accounts for this cluster's quirks</b> — step-by-step exercises · quizzes · a progress checklist.</li>
+  <li>My hands do the work. If the AI does it, <b>I still cannot do it next time.</b></li>
+  <li>For the same reason, <b>collecting the cluster's actual state with <code>kubectl</code></b> was delegated to the AI. That is <b>the source to compare the document's claims against</b>, and a human transcribing it by hand is more likely to get it wrong.</li>
+</ul></div>
+<div class="note teal"><span class="lbl">Current deployment structure</span>
+<ul>
+  <li>GitHub Actions connects to the server over SSH and runs <code>git reset --hard origin/main</code>.</li>
+  <li>The key is bound in <code>authorized_keys</code> with a <b>forced command</b> — whatever command arrives, only the one fixed script runs.</li>
+  <li>So <b>even if the key leaks, nothing more can be done with it.</b></li>
+</ul></div>
+
+<h2 id="ap-b"><span class="no">B.</span>Appendix — masking policy</h2>
+<div class="panel">
+<p>Before publication, everything was substituted exhaustively against the following criteria and re-checked by searching again.</p>
+<table>
+  <tr><th style="width:34%">Target</th><th>Treatment</th></tr>
+  <tr><td>Names of contracting authorities, agencies, clients</td><td>Replaced with <code>[contracting authority]</code> and similar</td></tr>
+  <tr><td>Internal team and unit names</td><td>Removed</td></tr>
+  <tr><td>Facility and site addresses</td><td>Removed (counts kept). Site names published by the government, such as the national observation network, are kept so the screens remain readable</td></tr>
+  <tr><td>Internal budget amounts in absolute terms</td><td>All removed; only ratios used (±1.7%, about 40%)</td></tr>
+  <tr><td>Internal file names</td><td>Replaced with generic names</td></tr>
+  <tr><td>Local paths · accounts</td><td>Removed or generalized</td></tr>
+  <tr><td>IPs · API keys · tokens · passwords</td><td>Removed after an exhaustive search of text and logs</td></tr>
+  <tr><td>Personal data (names, contact details, etc.)</td><td>Exhaustive search found none</td></tr>
+  <tr><td>Published documents such as the Standard Estimate Manual</td><td>Quoted as is, being published government material</td></tr>
+</table>
+<div class="note green" style="margin-bottom:0"><span class="lbl">Note — the same standard applies routinely</span>
+When moving related projects into public repositories, the <code>.gitignore</code> was built on the standard that "statutory and manual PDFs are published documents, so include them; internal budget spreadsheets are excluded".
+AI session logs are a learning asset but are not published as they are — terminal output drags along absolute paths, environment values and credentials, so the exporter script is tracked while its output is excluded.</div>
+</div>
+
+<h2><span class="no">C.</span>Appendix — public material</h2>
+<div class="panel">
+<p>The public repositories and live sites that support each claim in the text. You can open them and check directly.</p>
+<table>
+  <tr><th style="width:24%">What it supports</th><th>Repository · live</th></tr>
+  <tr>
+    <td>§1-4 ~ §1-6 <b>Case 2</b> — ground-truth set · 45-configuration benchmark · grading code</td>
+    <td><a href="https://github.com/bookseal/llm-app-lab">github.com/bookseal/llm-app-lab</a><br><a href="https://llm-app-lab.bit-habit.com">llm-app-lab.bit-habit.com</a> (live)</td>
+  </tr>
+  <tr>
+    <td><b>All of §2</b> — agent operating rules (CLAUDE.md) · ADRs · Board scripts</td>
+    <td><a href="https://github.com/KIBA-Automation/project_management_with_ai_agent">KIBA-Automation/project_management_with_ai_agent</a><br><span style="color:var(--muted);font-size:.9em;">Raw meeting notes are private — <code>meetings/</code> is excluded from git tracking</span></td>
+  </tr>
+  <tr>
+    <td>§3 limit ① library federated-search agent<br>(built on the Solar API and working, but does not know its own name)</td>
+    <td><a href="https://github.com/bookseal/Booktoss">github.com/bookseal/Booktoss</a><br><a href="https://booktoss.bit-habit.com">booktoss.bit-habit.com</a> (live)</td>
+  </tr>
+  <tr>
+    <td>Publishing the limits of the operating and observability infrastructure as open problems</td>
+    <td><a href="https://github.com/bookseal/bit-habit-infra">github.com/bookseal/bit-habit-infra</a><br><a href="https://status.bit-habit.com">status.bit-habit.com</a> (live status)</td>
+  </tr>
+</table>
+<p class="note teal" style="margin-bottom:0"><span class="lbl">What is not published</span>The repository for the cost-verification app, the central case of this document, is private because it handles client data. The §1 screens above have internal budget figures, survey site addresses and internal file names masked, leaving only the published Standard Estimate Manual (Appendix B). Not being able to show the strongest evidence as it is, is the price accepted in this kind of work.</p>
+</div>
+
+
+<footer>
+  Using AI in a Way You Can Trust · Gichan Lee · <a href="https://bit-habit.com">bit-habit.com</a> · 2026
+</footer>
+
+</div>
+
+<!-- mermaid 렌더러 — <pre class="mermaid"> 블록을 SVG로 그린다.
+     Artifact 런타임을 대체하는 것. GitHub Pages는 CSP 제약이 없어 CDN이 그대로 동작한다.
+     버전을 고정(@11.4.1)해 두어 CDN이 조용히 바뀌어도 렌더가 흔들리지 않게 한다. -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif',
+      primaryColor: '#EFEBFE', primaryBorderColor: '#B9A8F7', primaryTextColor: '#1E2536',
+      lineColor: '#5B6478', fontSize: '14px',
+    },
+  });
+</script>
+
+<!-- 사이드바: .wrap 안의 h2에서 목차를 만들고, 스크롤 위치를 표시한다. 숨기기/열기 토글 포함. -->
+<script>
+(function(){
+  // 사이드바는 '과제가 요구한 9개 항목'만 보여준다 — h2(대주제 3 + 부록)와
+  // "1-1." 꼴로 번호가 붙은 h3만. 부록 안의 P1~P7 같은 h3는 목차를 흐리므로 제외.
+  // 제목 앞에 사례 표식(💧 ✈️)이 붙을 수 있으므로 번호 판정은 표식을 뗀 뒤에 한다.
+  var numbered = function(h){
+    var t = h.textContent.trim();
+    var mk = h.querySelector('.mk');
+    if(mk) t = t.slice(mk.textContent.length).trim();
+    return /^\d-\d\./.test(t);
+  };
+  var heads = Array.prototype.slice.call(document.querySelectorAll('.wrap h2, .wrap h3, .wrap h4.branch, .wrap h4.dev'))
+    .filter(function(h){ return h.tagName!=='H3' || numbered(h); });
+  if(!heads.length) return;
+  heads.forEach(function(h,i){ if(!h.id) h.id='sec-'+i; });
+
+  // 본문 차례(#toc): h2와 번호 붙은 h3만. 인쇄본에서 유일한 목차가 된다.
+  (function(){
+    var tl=document.getElementById('toc-list'); if(!tl) return;
+    heads.filter(function(x){ return x.tagName==='H2' || x.tagName==='H3'; }).forEach(function(x){
+      var a=document.createElement('a'), li=document.createElement('li');
+      var no=x.querySelector('.no'), mk=x.querySelector('.mk');
+      var txt=x.textContent.trim(), num='';
+      if(mk) txt=txt.replace(mk.textContent,'').trim();
+      if(no){ num=no.textContent.trim(); }
+      else { num=(txt.match(/^\d-\d\./)||[''])[0]; }
+      if(num && txt.indexOf(num)===0) txt=txt.slice(num.length).trim();
+      a.href='#'+x.id;
+      a.className = x.tagName==='H2' ? 't2' : 't3';
+      if(num){ var s=document.createElement('span'); s.className='tn'; s.textContent=num; a.appendChild(s); }
+      a.appendChild(document.createTextNode(txt));
+      a.addEventListener('click', function(ev){ ev.preventDefault(); measure();
+        window.scrollTo({top: (document.getElementById(x.id).getBoundingClientRect().top+window.scrollY-14)}); });
+      li.appendChild(a); tl.appendChild(li);
+    });
+  })();
+
+  var list=document.getElementById('sidenav-list');
+  var links=heads.map(function(h){
+    var no=h.querySelector('.no'), label=h.getAttribute('data-nav') || h.textContent.trim();
+    if(no){ var n=no.textContent.trim(); label=n+' '+label.slice(n.length).trim(); }
+    var lv3 = h.tagName==='H3',
+        lv4 = h.classList.contains('branch'),
+        lv5 = h.classList.contains('dev');
+    if((lv3||lv4||lv5) && !h.hasAttribute('data-nav')){ var em=label.indexOf(' — '); if(em>0) label=label.slice(0,em); }  // 사이드바용 축약
+    var a=document.createElement('a');
+    a.href='#'+h.id; a.textContent=label;
+    if(lv3) a.className='lv3'; else if(lv4) a.className='lv4'; else if(lv5) a.className='lv5';
+    // 브라우저 기본 해시 점프는 쓰지 않는다 — mermaid가 늦게 렌더되며 높이가 바뀌면
+    // 점프한 뒤에 목표가 밀려서 엉뚱한 곳에 서 있게 된다. 클릭 시점에 다시 재서 이동한다.
+    a.addEventListener('click', function(ev){
+      ev.preventDefault();
+      measure();
+      var y=h.getBoundingClientRect().top+window.scrollY-14;
+      // behavior:'smooth'는 환경에 따라 조용히 무시된다(확인함) — 즉시 이동으로 확정한다.
+      window.scrollTo({top:Math.max(0,y)});
+      history.replaceState(null,'','#'+h.id);
+      last=-1; sync();
+      links.forEach(function(x){ x.classList.toggle('active', x===a); });
+    });
+    list.appendChild(a); return a;
+  });
+
+  function topOf(el){ return el.getBoundingClientRect().top+window.scrollY; }
+  var tops=[], side=document.getElementById('sidenav');
+  function measure(){ tops=heads.map(topOf); }
+
+  // 기준선은 화면 위 1/3 — 눈이 머무는 높이. 문서 끝이면 마지막 섹션.
+  function activeIndex(){
+    if(window.scrollY+window.innerHeight >= document.documentElement.scrollHeight-2) return heads.length-1;
+    var line=window.scrollY+window.innerHeight/3;
+    for(var i=heads.length-1;i>=0;i--) if(tops[i]<=line) return i;
+    return 0;
+  }
+
+  var last=-1;
+  function sync(){
+    var i=activeIndex(); if(i===last) return; last=i;
+    links.forEach(function(a,n){ a.classList.toggle('active', n===i); });
+    var a=links[i];
+    if(a && side && (a.offsetTop<side.scrollTop || a.offsetTop>side.scrollTop+side.clientHeight-60))
+      side.scrollTop = a.offsetTop - side.clientHeight/2;
+  }
+
+  var ticking=false;
+  addEventListener('scroll', function(){ if(ticking)return; ticking=true;
+    requestAnimationFrame(function(){ ticking=false; sync(); }); }, {passive:true});
+  addEventListener('resize', function(){ measure(); last=-1; sync(); });
+  addEventListener('load',   function(){ measure(); last=-1; sync(); });  // mermaid가 늦게 렌더되며 높이가 바뀐다
+  // 본문 높이가 바뀔 때마다 다시 잰다 (mermaid·이미지가 비동기로 들어온다)
+  if(window.ResizeObserver){
+    var rt; new ResizeObserver(function(){
+      clearTimeout(rt); rt=setTimeout(function(){ measure(); last=-1; sync(); }, 120);
+    }).observe(document.querySelector('.wrap'));
+  }
+  measure(); sync();
+
+  document.getElementById('navhide').onclick=function(){ document.body.classList.add('nav-hidden'); };
+  document.getElementById('navshow').onclick=function(){ document.body.classList.remove('nav-hidden'); measure(); last=-1; sync(); };
+})();
+</script>
+
+</body>
+</html>
