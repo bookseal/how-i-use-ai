@@ -979,6 +979,21 @@ A RAG system that finds the governing clause in the 1,297-page US Federal Aviati
 </ul>
 <span class="repo"><b>Repository</b> — <a href="https://github.com/bookseal/llm-app-lab">github.com/bookseal/llm-app-lab</a> · live at <a href="https://llm-app-lab.bit-habit.com">llm-app-lab.bit-habit.com</a><br>The ground-truth set, the grading code and the results for all 45 configurations are public, so <b>everything described in 1-5 and 1-6 can be reproduced</b>.</span></div>
 
+<div class="note teal"><span class="lbl">First — what RAG is</span>
+Think of it as an <b>open-book exam</b>. Instead of making the model memorize all 1,297 pages (= stuffing everything into the model), when a question comes in you have it <b>open only the relevant clause and answer from that</b>. Reciting from memory invites fabrication; reading the page first leaves <b>a record of which clause was consulted</b> — the premise of this whole document (to trust it, the grounds must remain) applies here directly.<br>
+Two reasons not to stuff it all in — long inputs the model <b>doesn't fully read</b> (§3-3 limitation ④), and feeding it every time is <b>expensive.</b> So it is "find and feed," not "feed it all."</div>
+
+<p>To find and feed, the code has to be prepared in advance. The terms that keep recurring below (1-5·1-6) are exactly those <b>assembly parts</b>.</p>
+<table>
+  <tr><th style="width:15%">Part</th><th style="width:33%">What it does <span style="color:var(--muted);font-weight:400;font-size:.85em">(analogy)</span></th><th>Where the choice is</th></tr>
+  <tr><td><b>① Split</b><br><span style="color:var(--muted);font-size:.85em">chunking</span></td><td>Cut 1,297 pages into <b>searchable pieces</b> — breaking a book down to sticky-note size</td><td>Cut on § clause boundaries, or by character count? <b>Performance turns on this.</b></td></tr>
+  <tr><td><b>② Index</b><br><span style="color:var(--muted);font-size:.85em">embedding</span></td><td>Turn each piece into a <b>meaning coordinate</b> — a map that places similar meanings close together</td><td>Which embedding model. Even with no shared words, <b>close meaning still matches.</b></td></tr>
+  <tr><td><b>③ Retrieve</b><br><span style="color:var(--muted);font-size:.85em">search method</span></td><td>Pull the pieces that fit the question</td><td>By <b>meaning</b> (vector) · by <b>word</b> (keyword) · <b>blend</b> (hybrid)</td></tr>
+  <tr><td><b>④ How many</b><br><span style="color:var(--muted);font-size:.85em">top-K</span></td><td>How many <b>top pieces</b> to hand over as grounds</td><td>Too few drops the grounds; too many lets noise in.</td></tr>
+  <tr><td><b>⑤ Score</b><br><span style="color:var(--muted);font-size:.85em">LLM judge</span></td><td>Whether the answer is good is <b>graded by another model</b> — a grader instead of a person</td><td>Accurate, but <b>it costs money</b> every call.</td></tr>
+</table>
+<div class="note teal"><span class="lbl">Why this is a design problem</span>Multiply ①×②×③×④ and the combinations run to <b>dozens.</b> You can't pick the right one by eye. Narrowing it by <b>building an answer set and grading overnight, automatically</b> is what 1-5·1-6 are — an approach that holds beyond RAG: <b>when the options are too many and the answer can be written down, turn judgment into an experiment.</b></div>
+
 <h4 class="dev" data-nav="1-4-1 · What this project is">1-4-1 · What this project is</h4>
 <ul>
   <li><b>Corpus</b> — the US Federal Aviation Regulations, 14 CFR. 1,297 pages in the original.</li>
@@ -1000,13 +1015,6 @@ A RAG system that finds the governing clause in the 1,297-page US Federal Aviati
   <li>With a ground-truth set, verification stops being something you look at and becomes an experiment you run overnight.</li>
   <li>So the bottleneck shifts from "can it be trusted" to "there are too many configurations".</li>
 </ul>
-
-<div class="note amber"><span class="lbl">The constraints that followed</span>
-<ul>
-  <li>The configuration space is large — chunking × embedding × retrieval method × top-K. It cannot be swept by hand.</li>
-  <li>Grading costs money — measuring answer quality needs an LLM judge, and repetition accumulates charges.</li>
-  <li>I built the ground-truth set myself — a self-authored answer key inherits its author's bias directly.</li>
-</ul></div>
 
 <h3><span class="mk">✈️</span> 1-5. <span class="cs">Case 2</span> Key prompts — asking not about the answer, but where it came from</h3>
 <div class="qa"><span class="lbl">Assignment question</span>
