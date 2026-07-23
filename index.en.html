@@ -973,7 +973,7 @@ gap = (annual - UNIT) / UNIT * 100      <span class="cm"># UNIT = allocated unit
 A RAG system that finds the governing clause in the 1,297-page US Federal Aviation Regulations (14 CFR). It is a learning project built in a public repository, so the data, code and scores are all public and reproducible.
 <ul>
   <li><b>Where it splits from Case 1</b> — here a ground-truth set can be built. The clause sits in a settled document, so this is comparison, not interpretation.</li>
-  <li><b>Large configuration space</b> — chunking × embedding × retrieval method × top-K. It cannot be swept by hand.</li>
+  <li><b>Many combinations</b> — chunking × embedding × retrieval method × top-K multiplies to dozens. Not a flaw but a design challenge: you can't pick by eye, so you narrow it by experiment.</li>
   <li><b>Grading costs money</b> — measuring answer quality needs an LLM judge, and repetition accumulates charges.</li>
   <li><b>Self-authored bias</b> — I built the ground-truth set myself, so it inherits my bias directly.</li>
 </ul>
@@ -1019,9 +1019,8 @@ Two reasons not to stuff it all in — long inputs the model <b>doesn't fully re
 <h3><span class="mk">✈️</span> 1-5. <span class="cs">Case 2</span> Key prompts — asking not about the answer, but where it came from</h3>
 <div class="qa"><span class="lbl">Assignment question</span>
 <span class="qtext">What was the key prompt (question) you gave the AI, and what was its answer? Describe how the conversation proceeded afterwards.</span>
-I did not argue with the AI's answers; I asked where they came from. All four times, this followed the AI being confidently wrong.
+I did not argue with the AI's answers; I asked where they came from. All three times, this followed the AI having answered fluently.
 <ul>
-  <li><b>"When did I ever show you that?"</b> — a table labelled "exact measurement" was in fact an estimate; measured properly it was 1,406 → 2,656 (about 1.9×).</li>
   <li><b>"At what ratio?"</b> — asked for a concrete number, the AI opened the code, and what it had described as RRF was actually an <code>alpha=0.5</code> weighted sum. Five places in the public docs were corrected.</li>
   <li><b>Taking back a judgment the AI deferred</b> — the agentic version had better quality but cost 27× the tokens, so it was rejected.</li>
   <li><b>Putting rules in configuration, not conversation</b> — an instruction that worked once was moved into a config file so it survives into the next session.</li>
@@ -1029,27 +1028,9 @@ I did not argue with the AI's answers; I asked where they came from. All four ti
 <p>This section shows the principles set in 1-2 operating in the same places even as the domain changes. Here too the prompts are kept raw, typos and dictation artefacts included.</p>
 
 <div class="note teal"><span class="lbl">How this differs from 1-2</span>
-1-2 was the prompt at the start of the work. All four here come after the AI had already produced a result — the places where things are turned back, pressed on, and rejected.</div>
+1-2 was the prompt at the start of the work. All three here come after the AI had already produced a result — the places where things are pressed on, rejected, and hardened into rules.</div>
 
-<h4 class="dev" data-nav="1-5-1 · Tracing the origin of an 'exact measurement'">1-5-1 · Tracing the origin of an 'exact measurement'</h4>
-<p class="sit">Context — the AI produced a table of token consumption by top-K. It was headed <span class="q">📏 exact measurement</span> and footed with <span class="q">real tokenizer + real answer · real passage · real system prompt</span>. The numbers looked plausible.</p>
-<blockquote class="rawp">네가 아까 붙여준 <mark>실제 답변 + 실제 §91.151 문단 + 실제 시스템 프롬프트를 내가 언제 보여줬더라?</mark> 지금 <mark>너가 직접 한번만 돌려볼래?</mark> 그 후에도 k를 낮추는걸 추천하는지 궁금해</blockquote>
-<p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
-<div class="io intent"><span class="ioh">Intent</span>
-<ul>
-  <li>I did not argue that the numbers were wrong. I asked where that "real" came from.</li>
-  <li>To rule out an answer by estimation, I asked it to run the thing once itself.</li>
-</ul></div>
-<div class="io result"><span class="ioh">Result</span>
-<ul>
-  <li><b>The "real answer" had been copy-pasted off the screen</b> — the token counts were estimates from an approximate tokenizer.</li>
-  <li>Measured properly, K=5 went from 1,406 to 2,656. About 1.9× off.</li>
-  <li>The direction "let's lower K" survived; only the numbers used as its evidence were entirely replaced.</li>
-</ul></div>
-<div class="note teal"><span class="lbl">The same move as in 1-2</span>
-It is the same as demanding the three columns "formula → substituted numbers → result" in the hydrology case. Instead of re-checking a result, force open the path by which the result was made. Once the path is open, the wrong step reveals itself.</div>
-
-<h4 class="dev" data-nav="1-5-2 · Catching a description that differed from the code">1-5-2 · Catching a description that differed from the code</h4>
+<h4 class="dev" data-nav="1-5-1 · Catching a description that differed from the code">1-5-1 · Catching a description that differed from the code</h4>
 <p class="sit">Context — the AI described the hybrid search as RRF (rank fusion), and that description went straight into five places in the public documentation: diagrams, glossary, body text. Yet reading it, I never quite got it.</p>
 <blockquote class="rawp">아니, 내가 궁금한건 앙상블을 어떻게 한지 아직 이해안돼. <mark>어느 비율로 어떤 것을 쓰고, 언제 어떤 임베딩을 썼나?</mark></blockquote>
 <p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
@@ -1070,7 +1051,7 @@ It is the same as demanding the three columns "formula → substituted numbers �
   <li><b>Refusing to leave anything not understood is itself a verification mechanism</b> — an explanation you cannot follow was usually one the explainer had not checked either.</li>
 </ul></div>
 
-<h4 class="dev" data-nav="1-5-3 · Taking back a judgment the AI deferred">1-5-3 · Taking back a judgment the AI deferred — rejecting agentic</h4>
+<h4 class="dev" data-nav="1-5-2 · Taking back a judgment the AI deferred">1-5-2 · Taking back a judgment the AI deferred — rejecting agentic</h4>
 <p class="sit">Context — after implementing agentic RAG itself and showing a quality advantage, the AI handed the decision over with <span class="q">Your call. Which way should we settle on?</span></p>
 <blockquote class="rawp">지금 에이전틱으로 하면 그래도 <mark>10배 정도의 토큰 소모</mark>가 있는거 아니가? 우리는 단일 래그로 했을 때 <mark>복잡한 문제도 이미 잘 풀었다는것을 확인</mark>했어. 이정도 데이터에서는 에이전틱 루프 보다는 단일 래그도 잘 된다면 <mark>굳이 토큰 많이 써가면서 에이전트를 붙일 필요성ㅇ ㅣ있을까?</mark></blockquote>
 <p class="sit" style="font-size:.88rem;color:#8a8399;">Original prompt, in Korean — kept verbatim.</p>
@@ -1086,9 +1067,9 @@ It is the same as demanding the three columns "formula → substituted numbers �
   <li><b>Discard but keep</b> — the code was committed as <code>harness/agent_rag.py</code> and only dropped from the deployment. It will be needed again once the corpus grows.</li>
 </ul></div>
 <div class="note teal"><span class="lbl">What the human did</span>
-The AI showed "the quality is better" accurately. But it handed over the act of putting quality and cost on the same scale. What to optimize has to be decided by whoever knows the product's constraints.</div>
+The AI showed "the quality is better" accurately. But it handed over the act of putting quality and cost on the same scale. It is easy to assume that adding an agent is always better, but once the tokens were measured, at this data scale the single-shot path fit better — <b>"when to use an agent" was a call for whoever knows the corpus size and the cost</b> to make.</div>
 
-<h4 class="dev" data-nav="1-5-4 · Put rules in configuration, not conversation">1-5-4 · Put rules in configuration, not conversation</h4>
+<h4 class="dev" data-nav="1-5-3 · Put rules in configuration, not conversation">1-5-3 · Put rules in configuration, not conversation</h4>
 <p class="sit">Context — I was running two sessions at once. One handled experiment code, the other documentation, both on the same repository. That leads to one session committing the other's unfinished work.</p>
 <blockquote class="rawp">그리고 너가 커밋할때는 <mark>너가 작업한것만 올려줘</mark>. 너가 작업하지 않은건 그대로 둬<br><br>
 claude-memory-backup 에서 <mark>커밋 관련된 모든 엠디 파일에 '한 세션에서는 그 세션이 작업한 것만 커밋한다'는 것을 추가해줘.</mark></blockquote>
@@ -1100,20 +1081,21 @@ claude-memory-backup 에서 <mark>커밋 관련된 모든 엠디 파일에 '한 
 </ul></div>
 <div class="io result"><span class="ioh">Result</span>
 <ul>
-  <li>The document-update procedure became a rule the same way — markers planted in the draft, which the AI sweeps before publishing.</li>
+  <li>The document-update procedure became a rule the same way — wired as a <b>pre-action hook that must run before publishing</b>. Not "just leave a marker," but a gate you cannot pass until the check clears.</li>
+  <li><b>If the rule stopped the symptom, what changed the structure was worktrees</b> — running several sessions in parallel kept committing files that weren't theirs. Giving each session its own working tree (<code>git worktree</code>) makes touching another session's files impossible to begin with. Parallel sessions have run on worktrees ever since.</li>
   <li><b>Why do it this way</b> — an instruction given in conversation disappears when that conversation ends. What does not reproduce is a habit, not a system.</li>
 </ul></div>
 <div class="note teal"><span class="lbl">Where this connects to §2</span>
 "Does it reproduce after the owner changes" is the criterion in §2, and that criterion already appears once here. Does the rule survive when the session changes — the same question at a different scale.</div>
 
-<div class="note amber"><span class="lbl">What these four share</span>
-All four happened <b>after the AI was confidently wrong</b>.
+<div class="note amber"><span class="lbl">What these three share</span>
+All three happened <b>after the AI had answered fluently</b> — not so much wrong as leaving something unexamined.
 <ul>
-  <li>The table said "exact measurement",</li>
-  <li>the explanation was fluent,</li>
-  <li>and the implementation really did have better quality.</li>
+  <li>the explanation was fluent but differed from the code (RRF ↔ <code>alpha=0.5</code>),</li>
+  <li>the implementation had good quality but its cost was never put on the same scale,</li>
+  <li>and an instruction that worked once vanished when the conversation ended.</li>
 </ul>
-Outwardly, none of them looked off. So the method used was not better intuition but <b>one and the same question</b> — "that number, where did it come from?"</div>
+Outwardly, none of them looked off. So what was used was not better intuition but <b>one and the same question</b> — "this part: where is the evidence, and was it considered?"</div>
 
 <h3><span class="mk">✈️</span> 1-6. <span class="cs">Case 2</span> Verification and rollout — with a ground-truth set, grade hundreds of runs automatically</h3>
 <div class="qa"><span class="lbl">Assignment question</span>
@@ -1121,58 +1103,33 @@ Outwardly, none of them looked off. So the method used was not better intuition 
 With a ground-truth set available, verification was raised from something a person looks at into an experiment a machine grades. 45 configurations were run overnight.
 <ul>
   <li><b>A secret exam</b> — of 14 holdout questions, 4 were never used for tuning, and for 3 the correct answer is refusal.</li>
-  <li><b>Cheap grading separated from expensive grading</b> — the retrieval axis runs locally, 0 API calls. The generation axis was only touched after retrieval was settled.</li>
-  <li><b>Verify the grader and the labels first</b> — before the experiment, I checked the thing doing the comparing, not the things being compared.</li>
+  <li><b>Cheap grading separated from expensive grading</b> — retrieval grading is a code comparison, 0 API calls. The expensive LLM grading was only touched after retrieval was settled.</li>
   <li><b>Rollout</b> — on a tie, the cheaper one. A configuration 38% cheaper in tokens was adopted, and the result was collected back as an instructor score (9/10).</li>
 </ul></div>
-<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">Where verification in Case 1 was about making things traceable by a person, here it is about making them gradable by a machine. Four mechanisms were built, and 45 configurations were run on top of them.</p>
+<p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">Where verification in Case 1 was about making things traceable by a person, here it is about making them gradable by a machine. Two mechanisms were built, and 45 configurations were run on top of them.</p>
 
 <h4 class="dev" data-nav="1-6-1 · A secret exam">1-6-1 · A secret exam — set aside questions never used for tuning</h4>
-<p>I wrote 14 holdout questions by hand and split them by purpose.</p>
+<p><b>Holdout</b> — sitting the exam with questions you tuned on inflates the score. So a few questions are set aside from the start as a <b>"secret exam" used only for grading, never for tuning</b>. I wrote 14 by hand and split them by purpose into three.</p>
 <table>
   <tr><th style="width:16%">Questions</th><th style="width:30%">Purpose</th><th>Why split</th></tr>
   <tr><td><b>4</b></td><td>Final exam — never used for tuning (<code>split:"final"</code>)</td><td>Fitting configurations to the remaining questions makes you strong only on those questions. Studying from the exam paper raises the score, not the ability.</td></tr>
   <tr><td><b>3</b></td><td><b>Refusal is the right answer</b> — out-of-scope questions</td><td>Measuring only how well it answers puts the model that bluffs about what it does not know in first place.</td></tr>
   <tr><td><b>7</b></td><td>For tuning</td><td>The questions used to fit configurations.</td></tr>
 </table>
+<p style="color:var(--muted);font-size:.9em;margin-top:6px">The refusal questions weren't there at first — I was only writing in-scope questions until I realized late that "does it avoid making up an answer to an out-of-scope question" also had to be tested, and added them.</p>
 
 <h4 class="dev" data-nav="1-6-2 · Cheap grading / expensive grading, separated">1-6-2 · Cheap grading / expensive grading, separated</h4>
 <table>
-  <tr><th style="width:14%"></th><th style="width:34%">Retrieval axis</th><th>Generation axis</th></tr>
-  <tr><td><b>What is measured</b></td><td>Is the correct § among the retrieved results</td><td>Answer quality</td></tr>
+  <tr><th style="width:14%"></th><th style="width:34%">Retrieval grading <span style="color:var(--muted);font-weight:400;font-size:.85em">retrieval</span></th><th>Generation grading <span style="color:var(--muted);font-weight:400;font-size:.85em">generation</span></th></tr>
+  <tr><td><b>What is measured</b></td><td>Is the correct § among the retrieved results</td><td>The quality of the answer actually produced</td></tr>
   <tr><td><b>Grading method</b></td><td>Compared in code — local embeddings</td><td>LLM judge</td></tr>
   <tr><td><b>Cost</b></td><td><b>0 API calls · $0</b></td><td>Charged per call</td></tr>
-  <tr><td><b>Execution</b></td><td><b>All 45 configurations, overnight</b></td><td>Only after retrieval was settled</td></tr>
+  <tr><td><b>Execution</b></td><td><b>All 45 configurations, overnight</b></td><td>Only the few survivors, after retrieval was settled</td></tr>
 </table>
-<p>Splitting the order alone ran the same volume of experiments at roughly a tenth of the cost.</p>
+<p>Because retrieval grading runs in code, all 45 configurations were swept for <b>$0</b>, and the paid generation grading was spent only on the few survivors — the same volume of experiments at roughly a tenth of the cost. That said, neither the generation grading nor checking that the grading is right is free, so this is less "completely free" than <b>calling the expensive grader as little as possible</b>.</p>
 
-<h4 class="dev" data-nav="1-6-3 · Suspect the grader">1-6-3 · Suspect the grader</h4>
-<p>I checked the thing doing the comparing before the things being compared. Two parts were wrong.</p>
-<table>
-  <tr><th style="width:22%">What was wrong</th><th style="width:36%">Why it is a false signal</th><th>How it was fixed</th></tr>
-  <tr><td>"1 point if any correct clause appears"</td><td>On cross-referencing questions with several correct clauses, getting half right scores full marks.</td><td>Replaced with <b>coverage</b> (found ÷ total correct) and MRR (how high the correct answer ranks)</td></tr>
-  <tr><td>The ruler differed by chunking method</td><td>A char chunk silently scored 0 because it has no <code>section</code> metadata, framing a perfectly good configuration.</td><td>Added a chunking-independent matching rule (<code>R1</code>) and required the <code>§</code> symbol to prevent false matches</td></tr>
-</table>
-<div class="codecap">Measuring different chunkings with the same ruler <span class="fn">harness/score.py</span></div>
-<pre class="code">A retrieved chunk "matches" an expected § when (R1 — chunking-independent):
-  - its `section` meta equals the expected §, OR
-  - (no section meta, i.e. a char chunk) the expected § number appears in its text.
-<span class="cm"># Without this, char chunks silently score 0 for lacking section metadata
-# and a perfectly good configuration gets framed.</span>
-
-def _text_has_section(text, number):
-    <span class="cm"># require the § symbol — without it, '191.151' or '91.1511' is mistaken for §91.151</span>
-    return re.search(rf"§\s*{re.escape(number)}(?!\d)", text) is not None</pre>
-<p>If the ruler favours one side, the 45 experiments that follow are all meaningless.</p>
-
-<h4 class="dev" data-nav="1-6-4 · Label verification">1-6-4 · Label verification</h4>
-<table>
-  <tr><th style="width:14%">Dependency</th><td>This whole free grading scheme rests on a human-applied label saying "the correct answer to this question is §91.151".</td></tr>
-  <tr><th>Risk</th><td>If the labels are wrong, the scoreboard keeps rising while actual quality falls. You run fast in the wrong direction.</td></tr>
-  <tr><th>Action</th><td>Label verification was made a blocking task rather than an optional one. Only after checking in the source text that the clause really contains the question's key terms did the experiments start.</td></tr>
-</table>
-
-<h4 class="dev" data-nav="1-6-5 · Result — on a tie, the cheaper one">1-6-5 · Result — on a tie, the cheaper one</h4>
+<h4 class="dev" data-nav="1-6-3 · Result — on a tie, the cheaper one">1-6-3 · Result — on a tie, the cheaper one</h4>
+<p><b>Coverage</b> = the fraction of correct clauses retrieval actually found (found ÷ total correct). <b>MRR</b> = how high the correct answer ranked in the results (closer to 1 the higher). Both are <b>retrieval grading</b>, scored in code — which is why they could be applied to all 45 configurations.</p>
 <table>
   <tr><th>Configuration</th><th>Coverage</th><th>MRR</th><th>Tokens</th></tr>
   <tr><td>§ boundary · bge · hybrid · K8</td><td>0.864</td><td>0.636</td><td>17,284</td></tr>
@@ -1181,18 +1138,24 @@ def _text_has_section(text, number):
 </table>
 <table>
   <tr><th style="width:18%">Judgment</th><th>Grounds</th></tr>
-  <tr><td><b>The difference is noise</b></td><td>A coverage gap of 0.045 against first place — across 11 questions, effectively one question.</td></tr>
-  <tr><td><b>The adopted one is cheaper</b></td><td>38% fewer tokens, and it ranks the correct answer higher (MRR 0.718 vs 0.636).</td></tr>
-  <tr><td><b>On a tie, the cheaper one</b></td><td>In an on-premise deployment, inference cost is a product constraint.</td></tr>
+  <tr><td><b>The difference is marginal</b></td><td>A coverage gap of 0.046 against first place (K8) — across 11 questions, effectively one question. Not a gap wide enough to decide on.</td></tr>
+  <tr><td><b>The adopted one is better</b></td><td>First place packs 8 chunks of evidence (K8), so <b>it responds slowly.</b> The adopted K5 uses 38% fewer tokens and answers faster, while ranking the correct answer higher (MRR 0.718 vs 0.636). It loses only 0.046 in coverage — put usability on the scale too and K5 wins.</td></tr>
+  <tr><td><b>On a tie, the cheaper one</b></td><td>In an on-premise deployment, both inference cost and response latency are product constraints.</td></tr>
   <tr><td><b>Rejected for the same reason</b></td><td>The agentic retrieval loop grows tokens roughly quadratically (81k vs 2.3k), too expensive for the gain. The deployment is single-shot; the loop was kept as a documented experiment.</td></tr>
   <tr><td><b>The biggest variable</b></td><td>Chunking. Switching from character count to § clause boundaries moved coverage from 0.136 to 0.864. In regulation the clause is the unit of meaning, and cutting at 1,000 characters slices across it.</td></tr>
 </table>
-<h4 class="dev" data-nav="1-6-6 · After rollout — the instructor's score">1-6-6 · After rollout — the instructor's score</h4>
+<h4 class="dev" data-nav="1-6-4 · After rollout — the instructor's score">1-6-4 · After rollout — the instructor's score</h4>
 <p class="sec-note" style="color:var(--muted);margin:2px 0 10px;">Same here. After the automatic grading was done, what a person pointed out became the starting point of the next improvement.</p>
 <div class="note green"><span class="lbl">Instructor's score — first among the course participants, 9/10 for completeness</span>
-There was one criticism — "polish the UI further." Retrieved chunks, token counts and scores were exposed on screen as they were. That exposure was deliberate, for verification, but in a setting judging completeness it was the wrong default. Next time it goes behind a toggle — what the builder needs and what the user needs are different.</div>
+The grader was <a href="https://www.linkedin.com/in/larryarnstein/">Larry Arnstein</a> — who led Impinj to an IPO and Xnor.ai to its acquisition by Apple, and is now CTO of a generative-AI startup (Simply Augmented). Among several axes — speed, completeness and more — he weighted <b>completeness</b> especially highly, and on that axis, the one that rewards depth of thought, this placed first among the course participants. There was one criticism — "polish the UI further." Retrieved chunks, token counts and scores were exposed on screen as they were. That exposure was deliberate, for verification, but in a setting judging completeness it was the wrong default. Next time it goes behind a toggle — what the builder needs and what the user needs are different.</div>
 
-<div class="note amber"><span class="lbl">The limit of this verification</span>I wrote the grading standard (the ground-truth set) myself. Self-grading struggles to escape self-bias — next time I want someone else to build the ground-truth set, or at minimum to compare it once against human evaluation.</div>
+<div class="note amber"><span class="lbl">The limit of this verification, and the next moves</span>
+I wrote the grading standard (the ground-truth set) myself, so self-bias remains — though completeness placed first even on the instructor's score, so that was not the decisive flaw. What looms larger is the retrospective:
+<ul>
+  <li><b>Accuracy</b> — the ground-truth set is still 14 questions. Scaling it up (say 100×) makes grading finer-grained and separates even subtler differences between configurations.</li>
+  <li><b>Quality of the set</b> — if someone else, and specifically someone who knows aviation law, writes the questions, the exam gets harder and free of my bias.</li>
+  <li><b>Cost</b> — there is still room to cut tokens further — how far it can go I never pushed to the end.</li>
+</ul></div>
 <h3>1-7. What the two cases leave behind</h3>
 <p class="sec-note" style="color:var(--muted);margin:2px 0 12px;">Different conditions split the verification method. Here is where they split, on one page.</p>
 
